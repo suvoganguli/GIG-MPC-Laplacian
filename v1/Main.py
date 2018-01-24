@@ -1,8 +1,9 @@
 from nmpc import *
-import printPlots
 from problemData import *
-from pathData import *
+from path import *
 from obstacleData import *
+import printPlots
+
 import time
 
 # -------------------------------------------------------------------
@@ -16,12 +17,12 @@ import time
 #
 # Edit problemData.py to run different experiments
 #
-# Version 1.0
-# 01/18/2018
+# Version 1.1
+# 01/24/2018
 # -------------------------------------------------------------------
 
 # Path data
-pathClass = pathInfo(startPoint, endPoint, pathWidth, case)
+pathClass = path(case)
 path = pathClass()
 
 # Obstacle data (static)
@@ -49,6 +50,8 @@ else:
     fileName = ''
 
 tElapsed = np.zeros(mpciterations)
+
+posIdx = getPosIdx(x0[0], x0[1], path, posIdx0)
 
 # Main loop
 while mpciter < mpciterations:
@@ -91,7 +94,7 @@ if writeToFile == True:
 
 # create plots
 print('done!')
-figno = printPlots.nmpcPlot(t, x, u, lanes, obstacle, tElapsed, case)
+figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, case)
 
 # Save Data
 answer =  raw_input('Save Figures and Data [y/n]:  ')

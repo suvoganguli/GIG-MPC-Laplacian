@@ -8,21 +8,21 @@ mph2fps = 4.4/3
 # ----------------------------------------------------------
 
 # Test Case
-case = 'roadStraightNorth'
-#case = 'roadBrokenLinesNorth'
-#case = 'roadLaplacianNorth'
-# case = 'roadStraightNorthPopupObstacle'
-# case = 'roadBrokenLinesNorthPopupObstacle'
-# case = 'roadLaplacianNorthPopupObstacle'
+case = 'pathStraightNorth'
+#case = 'pathBrokenLinesNorth'
+#case = 'pathLaplacianNorth'
+# case = 'pathStraightNorthPopupObstacle'
+# case = 'pathBrokenLinesNorthPopupObstacle'
+# case = 'pathLaplacianNorthPopupObstacle'
 
 
 # Experiment Number
-# roadStraightNorth                 : exptno = 1A
-# roadBrokenLinesNorth              : exptno = 2A
-# roadLaplacianNorth                : exptnp = 3A
-# roadStraightNorthPopupObstacle    : exptno = 1B
-# roadBrokenLinesNorthPopupObstacle : exptno = 2B
-# roadLaplacianNorthPopupObstacle   : exptno = 3B
+# pathStraightNorth                 : exptno = 1A
+# pathBrokenLinesNorth              : exptno = 2A
+# pathLaplacianNorth                : exptnp = 3A
+# pathStraightNorthPopupObstacle    : exptno = 1B
+# pathBrokenLinesNorthPopupObstacle : exptno = 2B
+# pathLaplacianNorthPopupObstacle   : exptno = 3B
 exptno = '1A'
 
 # Number of states
@@ -105,7 +105,7 @@ if exptno == '1A':     # 30 mph, STRAIGHT ROAD NORTH
 
         # Ipopt settings
         nlpMaxIter = 100
-        mpciterations = 15
+        mpciterations = 3
 
         # Kinematic Constraints
         E0 = startPoint[0]  # ft (North, long)
@@ -130,12 +130,10 @@ if exptno == '1A':     # 30 mph, STRAIGHT ROAD NORTH
         W_Chidot = 1.0
 
         # Road and Obstacle Data
-        EObsStart = 0  # ft
-        NObsStart = 180  # ft
-        EObsEnd = EObsStart  # ft
-        NObsEnd = NObsStart + 20  # ft
-        ThetaObs = Chi0  # rad
-        idx_OffsetSafeZone = 2
+        obstacleE = 0  # ft, left-bottom
+        obstacleN = 50 # ft, left-bottom
+        obstacleLength = 10 # ft
+        obstacleWidth = 10 # ft
 
         V_cmd = V0  # fps
 
@@ -179,12 +177,10 @@ if exptno == '1A':     # 30 mph, STRAIGHT ROAD NORTH
         W_Chiddot = 1.0 #0.1
 
         # Road and Obstacle Data
-        EObsStart = 0 # ft
-        NObsStart = 150 # ft
-        EObsEnd = EObsStart # ft
-        NObsEnd = NObsStart+20 # ft
-        ThetaObs = Chi0 # rad
-        idx_OffsetSafeZone = 2
+        obstacleE = 0  # ft, left-bottom
+        obstacleN = 50 # ft, left-bottom
+        obstacleLength = 10 # ft
+        obstacleWidth = 10 # ft
 
         V_cmd = V0  # fps
 
@@ -201,6 +197,8 @@ else:
     print("Error in exptno")
 
 # ------------------------------------------------------------
+
+posIdx0 = {'number': 0}
 
 
 if nstates == 2:

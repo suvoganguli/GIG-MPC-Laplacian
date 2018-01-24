@@ -1,6 +1,41 @@
 import numpy as np
 from matplotlib.patches import Polygon
 
+def getPosIdx(E, N, path, posIdx0 = None):
+
+    posIdx = {'number': 0}
+
+    AR_Path = path.alongPathLines.AR
+    BR_Path = path.alongPathLines.BR
+    CR_Path = path.alongPathLines.CR
+    AL_Path = path.alongPathLines.AL
+    BL_Path = path.alongPathLines.BL
+    CL_Path = path.alongPathLines.CL
+
+    D1 = path.acrossPathLines.D1
+    E1 = path.acrossPathLines.E1
+    F1 = path.acrossPathLines.F1
+    D2 = path.acrossPathLines.D2
+    E2 = path.acrossPathLines.E2
+    F2 = path.acrossPathLines.F2
+
+    nSections = len(D1)
+
+    if posIdx0 == None:
+        kvec = range(nSections)
+    else:
+        kvec = np.arange(posIdx0['number'], nSections, 1)
+
+
+    for k in kvec:
+        inbox = insideBox(E, N, AR_Path[k], BR_Path[k], CR_Path[k], AL_Path[k], BL_Path[k], CL_Path[k],
+                          D1[k], E1[k], F1[k], D2[k], E2[k], F2[k])
+
+        if inbox == True:
+            posIdx['number'] = k
+            return posIdx
+
+
 def insideBox(x,y,AR,BR,CR,AL,BL,CL,D1,E1,F1,D2,E2,F2):
 
     chk1bool = False
@@ -103,7 +138,6 @@ def getPatch(Efc,Nfc,W,L,theta,fc):
         p = np.array([E[k], N[k]])
         p = p[:,None]
         pRot = np.dot(C,p)
-        #pRot = p
         ERot[k] = pRot[0] + Efc
         NRot[k] = pRot[1] + Nfc
 

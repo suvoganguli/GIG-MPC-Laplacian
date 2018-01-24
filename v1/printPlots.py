@@ -28,35 +28,37 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     None
 
     if mpciter == 0:
-        plt.plot(path.X, path.Y, linestyle='-', color='k')
+        plt.plot(path.path.X, path.path.Y, linestyle='-', color='k')
         ax1 = f1.gca()
         ax1.grid(True)
 
         if obstacle.obstaclePresent == True:
-            Efc = obstacle.EObsStartSafeZone
-            Nfc = obstacle.NObsStartSafeZone
-            W = obstacle.widthSafeZone
-            L = obstacle.lengthSafeZone
-            Theta = obstacle.thetaSafeZone
-            fc = "green"
-            polygon_safezone = getPatch(Efc, Nfc, W, L, Theta, fc)
-
-            Efc = obstacle.EObsStart
-            Nfc = obstacle.NObsStart
-            W = obstacle.widthObstacle
-            L = obstacle.lengthObstacle
-            Theta = obstacle.thetaObstacle
-            fc = "red"
-            polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
-
-            ax1.add_patch(polygon_safezone)
-            ax1.add_patch(polygon_obstacle)
+            print("Need correction")
+            # Efc = obstacle.EObsStartSafeZone
+            # Nfc = obstacle.NObsStartSafeZone
+            # W = obstacle.widthSafeZone
+            # L = obstacle.lengthSafeZone
+            # Theta = obstacle.thetaSafeZone
+            # fc = "green"
+            # polygon_safezone = getPatch(Efc, Nfc, W, L, Theta, fc)
+            #
+            # Efc = obstacle.EObsStart
+            # Nfc = obstacle.NObsStart
+            # W = obstacle.widthObstacle
+            # L = obstacle.lengthObstacle
+            # Theta = obstacle.thetaObstacle
+            # fc = "red"
+            # polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
+            #
+            # ax1.add_patch(polygon_safezone)
+            # ax1.add_patch(polygon_obstacle)
 
     plt.figure(f1.number)
     nEN = len(East)
     plt.plot(East[0:nEN], North[0:nEN], marker='x', markersize=4, color='b')
     plt.plot(East[0], North[0], marker='o', markersize=4, color='r')
-    #ax1.set_xlim([-100, 10])
+    plt.xlim([-30,30])
+    #ax1.set_xlim([-30,30])
     #ax1.set_ylim([200, 425])
 
     plt.pause(0.01)
@@ -185,7 +187,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         figno[4] = plt.gcf().number
         f, ax = plt.subplots(1, figsize=(6, 8), dpi=100)  # sharex=True
         lw = 1.0
-        ax.plot(path.X, path.Y, linewidth=lw, linestyle='-', color='k')
+        ax.plot(path.path.X, path.path.Y, linewidth=lw, linestyle='-', color='k')
         ax.plot(x[:, 0], x[:, 1], linestyle='-', color='b')
         ax.set_ylabel('N [ft]')
         ax.set_xlabel('E [ft]')

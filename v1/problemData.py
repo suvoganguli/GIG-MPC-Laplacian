@@ -105,7 +105,7 @@ if exptno == '1A':     # 30 mph, STRAIGHT ROAD NORTH
 
         # Ipopt settings
         nlpMaxIter = 100
-        mpciterations = 3
+        mpciterations = 20
 
         # Kinematic Constraints
         E0 = startPoint[0]  # ft (North, long)

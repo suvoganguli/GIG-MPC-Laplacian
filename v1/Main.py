@@ -64,7 +64,7 @@ while mpciter < mpciterations:
 
     # solve optimal control problem
     tStart = time.time()
-    u_new, info = solveOptimalControlProblem(N, t0, x0, u0, T, ncons, nu, path, obstacle)
+    u_new, info = solveOptimalControlProblem(N, t0, x0, u0, T, ncons, nu, path, obstacle, posIdx)
     tElapsed[mpciter] = (time.time() - tStart)
 
     # solution information
@@ -85,6 +85,8 @@ while mpciter < mpciterations:
 
     # prepare restart
     u0 = shiftHorizon(N, u_new)
+
+    posIdx = getPosIdx(xmeasure[0], xmeasure[1], path, posIdx)
 
     mpciter = mpciter + 1
 

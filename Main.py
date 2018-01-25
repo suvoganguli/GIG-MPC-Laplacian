@@ -17,8 +17,7 @@ import time
 #
 # Edit problemData.py to run different experiments
 #
-# Version 1.1
-# 01/24/2018
+# 01/25/2018
 # -------------------------------------------------------------------
 
 # Path data

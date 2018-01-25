@@ -173,7 +173,8 @@ def rotate(vec1,Chi):
         [np.cos(Chi), np.sin(Chi)],
         [-np.sin(Chi), np.cos(Chi)]
     ])
+    vec1 = np.squeeze(vec1)
     vec1 = vec1[:, None]
     vec2 = np.matmul(dcm, vec1)
 
-    return vec2
+    return np.squeeze(vec2)

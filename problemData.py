@@ -41,6 +41,9 @@ nstates = 4
 # (True or False)
 obstaclePresent = False
 
+# Detection Window
+detectionWindow = {'L': 50, 'W': 11}
+
 # ----------------------------------------------------------
 
 if exptno == '1A':     # 30 mph, STRAIGHT ROAD NORTH
@@ -83,6 +86,7 @@ if exptno == '1A':     # 30 mph, STRAIGHT ROAD NORTH
         # Road and Obstacle Data
         obstacleE = 0  # ft, left-bottom
         obstacleN = 50 # ft, left-bottom
+        obstacleChi = 0  # rad
         obstacleLength = 10 # ft
         obstacleWidth = 10 # ft
 
@@ -132,6 +136,7 @@ if exptno == '1A':     # 30 mph, STRAIGHT ROAD NORTH
         # Road and Obstacle Data
         obstacleE = 0  # ft, left-bottom
         obstacleN = 50 # ft, left-bottom
+        obstacleChi = 0  # rad
         obstacleLength = 10 # ft
         obstacleWidth = 10 # ft
 
@@ -179,6 +184,7 @@ if exptno == '1A':     # 30 mph, STRAIGHT ROAD NORTH
         # Road and Obstacle Data
         obstacleE = 0  # ft, left-bottom
         obstacleN = 50 # ft, left-bottom
+        obstacleChi = 0  # rad
         obstacleLength = 10 # ft
         obstacleWidth = 10 # ft
 

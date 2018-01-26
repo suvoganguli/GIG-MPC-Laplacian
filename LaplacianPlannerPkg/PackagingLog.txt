@@ -1,0 +1,44 @@
+mcc -W python:LaplacianPlannerPkg -T link:lib -d C:\Users\e183308\Documents\Projects\2018\GIG\matlab\LaplacianPlanner\modified\v2\LaplacianPlannerPkg\for_testing -v C:\Users\e183308\Documents\Projects\2018\GIG\matlab\LaplacianPlanner\modified\v2\laplacian.m 
+Compiler version: 6.1 (R2015b)
+
+Dependency analysis by REQUIREMENTS.
+
+[Warning: Name is nonexistent or not a directory:
+C:\Users\e183308\Documents\Projects\2017\UGV\matlab\yalmip] 
+[Warning: Name is nonexistent or not a directory:
+C:\Users\e183308\Documents\Projects\2017\UGV\matlab\yalmip\demos] 
+[Warning: Name is nonexistent or not a directory:
+C:\Users\e183308\Documents\Projects\2017\UGV\matlab\yalmip\extras] 
+[Warning: Name is nonexistent or not a directory:
+C:\Users\e183308\Documents\Projects\2017\UGV\matlab\yalmip\modules] 
+[Warning: Name is nonexistent or not a directory:
+C:\Users\e183308\Documents\Projects\2017\UGV\matlab\yalmip\modules\bilevel] 
+[Warning: Name is nonexistent or not a directory:
+C:\Users\e183308\Documents\Projects\2017\UGV\matlab\yalmip\modules\global] 
+[Warning: Name is nonexistent or not a directory:
+C:\Users\e183308\Documents\Projects\2017\UGV\matlab\yalmip\modules\moment] 
+[Warning: Name is nonexistent or not a directory:
+C:\Users\e183308\Documents\Projects\2017\UGV\matlab\yalmip\modules\parametric] 
+[Warning: Name is nonexistent or not a directory:
+C:\Users\e183308\Documents\Projects\2017\UGV\matlab\yalmip\modules\robust] 
+[Warning: Name is nonexistent or not a directory:
+C:\Users\e183308\Documents\Projects\2017\UGV\matlab\yalmip\modules\sos] 
+[Warning: Name is nonexistent or not a directory:
+C:\Users\e183308\Documents\Projects\2017\UGV\matlab\yalmip\operators] 
+[Warning: Name is nonexistent or not a directory:
+C:\Users\e183308\Documents\Projects\2017\UGV\matlab\yalmip\solvers] 
+[Warning: Adding path
+"C:\Users\e183308\Documents\Projects\2018\GIG\matlab\LaplacianPlanner\modified\v2"
+to Compiler path instance.] 
+[] 
+Parsing file "C:\Users\e183308\Documents\Projects\2018\GIG\matlab\LaplacianPlanner\modified\v2\laplacian.m"
+	(Referenced from: "Compiler Command Line").
+Deleting 0 temporary MEX authorization files.
+Generating file "C:\Users\e183308\Documents\Projects\2018\GIG\matlab\LaplacianPlanner\modified\v2\LaplacianPlannerPkg\for_testing\LaplacianPlannerPkg\__init__.py".
+Generating file "C:\Users\e183308\Documents\Projects\2018\GIG\matlab\LaplacianPlanner\modified\v2\LaplacianPlannerPkg\for_testing\setup.py".
+Generating file "C:\Users\e183308\Documents\Projects\2018\GIG\matlab\LaplacianPlanner\modified\v2\LaplacianPlannerPkg\for_testing\readme.txt".
+Packaging...
+Creating the bundle...
+Web based installer created at C:\Users\e183308\Documents\Projects\2018\GIG\matlab\LaplacianPlanner\modified\v2\LaplacianPlannerPkg\for_redistribution\MyAppInstaller_web.exe.
+Packaging complete.
+Elapsed packaging time was: 1 minutes and 21 seconds.

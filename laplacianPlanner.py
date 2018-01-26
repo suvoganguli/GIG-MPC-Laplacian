@@ -62,17 +62,33 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
         # If any point in fine obstacles block (that maps to point in coarse
         # obstacle array) contains a one, then corresponding point in coarse
         # obstacle array is set to one.
-        for i in np.arange(1, nx+1):
-            ii = np.arange( 1 + (i-1)*nxs/nx, i*nxs/nx + 1)
+        # for i in np.arange(1, nx+1):
+        #     ii = np.arange( 1 + (i-1)*nxs/nx, i*nxs/nx + 1)
+        #
+        #     for j in np.arange(1,ny+1):
+        #         jj =   np.arange( 1+(j-1)*nys/ny, j*nys/ny + 1)
+        #
+        #         for k in np.arange(1,nz+1):
+        #             kk = np.arange( 1+(k-1)*nzs/nz, k*nzs/nz + 1)
+        #
+        #             if sum ( sum ( obstacles[ii-1][jj-1][kk-1] ) ) > 0:
+        #                 obstacle[i-1][j-1][k-1] =  1
 
-            for j in np.arange(1,ny+1):
-                jj =   np.arange( 1+(j-1)*nys/ny, j*nys/ny + 1)
+        for i in range(nx):
+            i1 = i * nxs / nx
+            i2 = (i + 1) * nxs / nx
 
-                for k in np.arange(1,nz+1):
-                    kk = np.arange( 1+(k-1)*nzs/nz, k*nzs/nz + 1)
+            for j in range(ny):
+                j1 = j * nys / ny
+                j2 = (j + 1) * nys / ny
 
-                    if sum ( sum ( obstacles[ii-1][jj-1][kk-1] ) ) > 0:
-                        obstacle[i-1][j-1][k-1] =  1
+                for k in range(nz):
+                    k1 = k * nzs / nz
+                    k2 = (k + 1) * nzs / nz
+
+                    print(i,j,k)
+                    if sum(sum(sum(obstacles[ i1:i2 ][ j1:j2 ][ k1:k2 ]))) > 0:
+                        obstacle[i][j][k] = 1
 
 
         # Add outer domain bounday to obstacle
@@ -133,42 +149,117 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
     # Initialize new solution with interpolated old solution of previous grid size
     v = v0 * np.ones(obstacle.shape) # Gives correct v on obstacles, v_end overwritten later
     if (nx > n_old):
-        for i in np.arange(2:nx - 1
+        for i in np.arange(1,nx-1):
+            for j in np.arange(1,ny-1):
+                for k in np.arange(1,nz-1):
+                    if (obstacle[i][j][k] == 0): # interior points
+                        i_ = min(nx - 1, max(2, np.floor(i / 2)))
+                        j_ = min(ny - 1, max(2, np.floor(j / 2)))
+                        k_ = min(nz - 1, max(2, np.floor(k / 2)))
+                        v[i][j][k] = v_old[i_][j_][k_]  # update to intepolate later
+    elif(nx < n_old):
+        for i in np.arange(1, nx - 1):
+            for j in np.arange(1, ny - 1):
+                for k in np.arange(1, nz - 1):
+                    if (obstacle[i][j][k] == 0):  # interior points
+                        i_ = min(nx - 1, max(2, np.floor(i * 2)));
+                        j_ = min(ny - 1, max(2, np.floor(j * 2)));
+                        k_ = min(nz - 1, max(2, np.floor(k * 2)));
+                        v[i][j][k] = v_old[i_][j_][k_]  # update to average later
 
+    else:
+        v = v_old
 
+    # Compute solution, v(i,j,k)
+    # Iterate to get Laplacian solution for potential
 
+    for iter in range(iter_max):
+        for i in np.arange(1, nx - 1):
+            for j in np.arange(1, ny - 1):
+                for k in np.arange(1, nz - 1):
+                    if (obstacle[i][j][k] == 1):
+                        v[i][j][k] = v0
+                    elif (obstacle[i][j][k] == -1):
+                        v[i][j][k] = v_end
+                    else:
+                        v[i][k][k] = ( v[i-1][j][k] + v[i+1][j][k] +
+                                       v[i][j-1][k] + v[i][j+1][k] +
+                                       v[i][j][k-1] + v[i][j][k+1] ) / 6
+
+    v_old = v
+    n_old = nx
+
+    # ---------------- Convergence Test ---------------
+
+    not_converged = 0
+    if (slow_convergence_test == 1):
+        ijk_local_min = np.array([np.NaN, np.NaN, np.NaN])
+        ijk_local_max = np.array([np.NaN, np.NaN, np.NaN])
+        for i in np.arange(1,nx-1):
+            for j in np.arange(1,ny-1):
+                for k in np.arange(1,nz-1):
+                    if (obstacle[i][j][k] == 0):
+                        v_min = min( v[i - 1][j][k] + v[i + 1][j][k] +
+                                     v[i][j - 1][k] + v[i][j + 1][k] +
+                                     v[i][j][k - 1] + v[i][j][k + 1] )
+                        v_max = max( v[i - 1][j][k] + v[i + 1][j][k] +
+                                     v[i][j - 1][k] + v[i][j + 1][k] +
+                                     v[i][j][k - 1] + v[i][j][k + 1] )
+
+                        if v[i][j][k] <= v_min:
+                            not_converged = 1
+                            ijk_local_min = [i, j, k]
+                        elif v[i][j][k] >= v_max:
+                            not_converged = 1
+                            ijk_local_max = [i, j, k]
 
     # ----------------  Find Laplacian path ---------------
 
+    # Compute path along gradient of potential
 
 
+    path = np.NaN * np.ones([nt, 3])
+    path[1] = start_point
 
+    for it in np.arange(1, nt+1):
+        i = max(2, min(nx - 1, np.floor(path(1, it - 1))))
+        j = max(2, min(ny - 1, np.floor(path(2, it - 1))))
+        k = max(2, min(nz - 1, np.floor(path(3, it - 1))))
 
-    path = None
-    not_converged = None
-    v = None
-    nx = None
-    ny = None
-    nz = None
-    nz_low = None
+        dv_dx = (
+                    sum( sum( v[i + 1][j - 1:j + 1][k - 1:k + 1] ) ) / 9
+                  - sum( sum( v[i - 1][j - 1:j + 1][k - 1:k + 1] ) ) / 9
+                ) /2
+        dv_dy = (
+                    sum( sum( v[i - 1:i + 1][j + 1][k - 1:k + 1] ) ) / 9
+                  - sum( sum( v[i - 1:i + 1][j - 1][k - 1:k + 1] ) ) / 9
+                ) /2
+        dv_dz = (
+                    sum( sum( v[i - 1:i + 1][j - 1:j + 1][k + 1] ) ) / 9
+                  - sum( sum( v[i - 1:i + 1][j - 1:j + 1][k - 1] ) ) / 9
+                ) /2
+        gradient_vec = np.array([dv_dx, dv_dy, dv_dz])
+        gradient_vec = gradient_vec[:,None]
+        path[it] = path[it - 1] + dt * gradient_sign * gradient_vec / (1e-306 + np.linalg.norm(gradient_vec))
+
     return path, not_converged, nx, ny, nz, nz_low, v
-
-
 
 # ----------------------------------------------------------------
 # Testing
 
-start_point = np.array([30,10,2],dtype='float')
-end_point = np.array([60,10,2],dtype='float')
+start_point = np.array([30, 10, 2],dtype='float')
+end_point = np.array([60, 10, 2],dtype='float')
+
+obstacles = np.zeros([64, 64, 16])
 
 nxs = 64
 nys = nxs
 nzs = int(8*(float(nxs)/128))
 nzs_low = nzs
-obstacles = np.zeros([nxs, nys])
 slow_convergence_test = 0
 
 scale = 512 / nxs # (feet/grid_point)   eg scale=4 ft/grid_point when nxs=128
 
 path, not_converged, nx, ny, nz, nz_low, v = \
     laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_convergence_test )
+

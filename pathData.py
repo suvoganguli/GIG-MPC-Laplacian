@@ -1,4 +1,6 @@
 import numpy as np
+from laplacianPlanner import *
+
 
 def pathInitData(case, startPoint, endPoint, obstacle = None):
 
@@ -13,9 +15,38 @@ def pathInitData(case, startPoint, endPoint, obstacle = None):
         nPathSections = nPathSections + 1
 
     pathWidth = 10.0
-    pathTheta = np.pi/2  # (road theta is w.r.t +East axis)
+    num = endPoint[1] - startPoint[1]
+    den = endPoint[1] - startPoint[1]
+    if den != 0:
+        pathTheta = np.arctan(num/den)  # (road theta is w.r.t +East axis)
+    else:
+        pathTheta = np.sign(num)*np.pi/2
 
     pathSectionCurvatures = np.zeros(nPathSections)
+
+    # ---------------------------------------------------------
+    # Calling Laplacian Planner
+
+    if case == 'newpath':
+        gridsize = 4 # ft
+        lengthArea = 256 # ft
+        widthArea = 64 # ft
+        heightArea = 32 # ft
+
+        height = heightArea/2
+
+        nE = widthArea / gridsize
+        nN = lengthArea / gridsize
+        nh = heightArea / gridsize
+        nh_low = nh
+        slow_convergence_test = 1
+
+        startPoint_ = np.append(startPoint, height)
+        endPoint_ = np.append(endPoint, height)
+
+        path = laplacian( startPoint_, endPoint_, nE, nN, nh, nh_low, obstacle, slow_convergence_test )
+
+    # ---------------------------------------------------------
 
     data = {'case':case,
             'pathStart': [startPoint[0], startPoint[1], pathTheta], # ft, ft, rad

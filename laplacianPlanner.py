@@ -9,6 +9,10 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
 
     # ----------------  Initialization ----------------
 
+    nxs = int(nxs)
+    nys = int(nys)
+    nzs = int(nzs)
+
     v0 = 0 # v0=0 and v_end=-1 gives dynamic range of -(10^(-308)) to -1
     v_end = -1
     gradient_sign = np.sign(v_end - v0)
@@ -76,6 +80,7 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
                     k1 = k * nzs / nz
                     k2 = (k + 1) * nzs / nz
 
+                    None
                     if sum(sum(sum(obstacles[ i1:i2, j1:j2 , k1:k2 ]))) > 0:
                         obstacle[i][j][k] = 1
 
@@ -255,41 +260,43 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
 # ----------------------------------------------------------------
 # Testing
 
-nxs = 16
-nys = 32
-nzs = 8
-obstacles = np.zeros([nxs, nys, nzs])
-w = 4
-l = 4
-x0 = 5
-y0 = 14
-for j in range(w):
-    for k in range(l):
-        obstacles[x0+j,y0+k,:] = 1
+if False:
 
-obstacles[:,:,0] = 1
+    nxs = 16
+    nys = 32
+    nzs = 8
+    obstacles = np.zeros([nxs, nys, nzs])
+    w = 4
+    l = 4
+    x0 = 5
+    y0 = 14
+    for j in range(w):
+        for k in range(l):
+            obstacles[x0+j,y0+k,:] = 1
 
-start_point = np.array([7, 1.1, 1],dtype='float')  # [8, 2.1, 2]
-end_point = np.array([7, 30, 1],dtype='float')  # [8, 31, 2]
+    obstacles[:,:,0] = 1
 
-nzs_low = nzs
-slow_convergence_test = 1
+    start_point = np.array([7, 1.1, 1],dtype='float')  # [8, 2.1, 2]
+    end_point = np.array([7, 30, 1],dtype='float')  # [8, 31, 2]
 
-scale = 512 / nxs # (feet/grid_point)   eg scale=4 ft/grid_point when nxs=128
+    nzs_low = nzs
+    slow_convergence_test = 1
 
-path, not_converged, nx, ny, nz, nz_low, v = \
-    laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_convergence_test )
+    scale = 512 / nxs # (feet/grid_point)   eg scale=4 ft/grid_point when nxs=128
 
-East = path[:,0]
-North = path[:,1]
+    path, not_converged, nx, ny, nz, nz_low, v = \
+        laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_convergence_test )
 
-plt.plot(East, North, marker='x', markersize=4, color='b')
-plt.plot(East, North, marker='x', markersize=4, color='b')
-plt.plot(start_point[0], start_point[1], marker='o', markersize=4, color='r')
-plt.plot(end_point[0], end_point[1], marker='o', markersize=4, color='g')
-plt.grid('True')
-plt.ylabel('N [ft]')
-plt.xlabel('E [ft]')
-plt.axis('equal')
-plt.grid('True')
-plt.show()
+    East = path[:,0]
+    North = path[:,1]
+
+    plt.plot(East, North, marker='x', markersize=4, color='b')
+    plt.plot(East, North, marker='x', markersize=4, color='b')
+    plt.plot(start_point[0], start_point[1], marker='o', markersize=4, color='r')
+    plt.plot(end_point[0], end_point[1], marker='o', markersize=4, color='g')
+    plt.grid('True')
+    plt.ylabel('N [ft]')
+    plt.xlabel('E [ft]')
+    plt.axis('equal')
+    plt.grid('True')
+    plt.show()

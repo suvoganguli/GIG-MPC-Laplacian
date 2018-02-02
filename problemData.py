@@ -9,7 +9,7 @@ mph2fps = 4.4/3
 
 # Start and End Points
 startPoint = np.array([0, 0])  # E (ft), N (ft)
-endPoint = np.array([0, 500])  # E (ft), N (ft)
+endPoint = np.array([0, 150])  # E (ft), N (ft)
 
 # Number of states
 # nstates = 2:
@@ -93,7 +93,7 @@ elif nstates == 4:
 
     # Ipopt settings
     nlpMaxIter = 100
-    mpciterations = 5
+    mpciterations = 3
 
     # Kinematic Constraints
     E0 = startPoint[0]  # ft (North, long)

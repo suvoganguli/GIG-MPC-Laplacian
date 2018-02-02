@@ -61,6 +61,7 @@ while mpciter < mpciterations:
 
     # search for obstacle
     detected = detectObstacle(x0, detectionWindow, obstacle)
+    detected = True
 
     # create new path, if necessary
     if detected == True:
@@ -109,5 +110,5 @@ if answer == 'y':
     dirname = raw_input('Enter Folder Name: ')
     printPlots.savePlots(dirname, figno)
 
-
+# -------------------------------------------------------------------
 

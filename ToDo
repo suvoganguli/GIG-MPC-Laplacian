@@ -1,11 +1,5 @@
 
 
-2018/01/15
-- README
-	= I/O
-	= Constraints
-	= Performance Objectives
-	= Design parameters - weights, constraints
-- Freeze S/W
-- Define Test Cases
+2018/02/02
+- Construct obstacle data in 3D grid
 

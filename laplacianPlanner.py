@@ -1,7 +1,9 @@
 # Matlab (original): Mike Elgersma
 # Python: Suvo Ganguli
+# Feb 02, 2018
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_convergence_test ):
 
@@ -11,39 +13,22 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
     v_end = -1
     gradient_sign = np.sign(v_end - v0)
 
-    if (nxs == 128):
-        if (nzs == 32):
-            n_vec_exponents = [6, 5, 4, 5, 4, 5, 6, 7]
-            iter_max = 25 # nx = 2 ^ 4 = 16 coarse grid.runtime =?s for nzs=32,
-        elif (nzs == 16):
-            n_vec_exponents = [6, 5, 4, 5, 4, 5, 6, 7]
-            iter_max = 25 # nx = 2 ^ 4 = 16 coarse grid.runtime = 6s for nzs=16, CONVERGED
-        elif(nzs == 8): # Artificial ceiling at half height, to force OAV below rooftops
-            n_vec_exponents = [6, 5, 6, 5, 6, 7]
-            iter_max = 50
-    elif(nxs == 64):
-        if (nzs == 16):
-            n_vec_exponents = [5, 4, 5, 4, 5, 6, 6]
-            iter_max = 25
-        elif(nzs == 8):
-            n_vec_exponents = [5, 4, 5, 4, 5, 6, 6]
-            iter_max = 25
-        elif(nzs == 4):
-            n_vec_exponents = [5, 4, 5, 4, 5, 6, 6]
-            iter_max = 50
+    n_vec_exponents = [4, 3, 4]
+    iter_max = 50
 
     n_vec = 2 ** np.array(n_vec_exponents)
-    ny_factor = nxs / nys # POWER OF 2     (y grid_size) = (x grid size)/ny_factor
-    nz_factor = nxs / nzs # POWER OF 2     (z grid_size) = (x grid size)/nz_factor
+    ny_factor = float(nxs) / float(nys) # POWER OF 2     (y grid_size) = (x grid size)/ny_factor
+    nz_factor = float(nxs) / float(nzs) # POWER OF 2     (z grid_size) = (x grid size)/nz_factor
 
     #dt = float(nxs) / 128 # number of pixels per time step
     dt = 4
+    tol = float(dt)
 
     # we want to make nt large enough for the path to run across the entire domain
     i_n = max(n_vec_exponents)
     nx_ = 2 ** i_n
-    ny_ = nx_ / ny_factor
-    nz_ = nx_ / nz_factor
+    ny_ = int(nx_ / ny_factor)
+    nz_ = int(nx_ / nz_factor)
     nt = int(np.linalg.norm(np.array([nx_, ny_, nz_]) / dt))
     nz_low = int(nz_/2)
 
@@ -52,9 +37,9 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
 
     for i_n in np.arange(min(n_vec_exponents), max(n_vec_exponents)+1):
         nx = 2 ** i_n
-        ny = nx / ny_factor # this needs to be updated
-        nz = nx / nz_factor
-        nz_low = nz * (nzs_low/ nzs)
+        ny = int(nx / ny_factor) # this needs to be updated
+        nz = int(nx / nz_factor)
+        nz_low = int(nz * (nzs_low/ nzs))
 
         # nx = int(nx)
         # ny = int(ny)
@@ -140,10 +125,9 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
     for i_n in np.arange(1, len(n_vec)):
 
         nx = n_vec[i_n]
-        ny = nx / ny_factor
-        nz = nx / nz_factor
-        nz_low = nz * (nzs_low / nzs)
-
+        ny = int(nx / ny_factor)
+        nz = int(nx / nz_factor)
+        nz_low = int(nz * (nzs_low / nzs))
 
 
         if(nx==4):
@@ -186,16 +170,17 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
         # Compute solution, v(i,j,k)
         # Iterate to get Laplacian solution for potential
 
+        None
         for iter in range(iter_max):
-            for i in np.arange(1, nx - 1):
-                for j in np.arange(1, ny - 1):
-                    for k in np.arange(1, nz - 1):
+            for i in np.arange(1, nx-1):
+                for j in np.arange(1, ny-1):
+                    for k in np.arange(1, nz-1):
                         if (obstacle[i,j,k] == 1):
                             v[i,j,k] = v0
                         elif (obstacle[i,j,k] == -1):
                             v[i,j,k] = v_end
                         else:
-                            v[i,k,k] = ( v[i-1,j,k] + v[i+1,j,k] +
+                            v[i,j,k] = ( v[i-1,j,k] + v[i+1,j,k] +
                                            v[i,j-1,k] + v[i,j+1,k] +
                                            v[i,j,k-1] + v[i,j,k+1] ) / 6
 
@@ -204,7 +189,7 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
 
     # ---------------- Convergence Test ---------------
 
-    not_converged = 0
+    not_converged = False
     if (slow_convergence_test == 1):
         ijk_local_min = np.array([np.NaN, np.NaN, np.NaN])
         ijk_local_max = np.array([np.NaN, np.NaN, np.NaN])
@@ -212,19 +197,24 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
             for j in np.arange(1,ny-1):
                 for k in np.arange(1,nz-1):
                     if (obstacle[i,j,k] == 0):
-                        v_min = min( v[i - 1,j,k] + v[i + 1,j,k] +
-                                     v[i,j - 1,k] + v[i,j + 1,k] +
-                                     v[i,j,k - 1] + v[i,j,k + 1] )
-                        v_max = max( v[i - 1,j,k] + v[i + 1,j,k] +
-                                     v[i,j - 1,k] + v[i,j + 1,k] +
-                                     v[i,j,k - 1] + v[i,j,k + 1] )
+                        v_min = min( v[i - 1,j,k], v[i + 1,j,k],
+                                     v[i,j - 1,k], v[i,j + 1,k],
+                                     v[i,j,k - 1], v[i,j,k + 1] )
+                        v_max = max( v[i - 1,j,k], v[i + 1,j,k],
+                                     v[i,j - 1,k], v[i,j + 1,k],
+                                     v[i,j,k - 1], v[i,j,k + 1] )
 
                         if v[i,j,k] <= v_min:
-                            not_converged = 1
+                            not_converged = True
                             ijk_local_min = [i, j, k]
                         elif v[i,j,k] >= v_max:
-                            not_converged = 1
+                            not_converged = True
                             ijk_local_max = [i, j, k]
+
+        if not_converged == True:
+            print('Not Converged')
+        else:
+            print('Converged')
 
     # ----------------  Find Laplacian path ---------------
 
@@ -255,24 +245,51 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
         gradient_vec = gradient_vec[:,None]
         path[it] = path[it - 1] + dt * gradient_sign * np.squeeze(gradient_vec) / (1e-306 + np.linalg.norm(gradient_vec))
 
+        if np.linalg.norm(path[it]-end_point) < tol:
+            for k in np.arange(it+1,nt):
+                path[k] = end_point
+
+
     return path, not_converged, nx, ny, nz, nz_low, v
 
 # ----------------------------------------------------------------
 # Testing
 
-start_point = np.array([30, 10, 2],dtype='float')
-end_point = np.array([60, 10, 2],dtype='float')
+nxs = 16
+nys = 32
+nzs = 8
+obstacles = np.zeros([nxs, nys, nzs])
+w = 4
+l = 4
+x0 = 5
+y0 = 14
+for j in range(w):
+    for k in range(l):
+        obstacles[x0+j,y0+k,:] = 1
 
-obstacles = np.zeros([64, 64, 16])
+obstacles[:,:,0] = 1
 
-nxs = 64
-nys = nxs
-nzs = int(8*(float(nxs)/128))
+start_point = np.array([7, 1.1, 1],dtype='float')  # [8, 2.1, 2]
+end_point = np.array([7, 30, 1],dtype='float')  # [8, 31, 2]
+
 nzs_low = nzs
-slow_convergence_test = 0
+slow_convergence_test = 1
 
 scale = 512 / nxs # (feet/grid_point)   eg scale=4 ft/grid_point when nxs=128
 
 path, not_converged, nx, ny, nz, nz_low, v = \
     laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_convergence_test )
 
+East = path[:,0]
+North = path[:,1]
+
+plt.plot(East, North, marker='x', markersize=4, color='b')
+plt.plot(East, North, marker='x', markersize=4, color='b')
+plt.plot(start_point[0], start_point[1], marker='o', markersize=4, color='r')
+plt.plot(end_point[0], end_point[1], marker='o', markersize=4, color='g')
+plt.grid('True')
+plt.ylabel('N [ft]')
+plt.xlabel('E [ft]')
+plt.axis('equal')
+plt.grid('True')
+plt.show()

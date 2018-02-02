@@ -1,9 +1,7 @@
 from nmpc import *
-from problemData import *
 from path import *
 from obstacleData import *
 import printPlots
-
 import time
 
 # -------------------------------------------------------------------
@@ -21,7 +19,7 @@ import time
 # -------------------------------------------------------------------
 
 # Path data
-pathClass = path(case)
+pathClass = pathInfo('default')
 path = pathClass()
 
 # Obstacle data (static)
@@ -65,7 +63,9 @@ while mpciter < mpciterations:
     detected = detectObstacle(x0, detectionWindow, obstacle)
 
     # create new path, if necessary
-
+    if detected == True:
+        pathClass = pathInfo('newpath', obstacle)
+        path = pathClass()
 
     # solve optimal control problem
     tStart = time.time()
@@ -76,7 +76,7 @@ while mpciter < mpciterations:
     printPlots.nmpcPrint(mpciter, info, N, x0, writeToFile, fHandle, tElapsed[mpciter])
 
     # mpc  future path plot
-    printPlots.nmpcPlotSol(u_new, path, mpciter, x0, obstacle, case)
+    printPlots.nmpcPlotSol(u_new, path, mpciter, x0, obstacle, None)
 
     # store closed loop data
     t[mpciter] = tmeasure
@@ -101,7 +101,7 @@ if writeToFile == True:
 
 # create plots
 print('done!')
-figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, case)
+figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, None)
 
 # Save Data
 answer =  raw_input('Save Figures and Data [y/n]:  ')

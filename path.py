@@ -1,11 +1,23 @@
+from problemData import *
 from pathData import *
 from pathCosts import *
 from pathCons import *
 from pathLines import *
 from utils import *
 
-def path(case):
-    pathData = pathInputData(case)
+def pathInfo(case, obstacle=None):
+
+    # Path initial data
+    if case == 'newpath':
+        pathData = pathInitData(case, startPoint, endPoint, obstacle)
+
+    elif case == 'default':
+        pathData = pathInitData(case, startPoint, endPoint)
+
+    else:
+        pathData = None
+
+    # Path detailed data
     pathClass = pathDetailedData(pathData)
     path = pathClass()
 

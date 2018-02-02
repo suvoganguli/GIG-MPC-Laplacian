@@ -1,19 +1,46 @@
 import numpy as np
 
+def pathInitData(case, startPoint, endPoint, obstacle = None):
+
+    pathDist = np.linalg.norm(endPoint - startPoint)
+    pathSectionLength = 10.0
+    nPathSections = int(pathDist/pathSectionLength)
+    deltaPathLength = pathDist/pathSectionLength - nPathSections
+    pathSectionLengths = pathSectionLength * np.ones(nPathSections)
+
+    if deltaPathLength > 0:
+        pathSectionLengths = np.append([pathSectionLengths, deltaPathLength])
+        nPathSections = nPathSections + 1
+
+    pathWidth = 10.0
+    pathTheta = np.pi/2  # (road theta is w.r.t +East axis)
+
+    pathSectionCurvatures = np.zeros(nPathSections)
+
+    data = {'case':case,
+            'pathStart': [startPoint[0], startPoint[1], pathTheta], # ft, ft, rad
+            'pathWidth': pathWidth,
+            'nPathSections': nPathSections,
+            'pathSectionLengths': pathSectionLengths,
+            'pathSectionCurvatures': pathSectionCurvatures,
+            }
+
+    return data
+
+
 def pathInputData(case):
 
-    if case == 'pathStraightNorth':
-        nPathSections = 50
-        pathSectionLengths = 10*np.ones(nPathSections) # ft
-        pathSectionCurvatures = np.zeros(nPathSections) # ft
-        pathWidth = 10.0 # ft
-        data = {'case':case,
-                'pathStart': [0.0, 0.0, np.pi/2], # ft, ft, rad (road theta is w.r.t +x axis)
-                'pathWidth': pathWidth,
-                'nPathSections': nPathSections,
-                'pathSectionLengths': pathSectionLengths,
-                'pathSectionCurvatures': pathSectionCurvatures,
-                }
+    nPathSections = 50
+    pathSectionLengths = 10*np.ones(nPathSections) # ft
+    pathSectionCurvatures = np.zeros(nPathSections) # ft
+    pathWidth = 10.0 # ft
+    data = {'case':case,
+            'pathStart': [0.0, 0.0, np.pi/2], # ft, ft, rad (road theta is w.r.t +East axis)
+            'pathWidth': pathWidth,
+            'nPathSections': nPathSections,
+            'pathSectionLengths': pathSectionLengths,
+            'pathSectionCurvatures': pathSectionCurvatures,
+            }
 
     return data
 

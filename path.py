@@ -23,7 +23,6 @@ def path(case):
     alongPathLines = alongPathLinesClass()
     acrossPathLines = acrossPathLinesClass()
 
-
     class lanes():
         def __init__(self,x=None,y=None):
             self.pathSectionLengths = pathData['pathSectionLengths']

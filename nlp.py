@@ -171,7 +171,7 @@ class nlpProb(object):
         u = u0.flatten(1)
         x = prob.computeOpenloopSolution(u, N, T, t0, x0)
 
-        if obstacle.obstaclePresent == True:
+        if obstacle.Present == True:
 
             lane1Lines = lanes.lane1Lines
             lane2Lines = lanes.lane2Lines

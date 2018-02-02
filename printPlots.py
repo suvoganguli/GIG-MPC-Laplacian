@@ -32,7 +32,7 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
         ax1 = f1.gca()
         ax1.grid(True)
 
-        if obstacle.obstaclePresent == True:
+        if obstacle.Present == True:
             print("Need correction")
             # Efc = obstacle.EObsStartSafeZone
             # Nfc = obstacle.NObsStartSafeZone
@@ -205,7 +205,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         #plt.ylim(ylimval[0],ylimval[1])
         None
 
-    if obstacle.obstaclePresent == True:
+    if obstacle.Present == True:
         xfc = obstacle.EObsStartSafeZone
         yfc = obstacle.NObsStartSafeZone
         W = obstacle.widthSafeZone

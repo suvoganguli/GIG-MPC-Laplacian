@@ -92,7 +92,7 @@ def runningCosts(u, x, t0, path, obstacle, posIdx=None):
         # inside road segment
         if inbox == True:
 
-            if obstacle.obstaclePresent == False:
+            if obstacle.Present == False:
                 a = A[k]
                 b = B[k]
                 c = C[k]
@@ -159,7 +159,7 @@ def runningCons(u, x, t0, path, obstacle, posIdx=None):
         # inside road segment
         if inbox == True:
 
-            if obstacle.obstaclePresent == False:     # stay one lane 1
+            if obstacle.Present == False:     # stay one lane 1
                 a1 = AR[k]
                 b1 = BR[k]
                 c1 = CR[k]
@@ -220,7 +220,7 @@ def terminalCons(u, x, t0, path, obstacle, posIdx=None):
         inbox = insideBox(x[0], x[1], AR[k], BR[k], CR[k], AL[k], BL[k], CL[k],
                      D1[k], E1[k], F1[k], D2[k], E2[k], F2[k])
         if inbox == True:
-            if obstacle.obstaclePresent == False:     # stay one lane 1
+            if obstacle.Present == False:     # stay one lane 1
                 a = A[k]
                 b = B[k]
                 c = C[k]

@@ -17,8 +17,7 @@ import time
 #
 # Edit problemData.py to run different experiments
 #
-# Version 1.1
-# 01/24/2018
+# 01/25/2018
 # -------------------------------------------------------------------
 
 # Path data
@@ -26,7 +25,7 @@ pathClass = path(case)
 path = pathClass()
 
 # Obstacle data (static)
-obstacleClass = obstacleInfo(obstaclePresent, obstacleE, obstacleN, obstacleWidth, obstacleLength)
+obstacleClass = obstacleInfo(obstaclePresent, obstacleE, obstacleN, obstacleChi, obstacleWidth, obstacleLength)
 obstacle = obstacleClass()
 
 # Storage data
@@ -61,6 +60,12 @@ while mpciter < mpciterations:
 
     #  get new initial value
     t0, x0 = measureInitialValue(tmeasure, xmeasure)
+
+    # search for obstacle
+    detected = detectObstacle(x0, detectionWindow, obstacle)
+
+    # create new path, if necessary
+
 
     # solve optimal control problem
     tStart = time.time()

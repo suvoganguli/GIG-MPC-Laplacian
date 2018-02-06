@@ -10,32 +10,32 @@ mph2fps = 4.4/3
 
 # Grid selection
 
-exptno = 2
+exptno = 1
 
 if exptno == 1:
-    gridsize = 4  # ft
-    widthSpace = 64 * gridsize  # ft
-    lengthSpace = 256 * gridsize  # ft
-    heightSpace = 32 * gridsize  # ft
+    scaleFactor = 4
+    widthSpace = 16 * scaleFactor  # ft
+    lengthSpace = 32 * scaleFactor  # ft
+    heightSpace = 8  # ft
 
 elif exptno == 2:
-    gridsize = 1  # ft
-    widthSpace = 16 * gridsize  # ft
-    lengthSpace = 32 * gridsize  # ft
-    heightSpace = 8 * gridsize  # ft
+    scaleFactor = 1
+    widthSpace = 16 * scaleFactor  # ft
+    lengthSpace = 32 * scaleFactor  # ft
+    heightSpace = 8  # ft
 
-
-gridClass = createGrid(gridsize, lengthSpace, widthSpace, heightSpace)
+gridSize = 1 # ft/unit
+gridClass = createGrid(gridSize, lengthSpace, widthSpace, heightSpace)
 grid = gridClass()
 
 
 # Start and End Points
 if exptno == 1:
-    startPoint = np.array([32, 2]) * gridsize # E (ft), N (ft)
-    endPoint = np.array([32, 250]) * gridsize  # E (ft), N (ft)
+    startPoint = np.array([7, 1.1]) * scaleFactor # E (ft), N (ft)
+    endPoint = np.array([7, 30]) * scaleFactor  # E (ft), N (ft)
 elif exptno == 2:
-    startPoint = np.array([8, 2.1]) * gridsize # E (ft), N (ft)
-    endPoint = np.array([8, 31]) * gridsize  # E (ft), N (ft)
+    startPoint = np.array([7, 1.1]) * scaleFactor # E (ft), N (ft)
+    endPoint = np.array([7, 30]) * scaleFactor  # E (ft), N (ft)
 
 
 # Number of states
@@ -113,7 +113,7 @@ elif nstates == 4:
 
     # Ipopt settings
     nlpMaxIter = 100
-    mpciterations = 3
+    mpciterations = 30
 
     # Kinematic Constraints
     E0 = startPoint[0]  # ft (North, long)
@@ -140,7 +140,7 @@ elif nstates == 4:
     V_cmd = V0  # fps
 
     # Terminal constraint
-    delta_yRoad = 0.5 * 5  # ft
+    delta_yRoad = 0.5  # ft
     delta_yRoadRelaxed = 5  # ft, in safe zone
     delta_V = 1 * mph2fps  # fps
 
@@ -192,17 +192,17 @@ elif nstates == 6:
 
 # Obstacle Data
 if exptno == 1:
-    obstacleE = np.array([30.0]) * gridsize # ft, left-bottom
-    obstacleN = np.array([100.0]) * gridsize # ft, left-bottom
-    obstacleChi = np.array([0.0]) * gridsize  # rad
-    obstacleLength = np.array([10.0]) * gridsize # ft
-    obstacleWidth = np.array([10.0]) * gridsize # ft
+    obstacleE = np.array([7.0]) * scaleFactor # ft, left-bottom
+    obstacleN = np.array([15.0]) * scaleFactor # ft, left-bottom
+    obstacleChi = np.array([0.0]) * scaleFactor  # rad
+    obstacleLength = np.array([1.0]) * scaleFactor # ft
+    obstacleWidth = np.array([1.0]) * scaleFactor # ft
 elif exptno == 2:
-    obstacleE = np.array([6.0]) * gridsize # ft, left-bottom
-    obstacleN = np.array([15.0]) * gridsize # ft, left-bottom
-    obstacleChi = np.array([0.0]) * gridsize  # rad
-    obstacleLength = np.array([4.0]) * gridsize # ft
-    obstacleWidth = np.array([4.0]) * gridsize # ft
+    obstacleE = np.array([6.0]) * scaleFactor # ft, left-bottom
+    obstacleN = np.array([15.0]) * scaleFactor # ft, left-bottom
+    obstacleChi = np.array([0.0]) * scaleFactor  # rad
+    obstacleLength = np.array([4.0]) * scaleFactor # ft
+    obstacleWidth = np.array([4.0]) * scaleFactor # ft
 
 if nstates == 2:
     # problem size

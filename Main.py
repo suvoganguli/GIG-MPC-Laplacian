@@ -50,6 +50,8 @@ tElapsed = np.zeros(mpciterations)
 
 posIdx = getPosIdx(x0[0], x0[1], path, posIdx0)
 
+runOnce = True
+
 # Main loop
 while mpciter < mpciterations:
 
@@ -61,7 +63,11 @@ while mpciter < mpciterations:
 
     # search for obstacle
     detected = detectObstacle(x0, detectionWindow, obstacle)
-    detected = True
+    if runOnce == True:
+        detected = True
+        runOnce = False
+    else:
+        detected = False
 
     # create new path, if necessary
     if detected == True:
@@ -101,14 +107,16 @@ if writeToFile == True:
     fHandle.close()
 
 # create plots
-print('done!')
-figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, None)
+#print('done!')
+#figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, None)
 
 # Save Data
-answer =  raw_input('Save Figures and Data [y/n]:  ')
-if answer == 'y':
-    dirname = raw_input('Enter Folder Name: ')
-    printPlots.savePlots(dirname, figno)
+#answer =  raw_input('Save Figures and Data [y/n]:  ')
+#if answer == 'y':
+#    dirname = raw_input('Enter Folder Name: ')
+#    printPlots.savePlots(dirname, figno)
+
+None
 
 # -------------------------------------------------------------------
 

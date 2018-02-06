@@ -110,7 +110,7 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slo
 
         scl = 2 ** (max(n_vec_exponents)-i_n)
         end_point_scl = end_point / scl
-        obstacle[int(end_point_scl[0]-1),int(end_point_scl[1]-1),int(end_point_scl[2]-1)] = -1 # identify end point
+        obstacle[int(end_point_scl[0]),int(end_point_scl[1]),int(end_point_scl[2])] = -1 # identify end point
 
         if (nx == 4):
             obstacle_n4 = obstacle
@@ -259,12 +259,13 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slo
                 path[k] = end_point
 
 
-    return path, not_converged, nx, ny, nz, nz_low, v
+    path = path.T
+    return path, not_converged
 
 # ----------------------------------------------------------------
 # Testing
 
-if True:
+if False:
 
     nxs = 16
     nys = 32

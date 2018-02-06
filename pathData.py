@@ -59,7 +59,7 @@ def pathInitData(case, startPoint, endPoint, obstacle = None, grid = None):
 
         obstacleData = createObstacleData(nE, nN, nU, gridSize, obstacle)
 
-        path = laplacian( startPoint_, endPoint_, nE, nN, nU, nU_low, obstacleData, slow_convergence_test )
+        path, not_converged = laplacian( startPoint_, endPoint_, nE, nN, nU, nU_low, obstacleData, slow_convergence_test )
 
         pathE = path[0, :] * gridSize  # ft
         pathN = path[1, :] * gridSize  # ft
@@ -81,11 +81,15 @@ def pathInitData(case, startPoint, endPoint, obstacle = None, grid = None):
             pathSectionLengths[k] = np.sqrt(dE**2 + dN**2)
 
         # Set the last point heading as that of the previous point
-        pathChi[-1] = pathChi[-2]
+        pathChi = np.append(pathChi, pathChi[-1])
+
+        pathWidth = 10.0
 
     # ---------------------------------------------------------
 
     data = {'case':case,
+            'pathStartPoint': startPoint,
+            'pathEndPoint': endPoint,
             'path': path, # E, N, U - ft, ft, ft
             'pathChi': pathChi,
             'pathWidth': pathWidth,
@@ -253,6 +257,8 @@ def pathDetailedData(pathInputData):
             self.PathLeftEndPointsE = LeftEndPointsE
             self.PathLeftEndPointsN = LeftEndPointsN
             self.Theta_endpoints = Theta_endpoints
+            self.PathStartPoint = pathInputData['pathStartPoint']
+            self.PathEndPoint = pathInputData['pathEndPoint']
             pass
 
     return path

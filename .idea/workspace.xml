@@ -3,12 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="7c49206a-79d9-4156-af50-89e8433a6c73" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ToDo" afterPath="$PROJECT_DIR$/ToDo" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Main.py" afterPath="$PROJECT_DIR$/Main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/laplacianPlanner.py" afterPath="$PROJECT_DIR$/laplacianPlanner.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/obstacleData.py" afterPath="$PROJECT_DIR$/obstacleData.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/path.py" afterPath="$PROJECT_DIR$/path.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pathCons.py" afterPath="$PROJECT_DIR$/pathCons.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pathCosts.py" afterPath="$PROJECT_DIR$/pathCosts.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logFile.txt" afterPath="$PROJECT_DIR$/logFile.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pathData.py" afterPath="$PROJECT_DIR$/pathData.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/printPlots.py" afterPath="$PROJECT_DIR$/printPlots.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/problemData.py" afterPath="$PROJECT_DIR$/problemData.py" />
@@ -26,56 +23,18 @@
       <file leaf-file-name="Main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1037">
-              <caret line="65" column="35" lean-forward="false" selection-start-line="65" selection-start-column="35" selection-end-line="65" selection-end-column="35" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="490">
+              <caret line="119" column="0" lean-forward="false" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="obstacleData.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/obstacleData.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="629">
-              <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="printPlots.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="printPlots.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/printPlots.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1207">
-              <caret line="71" column="0" lean-forward="false" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="laplacianPlanner.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/laplacianPlanner.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="51" column="22" lean-forward="true" selection-start-line="51" selection-start-column="22" selection-end-line="51" selection-end-column="22" />
-              <folding>
-                <element signature="e#74#92#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pathData.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pathData.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1003">
-              <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+            <state relative-caret-position="190">
+              <caret line="32" column="9" lean-forward="false" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="9" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -86,11 +45,33 @@
       <file leaf-file-name="problemData.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/problemData.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="27" column="70" lean-forward="true" selection-start-line="27" selection-start-column="70" selection-end-line="27" selection-end-column="70" />
+            <state relative-caret-position="204">
+              <caret line="84" column="23" lean-forward="true" selection-start-line="84" selection-start-column="23" selection-end-line="84" selection-end-column="23" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="laplacianPlanner.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/laplacianPlanner.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="258" column="0" lean-forward="false" selection-start-line="258" selection-start-column="0" selection-end-line="258" selection-end-column="0" />
+              <folding>
+                <element signature="e#74#92#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pathData.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pathData.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="361">
+              <caret line="259" column="31" lean-forward="false" selection-start-line="259" selection-start-column="17" selection-end-line="259" selection-end-column="31" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -112,11 +93,17 @@
       <find>obstacles</find>
       <find>X</find>
       <find>Y</find>
+      <find>print</find>
+      <find>nxs</find>
+      <find>gridsize</find>
+      <find>lane1</find>
     </findStrings>
     <replaceStrings>
       <replace>obstacleData</replace>
       <replace>E</replace>
       <replace>N</replace>
+      <replace>scaleFactor</replace>
+      <replace>path.pathData</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -130,14 +117,14 @@
         <option value="$PROJECT_DIR$/probInfo.py" />
         <option value="$PROJECT_DIR$/pathCosts.py" />
         <option value="$PROJECT_DIR$/pathCons.py" />
-        <option value="$PROJECT_DIR$/utils.py" />
         <option value="$PROJECT_DIR$/obstacleData.py" />
-        <option value="$PROJECT_DIR$/pathData.py" />
         <option value="$PROJECT_DIR$/path.py" />
-        <option value="$PROJECT_DIR$/printPlots.py" />
+        <option value="$PROJECT_DIR$/laplacianPlanner.py" />
+        <option value="$PROJECT_DIR$/utils.py" />
         <option value="$PROJECT_DIR$/Main.py" />
         <option value="$PROJECT_DIR$/problemData.py" />
-        <option value="$PROJECT_DIR$/laplacianPlanner.py" />
+        <option value="$PROJECT_DIR$/pathData.py" />
+        <option value="$PROJECT_DIR$/printPlots.py" />
       </list>
     </option>
   </component>
@@ -181,7 +168,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../UGV/v9/roadData.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../UGV/v9/printPlots.py" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$2/Languages" value="Python" />
   </component>
   <component name="RunDashboard">
@@ -196,7 +183,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.laplacianPlanner">
+  <component name="RunManager" selected="Python.Main">
     <configuration name="Main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -255,8 +242,8 @@
     </list>
     <recent_temporary>
       <list size="3">
-        <item index="0" class="java.lang.String" itemvalue="Python.laplacianPlanner" />
-        <item index="1" class="java.lang.String" itemvalue="Python.Main" />
+        <item index="0" class="java.lang.String" itemvalue="Python.Main" />
+        <item index="1" class="java.lang.String" itemvalue="Python.laplacianPlanner" />
         <item index="2" class="java.lang.String" itemvalue="Python.scratch_27" />
       </list>
     </recent_temporary>
@@ -275,27 +262,38 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="84" width="1282" height="890" extended-state="6" />
+    <frame x="0" y="84" width="1922" height="946" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12109375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.080729164" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27178153" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31861576" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41432226" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4522673" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27178153" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12109375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32769832" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41432226" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -305,29 +303,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/printPlots.py</url>
-          <line>71</line>
-          <option name="timeStamp" value="41" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/laplacianPlanner.py</url>
-          <line>86</line>
-          <option name="timeStamp" value="49" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/laplacianPlanner.py</url>
-          <line>238</line>
-          <option name="timeStamp" value="53" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/laplacianPlanner.py</url>
-          <line>112</line>
-          <option name="timeStamp" value="54" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/laplacianPlanner.py</url>
-          <line>24</line>
-          <option name="timeStamp" value="55" />
+          <url>file://$PROJECT_DIR$/Main.py</url>
+          <line>118</line>
+          <option name="timeStamp" value="65" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -337,18 +315,74 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="56" />
+      <option name="time" value="69" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/probInfo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="222" column="31" lean-forward="false" selection-start-line="222" selection-start-column="31" selection-end-line="222" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nlp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="165" column="0" lean-forward="true" selection-start-line="165" selection-start-column="0" selection-end-line="165" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pathData.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/path.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1054">
+          <caret line="66" column="35" lean-forward="false" selection-start-line="66" selection-start-column="35" selection-end-line="66" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/printPlots.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1156">
+          <caret line="68" column="0" lean-forward="false" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/problemData.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="27" column="18" lean-forward="false" selection-start-line="27" selection-start-column="18" selection-end-line="27" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1037">
           <caret line="65" column="35" lean-forward="false" selection-start-line="65" selection-start-column="35" selection-end-line="65" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -357,7 +391,7 @@
         <state relative-caret-position="629">
           <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -376,9 +410,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1003">
           <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -406,9 +438,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="986">
           <caret line="64" column="0" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -417,7 +447,7 @@
         <state relative-caret-position="969">
           <caret line="58" column="19" lean-forward="false" selection-start-line="58" selection-start-column="19" selection-end-line="58" selection-end-column="19" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -475,7 +505,7 @@
         <state relative-caret-position="969">
           <caret line="58" column="19" lean-forward="false" selection-start-line="58" selection-start-column="19" selection-end-line="58" selection-end-column="19" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -484,9 +514,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1088">
           <caret line="64" column="0" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -567,7 +595,7 @@
         <state relative-caret-position="969">
           <caret line="58" column="19" lean-forward="false" selection-start-line="58" selection-start-column="19" selection-end-line="58" selection-end-column="19" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -576,9 +604,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="986">
           <caret line="64" column="0" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -641,23 +667,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="186" column="30" lean-forward="true" selection-start-line="186" selection-start-column="30" selection-end-line="186" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/printPlots.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1207">
-          <caret line="71" column="0" lean-forward="false" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/path.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
@@ -665,52 +674,74 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Main.py">
+    <entry file="file://$PROJECT_DIR$/obstacleData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1037">
-          <caret line="65" column="35" lean-forward="false" selection-start-line="65" selection-start-column="35" selection-end-line="65" selection-end-column="35" />
+        <state relative-caret-position="358">
+          <caret line="47" column="0" lean-forward="false" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/obstacleData.py">
+    <entry file="file://$PROJECT_DIR$/utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        <state relative-caret-position="577">
+          <caret line="198" column="41" lean-forward="true" selection-start-line="198" selection-start-column="41" selection-end-line="198" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../UGV/v9/printPlots.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="101">
+          <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="68" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="490">
+          <caret line="119" column="0" lean-forward="false" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/problemData.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="84" column="23" lean-forward="true" selection-start-line="84" selection-start-column="23" selection-end-line="84" selection-end-column="23" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pathData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1003">
-          <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/problemData.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="27" column="70" lean-forward="true" selection-start-line="27" selection-start-column="70" selection-end-line="27" selection-end-column="70" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="361">
+          <caret line="259" column="31" lean-forward="false" selection-start-line="259" selection-start-column="17" selection-end-line="259" selection-end-column="31" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/laplacianPlanner.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="51" column="22" lean-forward="true" selection-start-line="51" selection-start-column="22" selection-end-line="51" selection-end-column="22" />
+        <state relative-caret-position="323">
+          <caret line="258" column="0" lean-forward="false" selection-start-line="258" selection-start-column="0" selection-end-line="258" selection-end-column="0" />
           <folding>
             <element signature="e#74#92#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/printPlots.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="32" column="9" lean-forward="false" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

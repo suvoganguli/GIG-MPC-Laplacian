@@ -178,3 +178,28 @@ def rotate(vec1,Chi):
     vec2 = np.matmul(dcm, vec1)
 
     return np.squeeze(vec2)
+
+def createGrid(gridsize, lengthSpace, widthSpace, heightSpace):
+
+    # always set height at the middle of the space to run Laplacian Planner without error
+    height = heightSpace / 2  # ft
+
+    nE = widthSpace / gridsize
+    nN = lengthSpace / gridsize
+    nU = heightSpace / gridsize
+    nU_low = nU
+
+    class grid():
+        def __init__(self):
+            self.nE = nE
+            self.nN = nN
+            self.nU = nU
+            self.nU_low = nU_low
+            self.height = height
+            self.gridSize = gridsize # ft
+            self.lengthSpace = lengthSpace # ft
+            self.widthSpace = widthSpace  # ft
+            self.heightSpace = heightSpace  # ft
+            pass
+
+    return grid

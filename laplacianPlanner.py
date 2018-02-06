@@ -5,7 +5,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_convergence_test ):
+def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slow_convergence_test ):
 
     # ----------------  Initialization ----------------
 
@@ -17,7 +17,9 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
     v_end = -1
     gradient_sign = np.sign(v_end - v0)
 
-    n_vec_exponents = [4, 3, 4]
+    nmax = np.int( np.log2( min(nxs, nys) ) )
+
+    n_vec_exponents = [nmax, nmax-1, nmax]
     iter_max = 50
 
     n_vec = 2 ** np.array(n_vec_exponents)
@@ -35,6 +37,7 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
     nz_ = int(nx_ / nz_factor)
     nt = int(np.linalg.norm(np.array([nx_, ny_, nz_]) / dt))
     nz_low = int(nz_/2)
+
 
     # ----------------  Build obstacles ----------------
 
@@ -80,8 +83,9 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
                     k1 = k * nzs / nz
                     k2 = (k + 1) * nzs / nz
 
-                    None
-                    if sum(sum(sum(obstacles[ i1:i2, j1:j2 , k1:k2 ]))) > 0:
+                    if i1==i2 or j1==j2 or k1==k2:
+                        print('error')
+                    if sum(sum(sum(obstacleData[ i1:i2, j1:j2 , k1:k2 ]))) > 0:
                         obstacle[i][j][k] = 1
 
 
@@ -106,7 +110,7 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
 
         scl = 2 ** (max(n_vec_exponents)-i_n)
         end_point_scl = end_point / scl
-        obstacle[int(end_point_scl[0]),int(end_point_scl[1]),int(end_point_scl[2])] = -1 # identify end point
+        obstacle[int(end_point_scl[0]-1),int(end_point_scl[1]-1),int(end_point_scl[2]-1)] = -1 # identify end point
 
         if (nx == 4):
             obstacle_n4 = obstacle
@@ -260,21 +264,21 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
 # ----------------------------------------------------------------
 # Testing
 
-if False:
+if True:
 
     nxs = 16
     nys = 32
     nzs = 8
-    obstacles = np.zeros([nxs, nys, nzs])
+    obstacleData = np.zeros([nxs, nys, nzs])
     w = 4
     l = 4
     x0 = 5
     y0 = 14
     for j in range(w):
         for k in range(l):
-            obstacles[x0+j,y0+k,:] = 1
+            obstacleData[x0+j,y0+k,:] = 1
 
-    obstacles[:,:,0] = 1
+    obstacleData[:,:,0] = 1
 
     start_point = np.array([7, 1.1, 1],dtype='float')  # [8, 2.1, 2]
     end_point = np.array([7, 30, 1],dtype='float')  # [8, 31, 2]
@@ -285,7 +289,7 @@ if False:
     scale = 512 / nxs # (feet/grid_point)   eg scale=4 ft/grid_point when nxs=128
 
     path, not_converged, nx, ny, nz, nz_low, v = \
-        laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_convergence_test )
+        laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slow_convergence_test )
 
     East = path[:,0]
     North = path[:,1]

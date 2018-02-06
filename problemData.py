@@ -1,4 +1,5 @@
 import numpy as np
+from utils import *
 
 # Units
 mph2fps = 4.4/3
@@ -7,9 +8,35 @@ mph2fps = 4.4/3
 # USER INPUTS
 # ----------------------------------------------------------
 
+# Grid selection
+
+exptno = 2
+
+if exptno == 1:
+    gridsize = 4  # ft
+    widthSpace = 64 * gridsize  # ft
+    lengthSpace = 256 * gridsize  # ft
+    heightSpace = 32 * gridsize  # ft
+
+elif exptno == 2:
+    gridsize = 1  # ft
+    widthSpace = 16 * gridsize  # ft
+    lengthSpace = 32 * gridsize  # ft
+    heightSpace = 8 * gridsize  # ft
+
+
+gridClass = createGrid(gridsize, lengthSpace, widthSpace, heightSpace)
+grid = gridClass()
+
+
 # Start and End Points
-startPoint = np.array([0, 0])  # E (ft), N (ft)
-endPoint = np.array([0, 150])  # E (ft), N (ft)
+if exptno == 1:
+    startPoint = np.array([32, 2]) * gridsize # E (ft), N (ft)
+    endPoint = np.array([32, 250]) * gridsize  # E (ft), N (ft)
+elif exptno == 2:
+    startPoint = np.array([8, 2.1]) * gridsize # E (ft), N (ft)
+    endPoint = np.array([8, 31]) * gridsize  # E (ft), N (ft)
+
 
 # Number of states
 # nstates = 2:
@@ -67,13 +94,6 @@ if nstates == 2:
     W_Vdot = 10.0
     W_Chidot = 1.0
 
-    # Road and Obstacle Data
-    obstacleE = 0  # ft, left-bottom
-    obstacleN = 50 # ft, left-bottom
-    obstacleChi = 0  # rad
-    obstacleLength = 10 # ft
-    obstacleWidth = 10 # ft
-
     V_cmd = V0  # fps
 
     # Terminal constraint
@@ -99,7 +119,7 @@ elif nstates == 4:
     E0 = startPoint[0]  # ft (North, long)
     N0 = startPoint[1]  # ft (East, lat)
     Chi0 = 0 * np.pi / 180  # rad
-    V0 = 30 * mph2fps
+    V0 = 5 * mph2fps
     x0 = [E0, N0, V0, Chi0]  # E, N, V, Chi, Vdot, Chidot
 
     lb_VdotVal = -2 * 100  # fps3
@@ -116,13 +136,6 @@ elif nstates == 4:
     W_V = 1.0
     W_Vdot = 10.0
     W_Chidot = 1.0
-
-    # Road and Obstacle Data
-    obstacleE = 0  # ft, left-bottom
-    obstacleN = 50 # ft, left-bottom
-    obstacleChi = 0  # rad
-    obstacleLength = 10 # ft
-    obstacleWidth = 10 # ft
 
     V_cmd = V0  # fps
 
@@ -165,13 +178,6 @@ elif nstates == 6:
     W_Vddot = 10.0   # 20.0
     W_Chiddot = 1.0 #0.1
 
-    # Road and Obstacle Data
-    obstacleE = 0  # ft, left-bottom
-    obstacleN = 50 # ft, left-bottom
-    obstacleChi = 0  # rad
-    obstacleLength = 10 # ft
-    obstacleWidth = 10 # ft
-
     V_cmd = V0  # fps
 
     # Terminal constraint
@@ -183,6 +189,20 @@ elif nstates == 6:
     pathWidth = 5.0 # ft
 
 # ------------------------------------------------------------
+
+# Obstacle Data
+if exptno == 1:
+    obstacleE = np.array([30.0]) * gridsize # ft, left-bottom
+    obstacleN = np.array([100.0]) * gridsize # ft, left-bottom
+    obstacleChi = np.array([0.0]) * gridsize  # rad
+    obstacleLength = np.array([10.0]) * gridsize # ft
+    obstacleWidth = np.array([10.0]) * gridsize # ft
+elif exptno == 2:
+    obstacleE = np.array([6.0]) * gridsize # ft, left-bottom
+    obstacleN = np.array([15.0]) * gridsize # ft, left-bottom
+    obstacleChi = np.array([0.0]) * gridsize  # rad
+    obstacleLength = np.array([4.0]) * gridsize # ft
+    obstacleWidth = np.array([4.0]) * gridsize # ft
 
 if nstates == 2:
     # problem size

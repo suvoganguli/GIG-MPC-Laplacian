@@ -1,5 +1,6 @@
 
 
-2018/02/02
-- Construct obstacle data in 3D grid
+2018/02/05
+- improve usage of obstacle detection output
+- update path to use only detected obstacles 
 

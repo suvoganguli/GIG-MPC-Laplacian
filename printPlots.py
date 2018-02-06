@@ -21,14 +21,17 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     North = x_mpciter[:,1]
 
     # figure 1
-    f1 = plt.figure(1,figsize=(6, 8), dpi=100)
+    f1 = plt.figure(1,figsize=(5, 7), dpi=100)
     plt.ylabel('N [ft]')
     plt.xlabel('E [ft]')
     print('')
     None
 
     if mpciter == 0:
-        plt.plot(path.path.X, path.path.Y, linestyle='-', color='k')
+        plt.plot(path.pathData.E, path.pathData.N, linestyle='--', color='k')
+        plt.plot(path.pathData.PathLeftBoundaryE, path.pathData.PathLeftBoundaryN, linestyle='-', color='k')
+        plt.plot(path.pathData.PathRightBoundaryE, path.pathData.PathRightBoundaryN, linestyle='-', color='k')
+
         ax1 = f1.gca()
         ax1.grid(True)
 
@@ -57,7 +60,7 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     nEN = len(East)
     plt.plot(East[0:nEN], North[0:nEN], marker='x', markersize=4, color='b')
     plt.plot(East[0], North[0], marker='o', markersize=4, color='r')
-    plt.xlim([-30,30])
+    #plt.xlim([-30,30])
     #ax1.set_xlim([-30,30])
     #ax1.set_ylim([200, 425])
 
@@ -65,6 +68,8 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     #if mpciter < mpciterations-1:
     #   ax1 = f1.gca()
     #   del ax1.lines[7:12]
+
+    None
 
 
 def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
@@ -130,7 +135,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         figno[5] = plt.gcf().number
         f, ax = plt.subplots(1, figsize=(6, 8), dpi=100)  #sharex=True
         lw = 1.0
-        ax.plot(path.X, path.Y, linewidth = lw, linestyle='--', color='k')
+        ax.plot(path.E, path.N, linewidth = lw, linestyle='--', color='k')
         ax.plot(x[:,0],x[:,1], linestyle='-', color='b')
         ax.set_ylabel('N [ft]')
         ax.set_xlabel('E [ft]')
@@ -187,7 +192,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         figno[4] = plt.gcf().number
         f, ax = plt.subplots(1, figsize=(6, 8), dpi=100)  # sharex=True
         lw = 1.0
-        ax.plot(path.path.X, path.path.Y, linewidth=lw, linestyle='-', color='k')
+        ax.plot(path.pathData.E, path.pathData.N, linewidth=lw, linestyle='-', color='k')
         ax.plot(x[:, 0], x[:, 1], linestyle='-', color='b')
         ax.set_ylabel('N [ft]')
         ax.set_xlabel('E [ft]')

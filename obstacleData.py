@@ -15,7 +15,35 @@ def obstacleInfo(obstaclePresent, obstacleE, obstacleN, obstacleChi, obstacleWid
 
     return obstacle
 
+def createObstacleData(nE, nN, nU, gridsize, obstacle):
+
+    obstacleOnGrid = np.zeros([nE, nN, nU])
+    n = len(obstacle.E)
+
+    for i in range(n):
+        EGrid = np.floor( obstacle.E[i] / gridsize )
+        NGrid = np.floor( obstacle.N[i] / gridsize )
+        wGrid = np.ceil( obstacle.w[i] / gridsize )
+        lGrid = np.ceil( obstacle.l[i] / gridsize )
+
+        EGrid = np.int(EGrid)
+        NGrid = np.int(NGrid)
+        wGrid = np.int(wGrid)
+        lGrid = np.int(lGrid)
+
+        for j in range(wGrid):
+            for k in range(lGrid):
+                obstacleOnGrid[EGrid + j, NGrid + k,:] = 1
+
+    # floor is an obstaclce
+    obstacleOnGrid[:,:,0] = 1
+
+    return obstacleOnGrid
+
+
 def detectObstacle(x0, detectionWindow, obstacle):
+
+    nObs = len(obstacle.E)
 
     # corners of detection window
     E = x0[0]
@@ -38,22 +66,25 @@ def detectObstacle(x0, detectionWindow, obstacle):
     bbPath = mplPath.Path(np.array([p1Win, p2Win, p3Win, p4Win]))
 
     # corners of obstacle
-    p1Obs = np.array([obstacle.E - obstacle.w/2, obstacle.N])
-    p2Obs = np.array([obstacle.E + obstacle.w/2, obstacle.N])
-    p3Obs = np.array([obstacle.E + obstacle.w/2, obstacle.N + obstacle.l])
-    p4Obs = np.array([obstacle.E - obstacle.w/2, obstacle.N + obstacle.l])
 
-    p1Obs = rotate(p1Obs, obstacle.Chi)
-    p2Obs = rotate(p2Obs, obstacle.Chi)
-    p3Obs = rotate(p3Obs, obstacle.Chi)
-    p4Obs = rotate(p4Obs, obstacle.Chi)
+    detected = False
+    for k in range(nObs):
+        p1Obs = np.array([obstacle.E[k] - obstacle.w[k]/2, obstacle.N[k]])
+        p2Obs = np.array([obstacle.E[k] + obstacle.w[k]/2, obstacle.N[k]])
+        p3Obs = np.array([obstacle.E[k] + obstacle.w[k]/2, obstacle.N[k] + obstacle.l[k]])
+        p4Obs = np.array([obstacle.E[k] - obstacle.w[k]/2, obstacle.N[k] + obstacle.l[k]])
 
-    # Current algorithm searches for detection of obstacle corners only in
-    # detection window. This will be improved later on
-    det1 = bbPath.contains_point(p1Obs)
-    det2 = bbPath.contains_point(p2Obs)
-    det3 = bbPath.contains_point(p3Obs)
-    det4 = bbPath.contains_point(p4Obs)
-    detected = det1 or det2 or det3 or det4
+        p1Obs = rotate(p1Obs, obstacle.Chi[k])
+        p2Obs = rotate(p2Obs, obstacle.Chi[k])
+        p3Obs = rotate(p3Obs, obstacle.Chi[k])
+        p4Obs = rotate(p4Obs, obstacle.Chi[k])
+
+        # Current algorithm searches for detection of obstacle corners only in
+        # detection window. This will be improved later on
+        det1 = bbPath.contains_point(p1Obs)
+        det2 = bbPath.contains_point(p2Obs)
+        det3 = bbPath.contains_point(p3Obs)
+        det4 = bbPath.contains_point(p4Obs)
+        detected = detected or det1 or det2 or det3 or det4
 
     return detected

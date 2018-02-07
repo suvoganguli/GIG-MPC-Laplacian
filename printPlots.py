@@ -24,7 +24,7 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     f1 = plt.figure(1,figsize=(5, 7), dpi=100)
     plt.ylabel('N [ft]')
     plt.xlabel('E [ft]')
-    print('')
+    #plt.axis('equal')
     None
 
     if mpciter == 0:

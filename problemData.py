@@ -31,8 +31,8 @@ grid = gridClass()
 
 # Start and End Points
 if exptno == 1:
-    startPoint = np.array([7, 1.1]) * scaleFactor # E (ft), N (ft)
-    endPoint = np.array([7, 30]) * scaleFactor  # E (ft), N (ft)
+    startPoint = np.array([7, 1]) * scaleFactor # E (ft), N (ft)
+    endPoint = np.array([7, 28]) * scaleFactor  # E (ft), N (ft)
 elif exptno == 2:
     startPoint = np.array([7, 1.1]) * scaleFactor # E (ft), N (ft)
     endPoint = np.array([7, 30]) * scaleFactor  # E (ft), N (ft)

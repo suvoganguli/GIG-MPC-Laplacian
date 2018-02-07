@@ -32,7 +32,7 @@ def pathInitData(case, startPoint, endPoint, obstacle = None, grid = None):
         path = np.zeros([3,npts])
 
         path[0,0] = startPoint[0]
-        path[0,1] = startPoint[1]
+        path[1,0] = startPoint[1]
 
         for k in range(npts - 1):
             path[0, k + 1] = path[0, k] + pathSectionLengths[k] * np.sin(pathChi[k])
@@ -122,6 +122,8 @@ def pathDetailedData(pathInputData):
     pathChi = pathInputData['pathChi']
     pathWidth = pathInputData['pathWidth']
     pathSectionLengths = pathInputData['pathSectionLengths']
+    pathStartPoint = pathInputData['pathStartPoint']
+    pathEndPoint = pathInputData['pathEndPoint']
 
     #  Set the initial location of the path section
     E0 = path[0,0] # ft
@@ -129,7 +131,10 @@ def pathDetailedData(pathInputData):
     theta0 = np.pi/2 - pathChi[0] # rad
 
     # Waypoint Data
-    deltaWP = 1 # ft, Waypoint separation distance
+    # deltaWP = 1 # ft, Waypoint separation distance
+
+    # Number of intermediate waypoints
+    n = 4
 
     # pathWidth/2
     d = pathWidth/2
@@ -156,10 +161,11 @@ def pathDetailedData(pathInputData):
 
         secLength = pathSectionLengths[i]
 
-        n = np.int(secLength / deltaWP)
-
+        #n = np.int(secLength / deltaWP)
         #if n != int(n):
         #    print('secLenth must be an integer multiple of deltaWP')
+
+        deltaWP = secLength / n
 
         path_dChi = pathChi[i+1] - pathChi[i]
         path_tht = - path_dChi
@@ -257,87 +263,8 @@ def pathDetailedData(pathInputData):
             self.PathLeftEndPointsE = LeftEndPointsE
             self.PathLeftEndPointsN = LeftEndPointsN
             self.Theta_endpoints = Theta_endpoints
-            self.PathStartPoint = pathInputData['pathStartPoint']
-            self.PathEndPoint = pathInputData['pathEndPoint']
+            self.PathStartPoint = pathStartPoint
+            self.PathEndPoint = pathEndPoint
             pass
 
     return path
-# ----------------------------------------------------------------
-# Older version:
-#
-# def pathInfo(case):
-#
-#     # --- Define the following ------------------------
-#     # - pathStart
-#     # - pathEnd
-#     # - pathWidth
-#     # - pathSectionLength
-#     # - pathE
-#     # - pathN
-#     # - pathChi
-#
-#     if case == 'pathStraightNorth':
-#
-#         pathStart = np.array([0,0,0])  # E [ft], N [ft], Chi [rad]
-#         pathWidth = 10
-#
-#         n = 100
-#
-#         dN = np.array([pathEnd[1] - pathStart[1]])/n
-#         pathE = np.zeros(n) + pathStart[0]
-#         pathN = np.arange(pathStart[1],pathEnd[1],dN)
-#
-#         pathSectionLength = dN # [ft]
-#
-#         pathChi = np.zeros(n)
-#         for k in range(n-1):
-#             num = np.array([pathE[k+1] - pathE[k]])
-#             den = np.array([pathN[k+1] - pathN[k]])
-#             if den != 0:
-#                 pathChi[k] = np.arctan(num/den)
-#             else:
-#                 pathChi[k] = np.sign(num)*np.pi/2
-#         pathChi[n-1] = pathChi[n-2]
-#
-#
-#     # ----------  Generic below this ---------------------
-#
-#     dvec1 = np.array([-pathWidth/2,0.0])
-#     dvec2 = np.array([+pathWidth/2,0.0])
-#
-#     pathLeftBoundaryE = np.zeros(n)
-#     pathLeftBoundaryN = np.zeros(n)
-#     pathRightBoundaryE = np.zeros(n)
-#     pathRightBoundaryN = np.zeros(n)
-#
-#     for k in range(n):
-#         dvec3 = rotate(dvec1,pathChi[k])
-#         dvec4 = rotate(dvec2,pathChi[k])
-#
-#         pathLeftBoundaryE[k] = pathE[k] + dvec3[0]
-#         pathLeftBoundaryN[k] = pathN[k] + dvec3[1]
-#
-#         pathRightBoundaryE[k] = pathE[k] + dvec4[0]
-#         pathRightBoundaryN[k] = pathN[k] + dvec4[1]
-#
-#
-#     class path():
-#         def __init__(self):
-#             self.pathStart = pathStart
-#             self.pathEnd = pathEnd
-#             self.nPathSections = n
-#             self.pathWidth = pathWidth
-#             self.pathSectionLength = pathSectionLength
-#             self.pathE = pathE
-#             self.pathN = pathN
-#             self.pathChi = pathChi
-#             self.pathLeftBoundaryE = pathLeftBoundaryE
-#             self.pathLeftBoundaryN = pathLeftBoundaryN
-#             self.pathRightBoundaryE = pathRightBoundaryE
-#             self.pathRightBoundaryN = pathRightBoundaryN
-#
-#             pass
-#
-#     return path
-#
-#

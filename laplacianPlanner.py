@@ -28,7 +28,7 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slo
 
     #dt = float(nxs) / 128 # number of pixels per time step
     dt = 4
-    tol = float(dt)
+    tol = 2*float(dt)
 
     # we want to make nt large enough for the path to run across the entire domain
     i_n = max(n_vec_exponents)
@@ -234,9 +234,9 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slo
     path[0] = start_point
 
     for it in np.arange(1, nt):
-        i = max(2, min(nx - 1, np.int(path[it - 1, 0])))
-        j = max(2, min(ny - 1, np.int(path[it - 1, 1])))
-        k = max(2, min(nz - 1, np.int(path[it - 1, 2])))
+        i = max(2, min(nx - 2, np.int(path[it - 1, 0])))
+        j = max(2, min(ny - 2, np.int(path[it - 1, 1])))
+        k = max(2, min(nz - 2, np.int(path[it - 1, 2])))
 
         dv_dx = (
                     sum( sum( v[i + 1,j - 1:j + 1,k - 1:k + 1] ) ) / 9
@@ -255,11 +255,10 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slo
         path[it] = path[it - 1] + dt * gradient_sign * np.squeeze(gradient_vec) / (1e-306 + np.linalg.norm(gradient_vec))
 
         if np.linalg.norm(path[it]-end_point) < tol:
-            for k in np.arange(it+1,nt):
-                path[k] = end_point
+            path_reached = path[:,0:it]
+            break
 
-
-    path = path.T
+    path = path_reached.T
     return path, not_converged
 
 # ----------------------------------------------------------------

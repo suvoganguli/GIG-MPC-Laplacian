@@ -134,7 +134,7 @@ def pathDetailedData(pathInputData):
     # deltaWP = 1 # ft, Waypoint separation distance
 
     # Number of intermediate waypoints
-    n = 4
+    n = 10
 
     # pathWidth/2
     d = pathWidth/2

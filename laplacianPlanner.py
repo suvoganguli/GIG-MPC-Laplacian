@@ -255,10 +255,17 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slo
         path[it] = path[it - 1] + dt * gradient_sign * np.squeeze(gradient_vec) / (1e-306 + np.linalg.norm(gradient_vec))
 
         if np.linalg.norm(path[it]-end_point) < tol:
-            path_reached = path[:,0:it]
+            #path_reached = path[:,0:it]
+            k_end = it
             break
 
-    path = path_reached.T
+    path_reached = path[0:k_end,:]
+
+    path = np.concatenate([path_reached,end_point[None,:]])
+    path = path.T
+
+    #path = path_reached.T
+
     return path, not_converged
 
 # ----------------------------------------------------------------

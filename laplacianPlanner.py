@@ -28,7 +28,7 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slo
 
     #dt = float(nxs) / 128 # number of pixels per time step
     dt = 4
-    tol = 2*float(dt)
+    tol = 4.0
 
     # we want to make nt large enough for the path to run across the entire domain
     i_n = max(n_vec_exponents)
@@ -258,6 +258,8 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slo
             #path_reached = path[:,0:it]
             k_end = it
             break
+        else:
+            k_end = nt
 
     path_reached = path[0:k_end,:]
 

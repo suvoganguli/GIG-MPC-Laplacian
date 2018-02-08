@@ -177,7 +177,6 @@ def pathDetailedData(pathInputData):
             Theta = np.array([theta0])
 
         if (Theta[-1] * 180 / np.pi > 269) and (Theta[-1] * 180 / np.pi < 270):
-
             path_dtht2 = [270 * np.pi / 180 - Theta[-1]]
             Theta[-1] = Theta[-1] + path_dtht2
 
@@ -201,6 +200,13 @@ def pathDetailedData(pathInputData):
 
             E0 = E0 + deltaWP * np.cos(theta)
             N0 = N0 + deltaWP * np.sin(theta)
+
+        # Debug
+        #E_err = E[-1] - path.T[i+1, 0]
+        #N_err = N[-1] - path.T[i+1, 1]
+        #print(i, E_err, N_err)
+        #if abs(N_err) > 5:
+        #    None
 
         # Add the section to the complete path defintion
         E_full = np.concatenate((E_full, E[:-1]))
@@ -249,6 +255,7 @@ def pathDetailedData(pathInputData):
         def __init__(self):
             self.nPathSections = nPathSections
             self.pathSectionLengths = pathSectionLengths
+            self.path = path
             self.E = E_full
             self.N = N_full
             self.Theta = Theta_full

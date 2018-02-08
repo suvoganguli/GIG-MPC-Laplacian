@@ -13,16 +13,19 @@ mph2fps = 4.4/3
 exptno = 1
 
 if exptno == 1:
-    scaleFactor = 4
+    scaleFactor = 1
     widthSpace = 16 * scaleFactor  # ft
     lengthSpace = 32 * scaleFactor  # ft
     heightSpace = 8  # ft
 
 elif exptno == 2:
-    scaleFactor = 1
+    scaleFactor = 4
     widthSpace = 16 * scaleFactor  # ft
     lengthSpace = 32 * scaleFactor  # ft
     heightSpace = 8  # ft
+
+
+
 
 gridSize = 1 # ft/unit
 gridClass = createGrid(gridSize, lengthSpace, widthSpace, heightSpace)
@@ -32,10 +35,10 @@ grid = gridClass()
 # Start and End Points
 if exptno == 1:
     startPoint = np.array([7, 1]) * scaleFactor # E (ft), N (ft)
-    endPoint = np.array([7, 28]) * scaleFactor  # E (ft), N (ft)
-elif exptno == 2:
-    startPoint = np.array([7, 1.1]) * scaleFactor # E (ft), N (ft)
     endPoint = np.array([7, 30]) * scaleFactor  # E (ft), N (ft)
+elif exptno == 2:
+    startPoint = np.array([7, 1]) * scaleFactor  # E (ft), N (ft)
+    endPoint = np.array([7, 28]) * scaleFactor  # E (ft), N (ft)
 
 
 # Number of states
@@ -192,17 +195,20 @@ elif nstates == 6:
 
 # Obstacle Data
 if exptno == 1:
+    obstacleE = np.array([6.0]) * scaleFactor # ft, left-bottom
+    obstacleN = np.array([15.0]) * scaleFactor # ft, left-bottom
+    obstacleChi = np.array([0.0]) * scaleFactor  # rad
+    obstacleLength = np.array([2.0]) * scaleFactor # ft
+    obstacleWidth = np.array([2.0]) * scaleFactor # ft
+
+elif exptno == 2:
     obstacleE = np.array([7.0]) * scaleFactor # ft, left-bottom
     obstacleN = np.array([15.0]) * scaleFactor # ft, left-bottom
     obstacleChi = np.array([0.0]) * scaleFactor  # rad
     obstacleLength = np.array([1.0]) * scaleFactor # ft
     obstacleWidth = np.array([1.0]) * scaleFactor # ft
-elif exptno == 2:
-    obstacleE = np.array([6.0]) * scaleFactor # ft, left-bottom
-    obstacleN = np.array([15.0]) * scaleFactor # ft, left-bottom
-    obstacleChi = np.array([0.0]) * scaleFactor  # rad
-    obstacleLength = np.array([4.0]) * scaleFactor # ft
-    obstacleWidth = np.array([4.0]) * scaleFactor # ft
+
+# ------------------------------------------------------------
 
 if nstates == 2:
     # problem size

@@ -107,16 +107,16 @@ if writeToFile == True:
     fHandle.close()
 
 # create plots
-#print('done!')
-#figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, None)
+print('done!')
+figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, None)
 
 # Save Data
-#answer =  raw_input('Save Figures and Data [y/n]:  ')
-#if answer == 'y':
-#    dirname = raw_input('Enter Folder Name: ')
-#    printPlots.savePlots(dirname, figno)
+answer =  raw_input('Save Figures and Data [y/n]:  ')
+if answer == 'y':
+    dirname = raw_input('Enter Folder Name: ')
+    printPlots.savePlots(dirname, figno)
 
-None
+
 
 # -------------------------------------------------------------------
 

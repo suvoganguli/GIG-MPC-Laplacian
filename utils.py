@@ -118,8 +118,8 @@ def getPatch(Efc,Nfc,W,L,theta,fc):
 
     # create object with heading = 0 deg
 
-    E1 = -W/2
-    E2 = +W/2
+    E1 = 0
+    E2 = W
     E3 = E2
     E4 = E1
     N1 = 0

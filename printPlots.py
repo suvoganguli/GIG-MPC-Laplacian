@@ -28,7 +28,13 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     None
 
     if mpciter == 0:
-        plt.plot(path.pathData.E, path.pathData.N, linestyle='--', color='k')
+
+        # Detailed Path
+        plt.plot(path.pathData.E, path.pathData.N, linestyle='--', color='c')
+
+        # Laplacian Path
+        #plt.plot(path.pathData.pathLaplacian[0,:], path.pathData.pathLaplacian[1,:], linestyle='--', color='k')
+
         #plt.plot(path.pathData.PathLeftBoundaryE, path.pathData.PathLeftBoundaryN, linestyle='-', color='k')
         #plt.plot(path.pathData.PathRightBoundaryE, path.pathData.PathRightBoundaryN, linestyle='-', color='k')
 
@@ -71,24 +77,29 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
             # fc = "green"
             # polygon_safezone = getPatch(Efc, Nfc, W, L, Theta, fc)
             #
-            Efc = obstacle.E[0]
-            Nfc = obstacle.N[0]
-            W = obstacle.w[0]
-            L = obstacle.l[0]
-            Theta = obstacle.Chi[0]
-            fc = "red"
-            polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
 
-            # ax1.add_patch(polygon_safezone)
-            ax1.add_patch(polygon_obstacle)
+            nObs = len(obstacle.E)
+            if nObs > 0:
+                for k in range(nObs):
+                    Efc = obstacle.E[k]
+                    Nfc = obstacle.N[k]
+                    W = obstacle.w[k]
+                    L = obstacle.l[k]
+                    Theta = obstacle.Chi[k]
+                    fc = "red"
+                    polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
+
+                    # ax1.add_patch(polygon_safezone)
+                    ax1.add_patch(polygon_obstacle)
 
     plt.figure(f1.number)
     nEN = len(East)
     plt.plot(East[0:nEN], North[0:nEN], marker='x', markersize=4, color='b')
     plt.plot(East[0], North[0], marker='o', markersize=4, color='r')
-    #plt.xlim([-30,30])
-    #ax1.set_xlim([-30,30])
-    #ax1.set_ylim([200, 425])
+    plt.xlim([0, 16])
+    plt.ylim([0, 128])
+    #ax1.set_xlim([0, 16])
+    #ax1.set_ylim([0, 128])
 
     plt.pause(0.01)
     #if mpciter < mpciterations-1:
@@ -330,18 +341,19 @@ def nmpcPrint(mpciter, info, N, x, writeToFile, f, t):
         status_msg_short = status_msg[0:19]
 
     if writeToFile == True:
-        if mpciter == 0:
-            f.write("%*s %*s %*s %*s %*s %*s %*s %*s %*s %*s\n" % (10, "mpciter", 10, "cost",
-                                               7, text_u0, 7, text_u1,
-                                               7, "V", 7, "Chi",
-                                               7, text_g1, 7, text_g2, 15, "status_msg",
-                                               10, "cpuTime") )
-
-        f.write("%*d %*.1f %*.1f %*.1f %*.1f %*.1f %*.2f %*.2f %*s %*.1f\n" % (10, mpciter, 10, cost,
-                                                 7, u0, 7, u1,
-                                                 7, x[2], 7, x[3]*180/np.pi,
-                                                 7, g1, 7, g2, 15, status_msg_short,
-                                                 10, t))
+        # if mpciter == 0:
+        #     f.write("%*s %*s %*s %*s %*s %*s %*s %*s %*s %*s\n" % (10, "mpciter", 10, "cost",
+        #                                        7, text_u0, 7, text_u1,
+        #                                        7, "V", 7, "Chi",
+        #                                        7, text_g1, 7, text_g2, 15, "status_msg",
+        #                                        10, "cpuTime") )
+        #
+        # f.write("%*d %*.1f %*.1f %*.1f %*.1f %*.1f %*.2f %*.2f %*s %*.1f\n" % (10, mpciter, 10, cost,
+        #                                          7, u0, 7, u1,
+        #                                          7, x[2], 7, x[3]*180/np.pi,
+        #                                          7, g1, 7, g2, 15, status_msg_short,
+        #                                          10, t))
+        f.write("%d %0.2f\n" % (mpciter, t))
 
     if mpciter == 0:
         print("%*s %*s %*s %*s %*s %*s %*s %*s %*s %*s\n" % (10, "mpciter", 10, "cost",

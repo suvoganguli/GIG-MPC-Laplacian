@@ -77,7 +77,7 @@ def pathInitData(case, startPoint, endPoint, obstacle = None, grid = None):
             if dN != 0:
                 pathChi[k] = np.arctan(dE / dN)  # (road chi is w.r.t +North axis)
             else:
-                path[Chi] = np.sign(dN) * np.pi / 2
+                pathChi[k] = np.sign(dN) * np.pi / 2
             pathSectionLengths[k] = np.sqrt(dE**2 + dN**2)
 
         # Set the last point heading as that of the previous point
@@ -90,7 +90,7 @@ def pathInitData(case, startPoint, endPoint, obstacle = None, grid = None):
     data = {'case':case,
             'pathStartPoint': startPoint,
             'pathEndPoint': endPoint,
-            'path': path, # E, N, U - ft, ft, ft
+            'pathLaplacian': path, # E, N, U - ft, ft, ft
             'pathChi': pathChi,
             'pathWidth': pathWidth,
             'pathSectionLengths': pathSectionLengths
@@ -117,17 +117,16 @@ def pathInitData(case, startPoint, endPoint, obstacle = None, grid = None):
 
 
 def pathDetailedData(pathInputData):
-
-    path = pathInputData['path']
+    pathLaplacian = pathInputData['pathLaplacian']
     pathChi = pathInputData['pathChi']
     pathWidth = pathInputData['pathWidth']
     pathSectionLengths = pathInputData['pathSectionLengths']
     pathStartPoint = pathInputData['pathStartPoint']
     pathEndPoint = pathInputData['pathEndPoint']
 
-    #  Set the initial location of the path section
-    E0 = path[0,0] # ft
-    N0 = path[1,0] # ft
+    #  Set the initial location of the pathLP section
+    E0 = pathLaplacian[0,0] # ft
+    N0 = pathLaplacian[1,0] # ft
     theta0 = np.pi/2 - pathChi[0] # rad
 
     # Waypoint Data
@@ -255,7 +254,7 @@ def pathDetailedData(pathInputData):
         def __init__(self):
             self.nPathSections = nPathSections
             self.pathSectionLengths = pathSectionLengths
-            self.path = path
+            self.pathLaplacian = pathLaplacian
             self.E = E_full
             self.N = N_full
             self.Theta = Theta_full

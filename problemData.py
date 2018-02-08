@@ -10,21 +10,40 @@ mph2fps = 4.4/3
 
 # Grid selection
 
-exptno = 1
+exptno = 2
 
-if exptno == 1:
+if exptno == 0:
     scaleFactor = 1
     widthSpace = 16 * scaleFactor  # ft
     lengthSpace = 32 * scaleFactor  # ft
     heightSpace = 8  # ft
 
-elif exptno == 2:
+elif exptno == -1:
     scaleFactor = 4
     widthSpace = 16 * scaleFactor  # ft
     lengthSpace = 32 * scaleFactor  # ft
     heightSpace = 8  # ft
 
+elif exptno == 1:
+    scaleFactor = 1
+    widthSpace = 16 * scaleFactor  # ft
+    lengthSpace = 128 * scaleFactor  # ft
+    heightSpace = 8  # ft
+    mpciterations = 32
 
+elif exptno == 2:
+    scaleFactor = 1
+    widthSpace = 16 * scaleFactor  # ft
+    lengthSpace = 128 * scaleFactor  # ft
+    heightSpace = 8  # ft
+    mpciterations = 34
+
+elif exptno == 2:
+    scaleFactor = 1
+    widthSpace = 16 * scaleFactor  # ft
+    lengthSpace = 128 * scaleFactor  # ft
+    heightSpace = 8  # ft
+    mpciterations = 44
 
 
 gridSize = 1 # ft/unit
@@ -33,13 +52,21 @@ grid = gridClass()
 
 
 # Start and End Points
-if exptno == 1:
+if exptno == 0:
     startPoint = np.array([7, 1]) * scaleFactor # E (ft), N (ft)
     endPoint = np.array([7, 30]) * scaleFactor  # E (ft), N (ft)
-elif exptno == 2:
+elif exptno == -1:
     startPoint = np.array([7, 1]) * scaleFactor  # E (ft), N (ft)
     endPoint = np.array([7, 28]) * scaleFactor  # E (ft), N (ft)
-
+elif exptno == 1:
+    startPoint = np.array([7, 1]) * scaleFactor  # E (ft), N (ft)
+    endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
+elif exptno == 2:
+    startPoint = np.array([7, 1]) * scaleFactor  # E (ft), N (ft)
+    endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
+elif exptno == 3:
+    startPoint = np.array([7, 1]) * scaleFactor  # E (ft), N (ft)
+    endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 
 # Number of states
 # nstates = 2:
@@ -73,7 +100,7 @@ if nstates == 2:
 
     # Ipopt settings
     nlpMaxIter = 100
-    mpciterations = 5
+    #mpciterations = 5
 
     # Kinematic Constraints
     E0 = startPoint[0]  # ft (North, long)
@@ -116,7 +143,7 @@ elif nstates == 4:
 
     # Ipopt settings
     nlpMaxIter = 100
-    mpciterations = 30
+
 
     # Kinematic Constraints
     E0 = startPoint[0]  # ft (North, long)
@@ -148,7 +175,7 @@ elif nstates == 4:
     delta_V = 1 * mph2fps  # fps
 
     # Path parameters
-    pathWidth = 5.0 # ft
+    pathWidth = 1.0 # ft
 
 elif nstates == 6:
     # NMPC Data
@@ -157,7 +184,7 @@ elif nstates == 6:
 
     # Ipopt settings
     nlpMaxIter = 100
-    mpciterations = 5
+    #mpciterations = 5
 
     # Kinematic Constraints
 
@@ -194,19 +221,40 @@ elif nstates == 6:
 # ------------------------------------------------------------
 
 # Obstacle Data
-if exptno == 1:
+if exptno == 0:
     obstacleE = np.array([6.0]) * scaleFactor # ft, left-bottom
     obstacleN = np.array([15.0]) * scaleFactor # ft, left-bottom
     obstacleChi = np.array([0.0]) * scaleFactor  # rad
     obstacleLength = np.array([2.0]) * scaleFactor # ft
     obstacleWidth = np.array([2.0]) * scaleFactor # ft
 
-elif exptno == 2:
+elif exptno == -1:
     obstacleE = np.array([7.0]) * scaleFactor # ft, left-bottom
     obstacleN = np.array([15.0]) * scaleFactor # ft, left-bottom
     obstacleChi = np.array([0.0]) * scaleFactor  # rad
     obstacleLength = np.array([1.0]) * scaleFactor # ft
     obstacleWidth = np.array([1.0]) * scaleFactor # ft
+
+elif exptno == 1:
+    obstacleE = np.array([]) * scaleFactor # ft, left-bottom
+    obstacleN = np.array([]) * scaleFactor # ft, left-bottom
+    obstacleChi = np.array([]) * scaleFactor  # rad
+    obstacleLength = np.array([]) * scaleFactor # ft
+    obstacleWidth = np.array([]) * scaleFactor # ft
+
+elif exptno == 2:
+    obstacleE = np.array([3.0]) * scaleFactor # ft, left-bottom
+    obstacleN = np.array([63.0]) * scaleFactor # ft, left-bottom
+    obstacleChi = np.array([0.0]) * scaleFactor  # rad
+    obstacleLength = np.array([4.0]) * scaleFactor # ft
+    obstacleWidth = np.array([8.0]) * scaleFactor # ft
+
+elif exptno == 3:
+    obstacleE = np.array([1.0, 7.0]) * scaleFactor # ft, left-bottom
+    obstacleN = np.array([31.0, 63.0]) * scaleFactor # ft, left-bottom
+    obstacleChi = np.array([0.0, 0.0]) * scaleFactor  # rad
+    obstacleLength = np.array([4.0, 4.0]) * scaleFactor # ft
+    obstacleWidth = np.array([6.0, 6.0]) * scaleFactor # ft
 
 # ------------------------------------------------------------
 

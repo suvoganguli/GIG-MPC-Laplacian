@@ -1,21 +1,33 @@
+from problemData import *
 from pathData import *
 from pathCosts import *
 from pathCons import *
 from pathLines import *
 from utils import *
 
-def path(case):
-    pathData = pathInputData(case)
-    pathClass = pathDetailedData(pathData)
-    path = pathClass()
+def pathInfo(case, obstacle=None):
+
+    # Path initial data
+    if case == 'newpath':
+        pathInitialData = pathInitData(case, startPoint, endPoint, obstacle, grid)
+
+    elif case == 'default':
+        pathInitialData = pathInitData(case, startPoint, endPoint)
+
+    else:
+        pathData = None
+
+    # Path detailed data
+    pathClass = pathDetailedData(pathInitialData)
+    pathData = pathClass()
 
     # Cost data
-    costAlongPathClass, costAcrossPathClass = pathCostData(path)
+    costAlongPathClass, costAcrossPathClass = pathCostData(pathData)
     costAlongPath = costAlongPathClass()
     costAcrossPath = costAcrossPathClass()
 
     # Constraint data
-    consPathClass = pathConsData(path)
+    consPathClass = pathConsData(pathData)
     consPath = consPathClass()
 
     # Road line data
@@ -25,9 +37,9 @@ def path(case):
 
     class lanes():
         def __init__(self,x=None,y=None):
-            self.pathSectionLengths = pathData['pathSectionLengths']
-            self.pathWidth = pathData['pathWidth']
-            self.path = path
+            self.pathSectionLengths = pathInitialData['pathSectionLengths']
+            self.pathWidth = pathInitialData['pathWidth']
+            self.pathData = pathData
             self.costAlongPath = costAlongPath
             self.costAcrossPath = costAcrossPath
             self.consPath = consPath

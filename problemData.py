@@ -1,4 +1,5 @@
 import numpy as np
+from utils import *
 
 # Units
 mph2fps = 4.4/3
@@ -7,23 +8,35 @@ mph2fps = 4.4/3
 # USER INPUTS
 # ----------------------------------------------------------
 
-# Test Case
-case = 'pathStraightNorth'
-#case = 'pathBrokenLinesNorth'
-#case = 'pathLaplacianNorth'
-# case = 'pathStraightNorthPopupObstacle'
-# case = 'pathBrokenLinesNorthPopupObstacle'
-# case = 'pathLaplacianNorthPopupObstacle'
+# Grid selection
+
+exptno = 1
+
+if exptno == 1:
+    scaleFactor = 4
+    widthSpace = 16 * scaleFactor  # ft
+    lengthSpace = 32 * scaleFactor  # ft
+    heightSpace = 8  # ft
+
+elif exptno == 2:
+    scaleFactor = 1
+    widthSpace = 16 * scaleFactor  # ft
+    lengthSpace = 32 * scaleFactor  # ft
+    heightSpace = 8  # ft
+
+gridSize = 1 # ft/unit
+gridClass = createGrid(gridSize, lengthSpace, widthSpace, heightSpace)
+grid = gridClass()
 
 
-# Experiment Number
-# pathStraightNorth                 : exptno = 1A
-# pathBrokenLinesNorth              : exptno = 2A
-# pathLaplacianNorth                : exptnp = 3A
-# pathStraightNorthPopupObstacle    : exptno = 1B
-# pathBrokenLinesNorthPopupObstacle : exptno = 2B
-# pathLaplacianNorthPopupObstacle   : exptno = 3B
-exptno = '1A'
+# Start and End Points
+if exptno == 1:
+    startPoint = np.array([7, 1]) * scaleFactor # E (ft), N (ft)
+    endPoint = np.array([7, 28]) * scaleFactor  # E (ft), N (ft)
+elif exptno == 2:
+    startPoint = np.array([7, 1.1]) * scaleFactor # E (ft), N (ft)
+    endPoint = np.array([7, 30]) * scaleFactor  # E (ft), N (ft)
+
 
 # Number of states
 # nstates = 2:
@@ -37,175 +50,159 @@ exptno = '1A'
 #   u0 = Vddot, u1 = chiddot
 nstates = 4
 
-# Popup Obstacle Present
+# Obstacle Present
 # (True or False)
 obstaclePresent = False
 
 # Detection Window
 detectionWindow = {'L': 50, 'W': 11}
 
+# Positon Index w.r.t. Path Sections
+posIdx0 = {'number': 0}
+
 # ----------------------------------------------------------
 
-if exptno == '1A':     # 30 mph, STRAIGHT ROAD NORTH
+if nstates == 2:
 
-    startPoint = np.array([0,0]) # E (ft), N (ft)
-    endPoint = np.array([0,100]) # E (ft), N (ft)
+    # NMPC Data
+    N = 6  # 12
+    T = 0.2  # 0.2
 
-    if nstates == 2:
+    # Ipopt settings
+    nlpMaxIter = 100
+    mpciterations = 5
 
-        # NMPC Data
-        N = 6  # 12
-        T = 0.2  # 0.2
+    # Kinematic Constraints
+    E0 = startPoint[0]  # ft (North, long)
+    N0 = startPoint[1]  # ft (East, lat)
+    Chi0 = 0 * np.pi / 180  # rad
+    V0 = 30 * mph2fps
+    x0 = [E0, N0]  # E, N, V, Chi, Vdot, Chidot
 
-        # Ipopt settings
-        nlpMaxIter = 100
-        mpciterations = 5
+    lb_VdotVal = -2 * 100  # fps3
+    ub_VdotVal = 2 * 100  # fps3
+    lb_ChidotVal = -20 * np.pi / 180  # rad/s2
+    ub_ChidotVal = 20 * np.pi / 180  # rad/s2
+    lataccel_maxVal = 0.5 * 32.2  # fps2
+    useLatAccelCons = 0
+    lb_V = -2.0 * V0
+    ub_V = 2.0 * V0
 
-        # Kinematic Constraints
-        E0 = startPoint[0]  # ft (North, long)
-        N0 = startPoint[1]  # ft (East, lat)
-        Chi0 = 0 * np.pi / 180  # rad
-        V0 = 30 * mph2fps
-        x0 = [E0, N0]  # E, N, V, Chi, Vdot, Chidot
+    # Tracking Tuning and Data
+    W_P = 1.0
+    W_V = 1.0
+    W_Vdot = 10.0
+    W_Chidot = 1.0
 
-        lb_VdotVal = -2 * 100  # fps3
-        ub_VdotVal = 2 * 100  # fps3
-        lb_ChidotVal = -20 * np.pi / 180  # rad/s2
-        ub_ChidotVal = 20 * np.pi / 180  # rad/s2
-        lataccel_maxVal = 0.5 * 32.2  # fps2
-        useLatAccelCons = 0
-        lb_V = -2.0 * V0
-        ub_V = 2.0 * V0
+    V_cmd = V0  # fps
 
-        # Tracking Tuning and Data
-        W_P = 1.0
-        W_V = 1.0
-        W_Vdot = 10.0
-        W_Chidot = 1.0
+    # Terminal constraint
+    delta_yRoad = 0.5 * 5  # ft
+    delta_yRoadRelaxed = 5  # ft, in safe zone
+    delta_V = 1 * mph2fps  # fps
 
-        # Road and Obstacle Data
-        obstacleE = 0  # ft, left-bottom
-        obstacleN = 50 # ft, left-bottom
-        obstacleChi = 0  # rad
-        obstacleLength = 10 # ft
-        obstacleWidth = 10 # ft
-
-        V_cmd = V0  # fps
-
-        # Terminal constraint
-        delta_yRoad = 0.5 * 5  # ft
-        delta_yRoadRelaxed = 5  # ft, in safe zone
-        delta_V = 1 * mph2fps  # fps
-
-        # Path parameters
-        pathWidth = 5.0 # ft
+    # Path parameters
+    pathWidth = 5.0 # ft
 
 
-    elif nstates == 4:
+elif nstates == 4:
 
-        # NMPC Data
-        N = 6  # 12
-        T = 0.4  # 0.2
+    # NMPC Data
+    N = 6  # 12
+    T = 0.4  # 0.2
 
-        # Ipopt settings
-        nlpMaxIter = 100
-        mpciterations = 5
+    # Ipopt settings
+    nlpMaxIter = 100
+    mpciterations = 30
 
-        # Kinematic Constraints
-        E0 = startPoint[0]  # ft (North, long)
-        N0 = startPoint[1]  # ft (East, lat)
-        Chi0 = 0 * np.pi / 180  # rad
-        V0 = 30 * mph2fps
-        x0 = [E0, N0, V0, Chi0]  # E, N, V, Chi, Vdot, Chidot
+    # Kinematic Constraints
+    E0 = startPoint[0]  # ft (North, long)
+    N0 = startPoint[1]  # ft (East, lat)
+    Chi0 = 0 * np.pi / 180  # rad
+    V0 = 5 * mph2fps
+    x0 = [E0, N0, V0, Chi0]  # E, N, V, Chi, Vdot, Chidot
 
-        lb_VdotVal = -2 * 100  # fps3
-        ub_VdotVal = 2 * 100  # fps3
-        lb_ChidotVal = -20 * np.pi / 180  # rad/s2
-        ub_ChidotVal = 20 * np.pi / 180  # rad/s2
-        lataccel_maxVal = 0.5 * 32.2  # fps2
-        useLatAccelCons = 0
-        lb_V = -2.0 * V0
-        ub_V = 2.0 * V0
+    lb_VdotVal = -2 * 100  # fps3
+    ub_VdotVal = 2 * 100  # fps3
+    lb_ChidotVal = -20 * np.pi / 180  # rad/s2
+    ub_ChidotVal = 20 * np.pi / 180  # rad/s2
+    lataccel_maxVal = 0.5 * 32.2  # fps2
+    useLatAccelCons = 0
+    lb_V = -2.0 * V0
+    ub_V = 2.0 * V0
 
-        # Tracking Tuning and Data
-        W_P = 1.0
-        W_V = 1.0
-        W_Vdot = 10.0
-        W_Chidot = 1.0
+    # Tracking Tuning and Data
+    W_P = 1.0
+    W_V = 1.0
+    W_Vdot = 10.0
+    W_Chidot = 1.0
 
-        # Road and Obstacle Data
-        obstacleE = 0  # ft, left-bottom
-        obstacleN = 50 # ft, left-bottom
-        obstacleChi = 0  # rad
-        obstacleLength = 10 # ft
-        obstacleWidth = 10 # ft
+    V_cmd = V0  # fps
 
-        V_cmd = V0  # fps
+    # Terminal constraint
+    delta_yRoad = 0.5  # ft
+    delta_yRoadRelaxed = 5  # ft, in safe zone
+    delta_V = 1 * mph2fps  # fps
 
-        # Terminal constraint
-        delta_yRoad = 0.5 * 5  # ft
-        delta_yRoadRelaxed = 5  # ft, in safe zone
-        delta_V = 1 * mph2fps  # fps
+    # Path parameters
+    pathWidth = 5.0 # ft
 
-        # Path parameters
-        pathWidth = 5.0 # ft
+elif nstates == 6:
+    # NMPC Data
+    N = 6
+    T = 0.4
 
-    elif nstates == 6:
-        # NMPC Data
-        N = 6
-        T = 0.4
+    # Ipopt settings
+    nlpMaxIter = 100
+    mpciterations = 5
 
-        # Ipopt settings
-        nlpMaxIter = 100
-        mpciterations = 5
+    # Kinematic Constraints
 
-        # Kinematic Constraints
+    E0 = startPoint[0]  # ft (North, long)
+    N0 = startPoint[1]  # ft (East, lat)
+    Chi0 = 0*np.pi/180 # rad (w.r.t. North)
+    V0 = 30*mph2fps
+    x0 = [E0, N0, V0, Chi0, 0, 0]  # E, N, V, Chi, Vdot, Chidot
+    lb_VddotVal = -2 # fps3
+    ub_VddotVal = 2 # fps3
+    lb_ChiddotVal = -30*np.pi/180 # rad/s2
+    ub_ChiddotVal = 30*np.pi/180 # rad/s2
+    lataccel_maxVal = 0.25*32.2 # fps2
+    useLatAccelCons = 1
+    lb_V = 0.8*V0
+    ub_V = 1.2*V0
 
-        E0 = startPoint[0]  # ft (North, long)
-        N0 = startPoint[1]  # ft (East, lat)
-        Chi0 = 0*np.pi/180 # rad (w.r.t. North)
-        V0 = 30*mph2fps
-        x0 = [E0, N0, V0, Chi0, 0, 0]  # E, N, V, Chi, Vdot, Chidot
-        lb_VddotVal = -2 # fps3
-        ub_VddotVal = 2 # fps3
-        lb_ChiddotVal = -30*np.pi/180 # rad/s2
-        ub_ChiddotVal = 30*np.pi/180 # rad/s2
-        lataccel_maxVal = 0.25*32.2 # fps2
-        useLatAccelCons = 1
-        lb_V = 0.8*V0
-        ub_V = 1.2*V0
+    # Tracking Tuning and Data
+    W_P = 1.0      #1.0
+    W_V = 1.0
+    W_Vddot = 10.0   # 20.0
+    W_Chiddot = 1.0 #0.1
 
-        # Tracking Tuning and Data
-        W_P = 1.0      #1.0
-        W_V = 1.0
-        W_Vddot = 10.0   # 20.0
-        W_Chiddot = 1.0 #0.1
+    V_cmd = V0  # fps
 
-        # Road and Obstacle Data
-        obstacleE = 0  # ft, left-bottom
-        obstacleN = 50 # ft, left-bottom
-        obstacleChi = 0  # rad
-        obstacleLength = 10 # ft
-        obstacleWidth = 10 # ft
+    # Terminal constraint
+    delta_yRoad = 0.5 # ft
+    delta_yRoadRelaxed = 5 # ft, in safe zone
+    delta_V = 1*mph2fps # fps
 
-        V_cmd = V0  # fps
-
-        # Terminal constraint
-        delta_yRoad = 0.5 # ft
-        delta_yRoadRelaxed = 5 # ft, in safe zone
-        delta_V = 1*mph2fps # fps
-
-        # Path parameters
-        pathWidth = 5.0 # ft
-
-else:
-
-    print("Error in exptno")
+    # Path parameters
+    pathWidth = 5.0 # ft
 
 # ------------------------------------------------------------
 
-posIdx0 = {'number': 0}
-
+# Obstacle Data
+if exptno == 1:
+    obstacleE = np.array([7.0]) * scaleFactor # ft, left-bottom
+    obstacleN = np.array([15.0]) * scaleFactor # ft, left-bottom
+    obstacleChi = np.array([0.0]) * scaleFactor  # rad
+    obstacleLength = np.array([1.0]) * scaleFactor # ft
+    obstacleWidth = np.array([1.0]) * scaleFactor # ft
+elif exptno == 2:
+    obstacleE = np.array([6.0]) * scaleFactor # ft, left-bottom
+    obstacleN = np.array([15.0]) * scaleFactor # ft, left-bottom
+    obstacleChi = np.array([0.0]) * scaleFactor  # rad
+    obstacleLength = np.array([4.0]) * scaleFactor # ft
+    obstacleWidth = np.array([4.0]) * scaleFactor # ft
 
 if nstates == 2:
     # problem size

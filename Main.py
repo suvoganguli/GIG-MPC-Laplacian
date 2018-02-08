@@ -1,9 +1,7 @@
 from nmpc import *
-from problemData import *
 from path import *
 from obstacleData import *
 import printPlots
-
 import time
 
 # -------------------------------------------------------------------
@@ -21,7 +19,7 @@ import time
 # -------------------------------------------------------------------
 
 # Path data
-pathClass = path(case)
+pathClass = pathInfo('default')
 path = pathClass()
 
 # Obstacle data (static)
@@ -52,6 +50,8 @@ tElapsed = np.zeros(mpciterations)
 
 posIdx = getPosIdx(x0[0], x0[1], path, posIdx0)
 
+runOnce = True
+
 # Main loop
 while mpciter < mpciterations:
 
@@ -63,9 +63,16 @@ while mpciter < mpciterations:
 
     # search for obstacle
     detected = detectObstacle(x0, detectionWindow, obstacle)
+    if runOnce == True:
+        detected = True
+        runOnce = False
+    else:
+        detected = False
 
     # create new path, if necessary
-
+    if detected == True:
+        pathClass = pathInfo('newpath', obstacle)
+        path = pathClass()
 
     # solve optimal control problem
     tStart = time.time()
@@ -76,7 +83,7 @@ while mpciter < mpciterations:
     printPlots.nmpcPrint(mpciter, info, N, x0, writeToFile, fHandle, tElapsed[mpciter])
 
     # mpc  future path plot
-    printPlots.nmpcPlotSol(u_new, path, mpciter, x0, obstacle, case)
+    printPlots.nmpcPlotSol(u_new, path, mpciter, x0, obstacle, None)
 
     # store closed loop data
     t[mpciter] = tmeasure
@@ -100,14 +107,16 @@ if writeToFile == True:
     fHandle.close()
 
 # create plots
-print('done!')
-figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, case)
+#print('done!')
+#figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, None)
 
 # Save Data
-answer =  raw_input('Save Figures and Data [y/n]:  ')
-if answer == 'y':
-    dirname = raw_input('Enter Folder Name: ')
-    printPlots.savePlots(dirname, figno)
+#answer =  raw_input('Save Figures and Data [y/n]:  ')
+#if answer == 'y':
+#    dirname = raw_input('Enter Folder Name: ')
+#    printPlots.savePlots(dirname, figno)
 
+None
 
+# -------------------------------------------------------------------
 

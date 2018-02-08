@@ -5,15 +5,21 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_convergence_test ):
+def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slow_convergence_test ):
 
     # ----------------  Initialization ----------------
+
+    nxs = int(nxs)
+    nys = int(nys)
+    nzs = int(nzs)
 
     v0 = 0 # v0=0 and v_end=-1 gives dynamic range of -(10^(-308)) to -1
     v_end = -1
     gradient_sign = np.sign(v_end - v0)
 
-    n_vec_exponents = [4, 3, 4]
+    nmax = np.int( np.log2( min(nxs, nys) ) )
+
+    n_vec_exponents = [nmax, nmax-1, nmax]
     iter_max = 50
 
     n_vec = 2 ** np.array(n_vec_exponents)
@@ -22,7 +28,7 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
 
     #dt = float(nxs) / 128 # number of pixels per time step
     dt = 4
-    tol = float(dt)
+    tol = 2*float(dt)
 
     # we want to make nt large enough for the path to run across the entire domain
     i_n = max(n_vec_exponents)
@@ -31,6 +37,7 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
     nz_ = int(nx_ / nz_factor)
     nt = int(np.linalg.norm(np.array([nx_, ny_, nz_]) / dt))
     nz_low = int(nz_/2)
+
 
     # ----------------  Build obstacles ----------------
 
@@ -76,7 +83,9 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
                     k1 = k * nzs / nz
                     k2 = (k + 1) * nzs / nz
 
-                    if sum(sum(sum(obstacles[ i1:i2, j1:j2 , k1:k2 ]))) > 0:
+                    if i1==i2 or j1==j2 or k1==k2:
+                        print('error')
+                    if sum(sum(sum(obstacleData[ i1:i2, j1:j2 , k1:k2 ]))) > 0:
                         obstacle[i][j][k] = 1
 
 
@@ -225,9 +234,9 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
     path[0] = start_point
 
     for it in np.arange(1, nt):
-        i = max(2, min(nx - 1, np.int(path[it - 1, 0])))
-        j = max(2, min(ny - 1, np.int(path[it - 1, 1])))
-        k = max(2, min(nz - 1, np.int(path[it - 1, 2])))
+        i = max(2, min(nx - 2, np.int(path[it - 1, 0])))
+        j = max(2, min(ny - 2, np.int(path[it - 1, 1])))
+        k = max(2, min(nz - 2, np.int(path[it - 1, 2])))
 
         dv_dx = (
                     sum( sum( v[i + 1,j - 1:j + 1,k - 1:k + 1] ) ) / 9
@@ -246,50 +255,59 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_c
         path[it] = path[it - 1] + dt * gradient_sign * np.squeeze(gradient_vec) / (1e-306 + np.linalg.norm(gradient_vec))
 
         if np.linalg.norm(path[it]-end_point) < tol:
-            for k in np.arange(it+1,nt):
-                path[k] = end_point
+            #path_reached = path[:,0:it]
+            k_end = it
+            break
 
+    path_reached = path[0:k_end,:]
 
-    return path, not_converged, nx, ny, nz, nz_low, v
+    path = np.concatenate([path_reached,end_point[None,:]])
+    path = path.T
+
+    #path = path_reached.T
+
+    return path, not_converged
 
 # ----------------------------------------------------------------
 # Testing
 
-nxs = 16
-nys = 32
-nzs = 8
-obstacles = np.zeros([nxs, nys, nzs])
-w = 4
-l = 4
-x0 = 5
-y0 = 14
-for j in range(w):
-    for k in range(l):
-        obstacles[x0+j,y0+k,:] = 1
+if False:
 
-obstacles[:,:,0] = 1
+    nxs = 16
+    nys = 32
+    nzs = 8
+    obstacleData = np.zeros([nxs, nys, nzs])
+    w = 4
+    l = 4
+    x0 = 5
+    y0 = 14
+    for j in range(w):
+        for k in range(l):
+            obstacleData[x0+j,y0+k,:] = 1
 
-start_point = np.array([7, 1.1, 1],dtype='float')  # [8, 2.1, 2]
-end_point = np.array([7, 30, 1],dtype='float')  # [8, 31, 2]
+    obstacleData[:,:,0] = 1
 
-nzs_low = nzs
-slow_convergence_test = 1
+    start_point = np.array([7, 1.1, 1],dtype='float')  # [8, 2.1, 2]
+    end_point = np.array([7, 30, 1],dtype='float')  # [8, 31, 2]
 
-scale = 512 / nxs # (feet/grid_point)   eg scale=4 ft/grid_point when nxs=128
+    nzs_low = nzs
+    slow_convergence_test = 1
 
-path, not_converged, nx, ny, nz, nz_low, v = \
-    laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacles, slow_convergence_test )
+    scale = 512 / nxs # (feet/grid_point)   eg scale=4 ft/grid_point when nxs=128
 
-East = path[:,0]
-North = path[:,1]
+    path, not_converged, nx, ny, nz, nz_low, v = \
+        laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slow_convergence_test )
 
-plt.plot(East, North, marker='x', markersize=4, color='b')
-plt.plot(East, North, marker='x', markersize=4, color='b')
-plt.plot(start_point[0], start_point[1], marker='o', markersize=4, color='r')
-plt.plot(end_point[0], end_point[1], marker='o', markersize=4, color='g')
-plt.grid('True')
-plt.ylabel('N [ft]')
-plt.xlabel('E [ft]')
-plt.axis('equal')
-plt.grid('True')
-plt.show()
+    East = path[:,0]
+    North = path[:,1]
+
+    plt.plot(East, North, marker='x', markersize=4, color='b')
+    plt.plot(East, North, marker='x', markersize=4, color='b')
+    plt.plot(start_point[0], start_point[1], marker='o', markersize=4, color='r')
+    plt.plot(end_point[0], end_point[1], marker='o', markersize=4, color='g')
+    plt.grid('True')
+    plt.ylabel('N [ft]')
+    plt.xlabel('E [ft]')
+    plt.axis('equal')
+    plt.grid('True')
+    plt.show()

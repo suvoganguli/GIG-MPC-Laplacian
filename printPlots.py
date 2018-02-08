@@ -21,19 +21,48 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     North = x_mpciter[:,1]
 
     # figure 1
-    f1 = plt.figure(1,figsize=(6, 8), dpi=100)
+    f1 = plt.figure(1,figsize=(5, 7), dpi=100)
     plt.ylabel('N [ft]')
     plt.xlabel('E [ft]')
-    print('')
+    #plt.axis('equal')
     None
 
     if mpciter == 0:
-        plt.plot(path.path.X, path.path.Y, linestyle='-', color='k')
+        plt.plot(path.pathData.E, path.pathData.N, linestyle='--', color='k')
+        #plt.plot(path.pathData.PathLeftBoundaryE, path.pathData.PathLeftBoundaryN, linestyle='-', color='k')
+        #plt.plot(path.pathData.PathRightBoundaryE, path.pathData.PathRightBoundaryN, linestyle='-', color='k')
+
+        plt.plot(path.pathData.PathStartPoint[0], path.pathData.PathStartPoint[1], marker='o', markersize=8, color='r')
+        plt.plot(path.pathData.PathEndPoint[0], path.pathData.PathEndPoint[1], marker='o', markersize=8, color='g')
+
+        if True:
+            #plt.plot(path.pathData.PathRightEndPointsE, path.pathData.PathRightEndPointsN,'m+')
+            #plt.plot(path.pathData.PathLeftEndPointsE, path.pathData.PathLeftEndPointsN,'m+')
+
+            #x1 = path.pathData.PathRightEndPointsE
+            #x2 = path.pathData.PathLeftEndPointsE
+            #y1 = path.pathData.PathRightEndPointsN
+            #y2 = path.pathData.PathLeftEndPointsN
+            #plt.plot(x1, y1, 'm', x2, y2, 'm')
+
+            x1 = path.pathData.PathCenterEndPointsE - pdata.delta_yRoad*np.sin(path.pathData.Theta_endpoints)
+            x2 = path.pathData.PathCenterEndPointsE + pdata.delta_yRoad*np.sin(path.pathData.Theta_endpoints)
+            y1 = path.pathData.PathCenterEndPointsN + pdata.delta_yRoad*np.cos(path.pathData.Theta_endpoints)
+            y2 = path.pathData.PathCenterEndPointsN - pdata.delta_yRoad*np.cos(path.pathData.Theta_endpoints)
+            plt.plot(x1, y1, 'r', x2, y2, 'r')
+
+            #for i in range(len(path.pathData.LaneRightEndPointsX)):
+            #    x1 = path.pathData.LaneRightEndPointsX[i]
+            #    y1 = path.pathData.LaneRightEndPointsY[i]
+            #    x2 = path.pathData.LaneLeftEndPointsX[i]
+            #    y2 = path.pathData.LaneLeftEndPointsY[i]
+            #    plt.plot([x1, x2], [y1, y2], 'm')
+
         ax1 = f1.gca()
         ax1.grid(True)
 
-        if obstacle.Present == True:
-            print("Need correction")
+        if True: # obstacle.Present == True:
+            #print("Need correction")
             # Efc = obstacle.EObsStartSafeZone
             # Nfc = obstacle.NObsStartSafeZone
             # W = obstacle.widthSafeZone
@@ -42,22 +71,22 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
             # fc = "green"
             # polygon_safezone = getPatch(Efc, Nfc, W, L, Theta, fc)
             #
-            # Efc = obstacle.EObsStart
-            # Nfc = obstacle.NObsStart
-            # W = obstacle.widthObstacle
-            # L = obstacle.lengthObstacle
-            # Theta = obstacle.thetaObstacle
-            # fc = "red"
-            # polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
-            #
+            Efc = obstacle.E[0]
+            Nfc = obstacle.N[0]
+            W = obstacle.w[0]
+            L = obstacle.l[0]
+            Theta = obstacle.Chi[0]
+            fc = "red"
+            polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
+
             # ax1.add_patch(polygon_safezone)
-            # ax1.add_patch(polygon_obstacle)
+            ax1.add_patch(polygon_obstacle)
 
     plt.figure(f1.number)
     nEN = len(East)
     plt.plot(East[0:nEN], North[0:nEN], marker='x', markersize=4, color='b')
     plt.plot(East[0], North[0], marker='o', markersize=4, color='r')
-    plt.xlim([-30,30])
+    #plt.xlim([-30,30])
     #ax1.set_xlim([-30,30])
     #ax1.set_ylim([200, 425])
 
@@ -65,6 +94,8 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     #if mpciter < mpciterations-1:
     #   ax1 = f1.gca()
     #   del ax1.lines[7:12]
+
+    None
 
 
 def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
@@ -130,7 +161,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         figno[5] = plt.gcf().number
         f, ax = plt.subplots(1, figsize=(6, 8), dpi=100)  #sharex=True
         lw = 1.0
-        ax.plot(path.X, path.Y, linewidth = lw, linestyle='--', color='k')
+        ax.plot(path.E, path.N, linewidth = lw, linestyle='--', color='k')
         ax.plot(x[:,0],x[:,1], linestyle='-', color='b')
         ax.set_ylabel('N [ft]')
         ax.set_xlabel('E [ft]')
@@ -187,7 +218,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         figno[4] = plt.gcf().number
         f, ax = plt.subplots(1, figsize=(6, 8), dpi=100)  # sharex=True
         lw = 1.0
-        ax.plot(path.path.X, path.path.Y, linewidth=lw, linestyle='-', color='k')
+        ax.plot(path.pathData.E, path.pathData.N, linewidth=lw, linestyle='-', color='k')
         ax.plot(x[:, 0], x[:, 1], linestyle='-', color='b')
         ax.set_ylabel('N [ft]')
         ax.set_xlabel('E [ft]')

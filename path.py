@@ -9,10 +9,10 @@ def pathInfo(case, obstacle=None):
 
     # Path initial data
     if case == 'newpath':
-        pathInitialData = pathInitData(case, startPoint, endPoint, obstacle, grid)
+        pathInitialData = pathInitData(case, startPoint, endPoint, pathWidth, obstacle, grid)
 
     elif case == 'default':
-        pathInitialData = pathInitData(case, startPoint, endPoint)
+        pathInitialData = pathInitData(case, startPoint, endPoint, pathWidth)
 
     else:
         pathData = None

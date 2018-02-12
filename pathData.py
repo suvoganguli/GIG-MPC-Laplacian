@@ -2,7 +2,7 @@ import numpy as np
 from laplacianPlanner import *
 from obstacleData import *
 
-def pathInitData(case, startPoint, endPoint, obstacle = None, grid = None):
+def pathInitData(case, startPoint, endPoint, pathWidth, obstacle = None, grid = None):
 
     # ---------------------------------------------------------
     # Default Path
@@ -38,7 +38,7 @@ def pathInitData(case, startPoint, endPoint, obstacle = None, grid = None):
             path[0, k + 1] = path[0, k] + pathSectionLengths[k] * np.sin(pathChi[k])
             path[1, k + 1] = path[1, k] + pathSectionLengths[k] * np.cos(pathChi[k])
 
-        pathWidth = 10.0
+        #pathWidth = 10.0
 
     # ---------------------------------------------------------
     # Calling Laplacian Planner
@@ -83,7 +83,7 @@ def pathInitData(case, startPoint, endPoint, obstacle = None, grid = None):
         # Set the last point heading as that of the previous point
         pathChi = np.append(pathChi, pathChi[-1])
 
-        pathWidth = 10.0
+        #pathWidth = 10.0
 
     # ---------------------------------------------------------
 

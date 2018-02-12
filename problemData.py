@@ -144,7 +144,7 @@ elif ns == 4:
     delta_V = 1 * mph2fps  # fps
 
     # Path parameters
-    pathWidth = 1.0 # ft
+    pathWidth = 4.0 # ft
 
 elif ns == 6:
 

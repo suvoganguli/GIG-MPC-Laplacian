@@ -3,7 +3,7 @@ from utils import *
 
 def system(uk, xk, T):
 
-    if nstates == 2:
+    if ns == 2:
         # x0 = E, x1 = N
         # u0 = V, u1 = Chi
 
@@ -16,7 +16,7 @@ def system(uk, xk, T):
         # xkp1[1] = xk[1] + T * V_cmd * np.cos(uk[1]) # Ndot
 
 
-    elif nstates == 4:
+    elif ns == 4:
         # x0 = E, x1 = N, x2 = V, x3 = Chi
         # u0 = Vdot, u1 = Chidot
 
@@ -32,7 +32,7 @@ def system(uk, xk, T):
         # xkp1[2] = xk[2] + T * uk[0]                 # Vdot
         # xkp1[3] = xk[3] + T * uk[1]                 # Chidot
 
-    elif nstates == 6:
+    elif ns == 6:
         # x0 = E, x1 = N, x2 = V, x3 = Chi, x5 = Vdot, x6 = Chidot
         # u0 = Vddot, u1 = Chiddot
 
@@ -99,7 +99,7 @@ def runningCosts(u, x, t0, path, obstacle, posIdx=None):
             else:
                 print("TBD")
 
-            if nstates == 6:
+            if ns == 6:
                 cost_p = W_P * (a * x[0] + b * x[1] - c) ** 2 / (a ** 2 + b ** 2)
                 cost_v = W_V * (V_cmd - x[2])**2
                 cost_vddot = W_Vddot * u[0]**2
@@ -108,7 +108,7 @@ def runningCosts(u, x, t0, path, obstacle, posIdx=None):
                 cost_u = cost_vddot + cost_Chiddot
                 cost = cost_x + cost_u
 
-            elif nstates == 4:
+            elif ns == 4:
                 cost_p = W_P * (a * x[0] + b * x[1] - c) ** 2 / (a ** 2 + b ** 2)
                 cost_v = W_V * (V_cmd - x[2])**2
                 cost_vdot = W_Vdot * u[0]**2

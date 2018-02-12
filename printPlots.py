@@ -42,14 +42,14 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
         plt.plot(path.pathData.PathEndPoint[0], path.pathData.PathEndPoint[1], marker='o', markersize=8, color='g')
 
         if True:
-            #plt.plot(path.pathData.PathRightEndPointsE, path.pathData.PathRightEndPointsN,'m+')
-            #plt.plot(path.pathData.PathLeftEndPointsE, path.pathData.PathLeftEndPointsN,'m+')
+            plt.plot(path.pathData.PathRightEndPointsE, path.pathData.PathRightEndPointsN,'m+')
+            plt.plot(path.pathData.PathLeftEndPointsE, path.pathData.PathLeftEndPointsN,'m+')
 
-            #x1 = path.pathData.PathRightEndPointsE
-            #x2 = path.pathData.PathLeftEndPointsE
-            #y1 = path.pathData.PathRightEndPointsN
-            #y2 = path.pathData.PathLeftEndPointsN
-            #plt.plot(x1, y1, 'm', x2, y2, 'm')
+            x1 = path.pathData.PathRightEndPointsE
+            x2 = path.pathData.PathLeftEndPointsE
+            y1 = path.pathData.PathRightEndPointsN
+            y2 = path.pathData.PathLeftEndPointsN
+            plt.plot(x1, y1, 'm', x2, y2, 'm')
 
             x1 = path.pathData.PathCenterEndPointsE - pdata.delta_yRoad*np.sin(path.pathData.Theta_endpoints)
             x2 = path.pathData.PathCenterEndPointsE + pdata.delta_yRoad*np.sin(path.pathData.Theta_endpoints)
@@ -112,7 +112,7 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
 def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
 
 
-    if nstates == 6:
+    if ns == 6:
 
         figno = np.zeros(7)
 
@@ -179,7 +179,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         ax.grid(True)
         #plt.axis('equal')
 
-    elif nstates == 4:
+    elif ns == 4:
 
         figno = np.zeros(6)
 
@@ -198,8 +198,14 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         f, ax = plt.subplots(2)
         figno[1] = plt.gcf().number
         ax[0].plot(t, x[:, [2]])  # V
-        ax[1].plot(t, u[:, [0]])  # Vdot
+        ax[0].plot(t, lb_V*np.ones(t.shape),linestyle='--', color='r')
+        ax[0].plot(t, ub_V*np.ones(t.shape), linestyle='--', color='r')
         ax[0].set_ylabel('V [fps]')
+
+        ax[1].plot(t, u[:, [0]])  # Vdot
+        ax[1].plot(t, lb_VdotVal*np.ones(t.shape),linestyle='--', color='r')
+        ax[1].plot(t, ub_VdotVal*np.ones(t.shape), linestyle='--', color='r')
+
         ax[1].set_ylabel('Vdot [fps2]')
         ax[1].set_xlabel('t [sec]')
         for k in range(2):
@@ -209,7 +215,11 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         f, ax = plt.subplots(2)
         figno[2] = plt.gcf().number
         ax[0].plot(t, x[:, [3]] * 180 / np.pi)
+
         ax[1].plot(t, u[:, [1]] * 180 / np.pi)
+        ax[1].plot(t, lb_ChidotVal*np.ones(t.shape)*180/np.pi,linestyle='--', color='r')
+        ax[1].plot(t, ub_ChidotVal*np.ones(t.shape)*180/np.pi, linestyle='--', color='r')
+
         ax[0].set_ylabel('Chi [deg]')
         ax[1].set_ylabel('Chidot [deg/s]')
         ax[1].set_xlabel('t [sec]')
@@ -220,7 +230,11 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         # figure 5
         f, ax = plt.subplots(1)
         figno[3] = plt.gcf().number
-        plt.plot(t, x[:, [2]] * u[:, [1]] / 32.2)  # V*Chidot
+        ax.plot(t, x[:, [2]] * u[:, [1]] / 32.2)  # V*Chidot
+        if useLatAccelCons == 1:
+            ax.plot(t, lataccel_maxVal*np.ones(t.shape)/32.2,linestyle='--', color='r')
+            ax.plot(t, -lataccel_maxVal*np.ones(t.shape)/32.2, linestyle='--', color='r')
+
         ax.set_ylabel('Lat Accel [g]')
         ax.set_xlabel('t [sec]')
         ax.grid(True)
@@ -282,16 +296,16 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
 
     return figno
 
-def nmpcPrint(mpciter, info, N, x, writeToFile, f, t):
+def nmpcPrint(mpciter, info, N, x, u_new, writeToFile, f, t):
 
     status = info['status']
     cost = info['obj_val']
     g = info['g']
     idx_lataccel = 2*N
-    if nstates == 6:
-        idx_trackingerror = 2*N+2
-    elif nstates == 4:
-        idx_trackingerror = 2 * N + 1
+    if ns == 6:
+        idx_trackingerror = 2*N + 2
+    elif ns == 4:
+        idx_trackingerror = 2*N + 1
     g1 = g[idx_lataccel]/32.2 # g
     g2 = g[idx_trackingerror] # ft
     text_g1 = "ay [g]"
@@ -302,10 +316,10 @@ def nmpcPrint(mpciter, info, N, x, writeToFile, f, t):
     u0 = u[0]  # Vddot
     u1 = u[N]*180/np.pi  #Chiddot
 
-    if nstates == 6:
+    if ns == 6:
         text_u0 = "Vddot"
         text_u1 = "Chiddot"
-    elif nstates == 4:
+    elif ns == 4:
         text_u0 = "Vdot"
         text_u1 = "Chidot"
 

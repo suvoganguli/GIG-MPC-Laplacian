@@ -80,7 +80,7 @@ class nlpProb(object):
 
         consR1 = np.concatenate([consR1_R, consR1_L])
 
-        if nstates == 6:
+        if ns == 6:
             consR2 = np.array([x[0, idx_V] * x[0, idx_Chidot] * useLatAccelCons])  # lateral acceleration
             consR3 = np.array([x[0, idx_V]])  # velocity
 
@@ -91,8 +91,10 @@ class nlpProb(object):
             consT1, consT2 = prob.terminalCons(u, x[N - 1], t0, lanes, obstacle, posIdx)
             consT = np.concatenate([consT1, consT2])
 
-        elif nstates == 4:
-            consR2 = np.array([x[0, idx_V] * u[idx_Chidot] * useLatAccelCons])  # lateral acceleration
+        elif ns == 4:
+            u_mat = u.reshape(2,-1).T
+
+            consR2 = np.array([x[0, idx_V] * u_mat[0, idx_Chidot] * useLatAccelCons])  # lateral acceleration
 
             consR = np.concatenate([consR1, consR2])
 
@@ -142,7 +144,7 @@ class nlpProb(object):
         obstacle = self.obstacle
         posIdx = self.posIdx
 
-        if nstates == 6:
+        if ns == 6:
 
             lb_Vddot = np.ones([N,1])*lb_VddotVal
             lb_Chiddot = np.ones([N,1])*lb_ChiddotVal
@@ -153,7 +155,7 @@ class nlpProb(object):
             lb = np.concatenate([lb_Vddot, lb_Chiddot])
             ub = np.concatenate([ub_Vddot,ub_Chiddot])
 
-        elif nstates == 4:
+        elif ns == 4:
 
             lb_Vdot = np.ones([N, 1]) * lb_VdotVal
             lb_Chidot = np.ones([N, 1]) * lb_ChidotVal
@@ -204,7 +206,7 @@ class nlpProb(object):
         cl_tmp1 = np.concatenate([cl_running, [-lataccel_max]])
         cu_tmp1 = np.concatenate([cu_running, [+lataccel_max]])
 
-        if nstates == 6:
+        if ns == 6:
             # Speed Constraint
             cl_tmp2 = np.concatenate([cl_tmp1, [lb_V]])
             cu_tmp2 = np.concatenate([cu_tmp1, [ub_V]])
@@ -216,7 +218,7 @@ class nlpProb(object):
             cl = np.concatenate([cl_tmp3, [-delta_V + V_cmd]])
             cu = np.concatenate([cu_tmp3, [delta_V + V_cmd]])
 
-        elif nstates == 4:
+        elif ns == 4:
 
             # Terminal Constraint
             cl = np.concatenate([cl_tmp1,[-dyRoadL]])

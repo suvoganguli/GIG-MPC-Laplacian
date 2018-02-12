@@ -27,8 +27,8 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slo
     nz_factor = float(nxs) / float(nzs) # POWER OF 2     (z grid_size) = (x grid size)/nz_factor
 
     #dt = float(nxs) / 128 # number of pixels per time step
-    dt = 4
-    tol = 4.0
+    dt = 1
+    tol = float(dt)
 
     # we want to make nt large enough for the path to run across the entire domain
     i_n = max(n_vec_exponents)

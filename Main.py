@@ -2,7 +2,8 @@ from nmpc import *
 from path import *
 from obstacleData import *
 import printPlots
-import time
+import time, datetime
+import shutil, distutils.dir_util
 
 # -------------------------------------------------------------------
 # Main.py lets the user run different test cases for Model
@@ -46,11 +47,12 @@ else:
     fHandle = -1
     fileName = ''
 
+saveData = True
+
 tElapsed = np.zeros(mpciterations)
 
 posIdx = getPosIdx(x0[0], x0[1], path, posIdx0)
 
-runOnce = True
 
 # Main loop
 while mpciter < mpciterations:
@@ -80,7 +82,7 @@ while mpciter < mpciterations:
     tElapsed[mpciter] = (time.time() - tStart)
 
     # solution information
-    printPlots.nmpcPrint(mpciter, info, N, x0, writeToFile, fHandle, tElapsed[mpciter])
+    printPlots.nmpcPrint(mpciter, info, N, x0, u_new, writeToFile, fHandle, tElapsed[mpciter])
 
     # mpc  future path plot
     printPlots.nmpcPlotSol(u_new, path, mpciter, x0, obstacle, None)
@@ -106,15 +108,33 @@ while mpciter < mpciterations:
 if writeToFile == True:
     fHandle.close()
 
+if saveData == True:
+
+    rundate = datetime.datetime.now().strftime("%Y-%m-%d")
+
+    rundir = './run_' + rundate + '/'
+    distutils.dir_util.mkpath(rundir)
+
+    suffix = '_N' + str(N) + '_Tp' + str(int(10*T)) + '_ns' + str(ns) + '_no' + str(no)
+    dst_file = rundir + 'logFile' + suffix + '.txt'
+    shutil.copyfile('logFile.txt', dst_file)
+
+    dst_fig = rundir + 'path' + suffix + '.png'
+    fig = plt.figure(1)
+    plt.pause(0.01)
+    fig.savefig(dst_fig)
+
+    print('saved data and figure')
+
 # create plots
-print('done!')
 figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, None)
+print('done!')
 
 # Save Data
-answer =  raw_input('Save Figures and Data [y/n]:  ')
-if answer == 'y':
-    dirname = raw_input('Enter Folder Name: ')
-    printPlots.savePlots(dirname, figno)
+# answer =  raw_input('Save Figures and Data [y/n]:  ')
+# if answer == 'y':
+#     dirname = raw_input('Enter Folder Name: ')
+#     printPlots.savePlots(dirname, figno)
 
 
 

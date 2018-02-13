@@ -43,7 +43,7 @@ def getColumns(inFile, delim=" ", header=True):
 
 # ---------------------------------------------------------------
 
-N = 4
+N = 8
 if N == 4:
     filenames = ['logFile_N4_Tp4_ns4_no0.txt',
                  'logFile_N4_Tp4_ns4_no1.txt',
@@ -104,6 +104,8 @@ plt.ylabel('Average CPU time [sec]')
 plt.title(title)
 plt.grid('True')
 
-plt.show()
+print(cputime_vec)
+print(cputime_vec[1]/cputime_vec[0])
 
+plt.show()
 

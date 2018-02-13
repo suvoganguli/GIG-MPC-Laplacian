@@ -1,6 +1,5 @@
 import numpy as np
 import probInfo as prob
-from problemData import *
 
 
 def measureInitialValue(tmeasure, xmeasure):

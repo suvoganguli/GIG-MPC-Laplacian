@@ -1,5 +1,5 @@
-from nmpc import *
 from path import *
+from nmpc import *
 from obstacleData import *
 import printPlots
 import time, datetime
@@ -33,6 +33,7 @@ x = np.zeros([mpciterations, nx])
 u = np.zeros([mpciterations, nu])
 
 # Iteration data
+x0[3] = np.pi/2 - path.pathData.Theta[0]  # align vehicle heading with road heading
 tmeasure = t0
 xmeasure = x0
 u_new = np.zeros([1,nu])
@@ -75,6 +76,7 @@ while mpciter < mpciterations:
     if detected == True:
         pathClass = pathInfo('newpath', obstacle)
         path = pathClass()
+        x0[3] = np.pi/2 - path.pathData.Theta[0]  # align vehicle heading with road heading
 
     # solve optimal control problem
     tStart = time.time()

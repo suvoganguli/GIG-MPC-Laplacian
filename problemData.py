@@ -31,18 +31,37 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # 'no' - number of obstacles
 
 # default
-N = 6
+N = 8
 T = 0.4
 ns = 4
-no = 1
+no = 2
+
+if no == 0:
+    if N == 4:
+        mpciterations = 36 #34
+    elif N == 6:
+        mpciterations = 34 #34
+    elif N == 8:
+        mpciterations = 32 # 32
 
 
-if N == 6:
-    mpciterations = 34 #34
-elif N == 8:
-    mpciterations = 32 # 32
-elif no == 10:
-    mpciterations = 30 # 30
+elif no == 1:
+    if N == 4:
+        mpciterations = 36 #34
+    elif N == 6:
+        mpciterations = 34 #34
+    elif N == 8:
+        mpciterations = 32 # 32
+
+
+elif no == 2:
+    if N == 4:
+        mpciterations = 50 # 50
+    elif N == 6:
+        mpciterations = 50 #34
+    elif N == 8:
+        mpciterations = 36 # 32
+
 
 
 # Number of states
@@ -79,17 +98,17 @@ if ns == 2:
     E0 = startPoint[0]  # ft (North, long)
     N0 = startPoint[1]  # ft (East, lat)
     Chi0 = 0 * np.pi / 180  # rad
-    V0 = 30 * mph2fps
+    V0 = 10 * mph2fps
     x0 = [E0, N0]  # E, N, V, Chi, Vdot, Chidot
 
-    lb_VdotVal = -2 * 100  # fps3
-    ub_VdotVal = 2 * 100  # fps3
+    lb_VdotVal = -2  # fps3
+    ub_VdotVal = 2  # fps3
     lb_ChidotVal = -20 * np.pi / 180  # rad/s2
     ub_ChidotVal = 20 * np.pi / 180  # rad/s2
-    lataccel_maxVal = 0.5 * 32.2  # fps2
+    lataccel_maxVal = 0.25 * 32.2  # fps2
     useLatAccelCons = 0
-    lb_V = -2.0 * V0
-    ub_V = 2.0 * V0
+    lb_V = 0.8 * V0
+    ub_V = 1.2 * V0
 
     # Tracking Tuning and Data
     W_P = 1.0
@@ -125,7 +144,7 @@ elif ns == 4:
     ub_VdotVal = 2  # fps3
     lb_ChidotVal = -20 * np.pi / 180  # rad/s2
     ub_ChidotVal = 20 * np.pi / 180  # rad/s2
-    lataccel_maxVal = 0.15 * 32.2  # fps2
+    lataccel_maxVal = 0.25 * 32.2  # fps2
     useLatAccelCons = 1
     lb_V = 0.8 * V0
     ub_V = 1.2 * V0
@@ -144,7 +163,7 @@ elif ns == 4:
     delta_V = 1 * mph2fps  # fps
 
     # Path parameters
-    pathWidth = 4.0 # ft
+    pathWidth = 5.0 # ft
 
 elif ns == 6:
 
@@ -157,7 +176,7 @@ elif ns == 6:
     E0 = startPoint[0]  # ft (North, long)
     N0 = startPoint[1]  # ft (East, lat)
     Chi0 = 0*np.pi/180 # rad (w.r.t. North)
-    V0 = 30*mph2fps
+    V0 = 10*mph2fps
     x0 = [E0, N0, V0, Chi0, 0, 0]  # E, N, V, Chi, Vdot, Chidot
     lb_VddotVal = -2 # fps3
     ub_VddotVal = 2 # fps3
@@ -206,11 +225,12 @@ elif no == 1:
 
 elif no == 2:
     runOnce = True
-    obstacleE = np.array([1.0, 7.0]) * scaleFactor # ft, left-bottom
+    obstacleE = np.array([4.0, 7.0]) * scaleFactor # ft, left-bottom
     obstacleN = np.array([31.0, 63.0]) * scaleFactor # ft, left-bottom
     obstacleChi = np.array([0.0, 0.0]) * scaleFactor  # rad
     obstacleLength = np.array([4.0, 4.0]) * scaleFactor # ft
     obstacleWidth = np.array([6.0, 6.0]) * scaleFactor # ft
+
 
 # ------------------------------------------------------------
 

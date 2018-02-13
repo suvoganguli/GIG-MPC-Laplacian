@@ -31,7 +31,7 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # 'no' - number of obstacles
 
 # default
-N = 8
+N = 4
 T = 0.4
 ns = 4
 no = 2

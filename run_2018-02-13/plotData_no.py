@@ -49,7 +49,7 @@ if N == 4:
                  'logFile_N4_Tp4_ns4_no1.txt',
                  'logFile_N4_Tp4_ns4_no2.txt']
 
-    title = 'N=4, t=0.4, ns=4'
+    title = 'N=4, T=0.4, ns=4'
     n_stop = 36
 
 elif N == 6:
@@ -57,7 +57,7 @@ elif N == 6:
                  'logFile_N6_Tp4_ns4_no1.txt',
                  'logFile_N6_Tp4_ns4_no2.txt']
 
-    title = 'N=6, t=0.4, ns=4'
+    title = 'N=6, T=0.4, ns=4'
     n_stop = 34
 
 elif N == 8:
@@ -65,7 +65,7 @@ elif N == 8:
                  'logFile_N8_Tp4_ns4_no1.txt',
                  'logFile_N8_Tp4_ns4_no2.txt']
 
-    title = 'N=8, t=0.4, ns=4'
+    title = 'N=8, T=0.4, ns=4'
     n_stop = 32
 
 n = len(filenames)

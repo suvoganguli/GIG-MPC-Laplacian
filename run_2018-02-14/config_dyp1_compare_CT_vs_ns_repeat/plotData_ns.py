@@ -52,8 +52,8 @@ N = 6
 #     n_stop = 36
 
 if N == 6:
-    filenames = ['logFile_N6_Tp4_ns4_no1_with_terminal_Vconstraint.txt',
-                 'logFile_N6_Tp4_ns6_no1_with_terminal_Vconstraint.txt']
+    filenames = ['logFile_N6_Tp4_ns4_no1.txt',
+                 'logFile_N6_Tp4_ns6_no1.txt']
 
     title = 'N=6, T=0.4, ns=4'
     n_stop = 34

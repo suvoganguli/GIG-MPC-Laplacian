@@ -12,3 +12,13 @@
 - added auto-saving of data and plot
 - fixed lataccel constraint error
 
+____________________________________________________
+
+## Summary of run directories
+
+### run_2018-02-13
+- CT vs no
+
+### run_2018-02-14
+- CT vs ns
+

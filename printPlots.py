@@ -132,6 +132,9 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         f, ax = plt.subplots(2)
         figno[1] = plt.gcf().number
         ax[0].plot(t, x[:,[2]])  # V
+        ax[0].plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
+        ax[0].plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
+
         ax[1].plot(t, x[:,[4]])  # Vdot
         ax[0].set_ylabel('V [fps]')
         ax[1].set_ylabel('Vdot [fps2]')
@@ -154,7 +157,13 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         f, ax = plt.subplots(2)
         figno[3] = plt.gcf().number
         ax[0].plot(t, u[:,0])
+        ax[0].plot(t, lb_VddotVal*np.ones(t.shape),linestyle='--', color='r')
+        ax[0].plot(t, ub_VddotVal*np.ones(t.shape), linestyle='--', color='r')
+
         ax[1].plot(t, u[:,1]*180/np.pi)
+        ax[1].plot(t, lb_ChiddotVal*np.ones(t.shape)*180/np.pi,linestyle='--', color='r')
+        ax[1].plot(t, ub_ChiddotVal*np.ones(t.shape)*180/np.pi, linestyle='--', color='r')
+
         ax[0].set_ylabel('Vddot [fps3]')
         ax[1].set_ylabel('Chiddot [deg/s2]')
         ax[1].set_xlabel('t [sec]')
@@ -226,8 +235,8 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         f, ax = plt.subplots(2)
         figno[1] = plt.gcf().number
         ax[0].plot(t, x[:, [2]])  # V
-        #ax[0].plot(t, lb_V*np.ones(t.shape),linestyle='--', color='r')
-        #ax[0].plot(t, ub_V*np.ones(t.shape), linestyle='--', color='r')
+        ax[0].plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
+        ax[0].plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
         ax[0].set_ylabel('V [fps]')
 
         ax[1].plot(t, u[:, [0]])  # Vdot
@@ -327,7 +336,8 @@ def nmpcPrint(mpciter, info, N, x, u_new, writeToFile, f, t):
     g = info['g']
     idx_lataccel = 2*N
     if ns == 6:
-        idx_trackingerror = 2*N + 2
+        #idx_trackingerror = 2*N + 2 # (nlp.py, option 1)
+        idx_trackingerror = 2*N + 1 # (nlp.py, option 2,3)
     elif ns == 4:
         idx_trackingerror = 2*N + 1
     g1 = g[idx_lataccel]/32.2 # g

@@ -41,13 +41,33 @@ def getColumns(inFile, delim=" ", header=True):
 
     return cols, indexToName
 
-filenames = ['logFile_N6_Tp4_ns4_no0.txt',
-             'logFile_N6_Tp4_ns4_no1.txt',
-             'logFile_N6_Tp4_ns4_no2.txt']
+# ---------------------------------------------------------------
+
+N = 6
+if N == 4:
+    filenames = ['logFile_N4_Tp4_ns4_no1.txt',
+                 'logFile_N4_Tp4_ns6_no1.txt']
+
+    title = 'N=4, T=0.4, no=1'
+    n_stop = 36
+
+elif N == 6:
+    filenames = ['logFile_N6_Tp4_ns4_no1.txt',
+                 'logFile_N6_Tp4_ns6_no1.txt']
+
+    title = 'N=6, T=0.4, ns=4'
+    n_stop = 34
+
+# elif N == 8:
+#     filenames = ['logFile_N8_Tp4_ns4_no1.txt',
+#                  'logFile_N8_Tp4_ns6_no1.txt']
+#
+#     title = 'N=8, T=0.4, ns=4'
+#     n_stop = 32
 
 n = len(filenames)
 cputime_vec = np.zeros(n)
-no_vec = [0,1,2]
+no_vec = [0,1]
 
 
 plt.figure(1)
@@ -59,25 +79,30 @@ for k in range(n):
     iter = np.array(cols[0]).astype(np.int)
     cputime = np.array(cols[1]).astype(np.float)
 
+    iter = iter[:n_stop]
+    cputime = cputime[:n_stop]
+
     cputime_vec[k] = np.mean(cputime)
 
     plt.plot(iter,cputime)
     plt.grid('True')
     plt.xlabel('Iterations')
     plt.ylabel('CPU time [sec]')
-    plt.title('N=6, t=0.4, ns=4')
+    plt.title(title)
     # plt.gca().set_adjustable('box')
     # ax = plt.gca()
     # ax.set_ylim(0,5))
-plt.legend(['no = 0','no = 1','no = 2'])
+plt.legend(['ns = 4','ns = 6'])
 
 plt.figure(2)
 plt.plot(no_vec,cputime_vec, marker = 'x')
 plt.xlabel('no')
 plt.ylabel('Average CPU time [sec]')
-plt.title('N=6, t=0.4, ns=4')
+plt.title(title)
 plt.grid('True')
 
-plt.show()
+print(cputime_vec)
+print(cputime_vec[1]/cputime_vec[0])
 
+plt.show()
 

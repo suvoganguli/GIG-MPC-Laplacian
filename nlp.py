@@ -5,7 +5,7 @@ from problemData import *
 
 class nlpProb(object):
 
-    def __init__(self, N, T, t0, x0, ncons, nu, lanes, obstacle, posIdx):
+    def __init__(self, N, T, t0, x0, ncons, nu, lanes, obstacle, posIdx, ns_option):
         self.N = N
         self.T = T
         self.t0 = t0
@@ -15,6 +15,7 @@ class nlpProb(object):
         self.lanes = lanes
         self.obstacle = obstacle
         self.posIdx = posIdx
+        self.ns_option = ns_option
         pass
 
 
@@ -68,6 +69,7 @@ class nlpProb(object):
         lanes = self.lanes
         obstacle = self.obstacle
         posIdx = self.posIdx
+        ns_option = self.ns_option
 
         x = prob.computeOpenloopSolution(u, N, T, t0, x0)
 
@@ -81,15 +83,42 @@ class nlpProb(object):
         consR1 = np.concatenate([consR1_R, consR1_L])
 
         if ns == 6:
-            consR2 = np.array([x[0, idx_V] * x[0, idx_Chidot] * useLatAccelCons])  # lateral acceleration
-            consR3 = np.array([x[0, idx_V]])  # velocity
 
-            constmp = np.concatenate([consR1, consR2])
-            consR = np.concatenate([constmp, consR3])
+            if ns_option == 1: # Additional Current velocity + Terminal velocity constraint
 
-            # terminal constraint
-            consT1, consT2 = prob.terminalCons(u, x[N - 1], t0, lanes, obstacle, posIdx)
-            consT = np.concatenate([consT1, consT2])
+                consR2 = np.array([x[0, idx_V] * x[0, idx_Chidot] * useLatAccelCons])  # lateral acceleration
+                consR3 = np.array([x[0, idx_V]])  # current velocity
+
+                constmp = np.concatenate([consR1, consR2])
+                consR = np.concatenate([constmp, consR3])
+
+                # terminal constraint (dy, V)
+                consT1, consT2 = prob.terminalCons(u, x[N - 1], t0, lanes, obstacle, posIdx)
+                consT = np.concatenate([consT1, consT2])
+
+            elif ns_option == 2:
+
+                # No terminal velocity constraint
+                consR2 = np.array([x[0, idx_V] * x[0, idx_Chidot] * useLatAccelCons])  # lateral acceleration
+
+                consR = np.concatenate([consR1, consR2])
+
+                # terminal constraint (dy, dV)
+                consT1, consT2 = prob.terminalCons(u, x[N - 1], t0, lanes, obstacle, posIdx)
+                consT = np.concatenate([consT1, consT2])
+
+
+            elif ns_option == 3:
+
+                # No terminal velocity constraint
+                consR2 = np.array([x[0, idx_V] * x[0, idx_Chidot] * useLatAccelCons])  # lateral acceleration
+
+                consR = np.concatenate([consR1, consR2])
+
+                # terminal constraint (dy)
+                consT1, consT2 = prob.terminalCons(u, x[N - 1], t0, lanes, obstacle, posIdx)
+                consT = consT1
+
 
         elif ns == 4:
             u_mat = u.reshape(2,-1).T
@@ -143,6 +172,7 @@ class nlpProb(object):
         lanes = self.lanes
         obstacle = self.obstacle
         posIdx = self.posIdx
+        ns_option = self.ns_option
 
         if ns == 6:
 
@@ -170,8 +200,8 @@ class nlpProb(object):
         lataccel_max = lataccel_maxVal
 
         # Running Constraints
-        u = u0.flatten(1)
-        x = prob.computeOpenloopSolution(u, N, T, t0, x0)
+        # u = u0.flatten(1)
+        # x = prob.computeOpenloopSolution(u, N, T, t0, x0)
 
         if obstacle.Present == True:
 
@@ -207,16 +237,36 @@ class nlpProb(object):
         cu_tmp1 = np.concatenate([cu_running, [+lataccel_max]])
 
         if ns == 6:
-            # Speed Constraint
-            cl_tmp2 = np.concatenate([cl_tmp1, [lb_V]])
-            cu_tmp2 = np.concatenate([cu_tmp1, [ub_V]])
 
-            # Terminal Constraint
-            cl_tmp3 = np.concatenate([cl_tmp2, [-dyRoadL]])
-            cu_tmp3 = np.concatenate([cu_tmp2, [dyRoadR]])
+            if ns_option == 3:
 
-            cl = np.concatenate([cl_tmp3, [-delta_V + V_cmd]])
-            cu = np.concatenate([cu_tmp3, [delta_V + V_cmd]])
+                # Speed Constraint
+                cl_tmp2 = np.concatenate([cl_tmp1, [lb_V]])
+                cu_tmp2 = np.concatenate([cu_tmp1, [ub_V]])
+
+                # Terminal Constraint
+                cl_tmp3 = np.concatenate([cl_tmp2, [-dyRoadL]])
+                cu_tmp3 = np.concatenate([cu_tmp2, [dyRoadR]])
+
+                cl = np.concatenate([cl_tmp3, [-delta_V + V_cmd]])
+                cu = np.concatenate([cu_tmp3, [delta_V + V_cmd]])
+
+            elif ns_option == 2:
+
+                # Terminal Constraint
+                cl_tmp3 = np.concatenate([cl_tmp1, [-dyRoadL]])
+                cu_tmp3 = np.concatenate([cu_tmp1, [dyRoadR]])
+
+                cl = np.concatenate([cl_tmp3, [-delta_V + V_cmd]])
+                cu = np.concatenate([cu_tmp3, [delta_V + V_cmd]])
+
+
+            elif ns_option == 1:
+
+                # Terminal Constraint
+                cl = np.concatenate([cl_tmp1, [-dyRoadL]])
+                cu = np.concatenate([cu_tmp1, [dyRoadR]])
+
 
         elif ns == 4:
 
@@ -231,7 +281,7 @@ class nlpProb(object):
         nlp = ipopt.problem(
             n=nu*N,
             m=len(cl),
-            problem_obj=nlpProb(N, T, t0, x0, ncons, nu, lanes, obstacle, posIdx),
+            problem_obj=nlpProb(N, T, t0, x0, ncons, nu, lanes, obstacle, posIdx, ns_option),
             lb=lb,
             ub=ub,
             cl=cl,

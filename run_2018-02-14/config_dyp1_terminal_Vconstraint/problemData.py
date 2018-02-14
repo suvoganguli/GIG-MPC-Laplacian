@@ -33,7 +33,7 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # default
 N = 6
 T = 0.4
-ns = 6
+ns = 4
 no = 1
 
 if no == 0:
@@ -49,19 +49,19 @@ elif no == 1:
     if N == 4:
         if ns == 4:
             mpciterations = 40 #34
-        else:
+        elif ns == 6:
             mpciterations = 34
 
     elif N == 6:
         if ns == 4:
             mpciterations = 34 #34
-        else:
+        elif ns == 6:
             mpciterations = 34
 
     elif N == 8:
         if ns == 4:
             mpciterations = 32 # 32
-        else:
+        elif ns == 6:
             mpciterations = 24
 
 elif no == 2:
@@ -157,8 +157,8 @@ elif ns == 4:
     ub_ChidotVal = 20 * np.pi / 180  # rad/s2
     lataccel_maxVal = 0.25 * 32.2  # fps2
     useLatAccelCons = 1
-    #lb_V = 0.8 * V0
-    #ub_V = 1.2 * V0
+    lb_V = 0.8 * V0
+    ub_V = 1.2 * V0
 
     # Tracking Tuning and Data
     W_P = 1.0
@@ -169,7 +169,7 @@ elif ns == 4:
     V_cmd = V0  # fps
 
     # Terminal constraint
-    delta_yRoad = 0.5  # ft
+    delta_yRoad = 0.1  # ft
     delta_yRoadRelaxed = 5  # ft, in safe zone
     delta_V = 1 * mph2fps  # fps
 
@@ -191,12 +191,12 @@ elif ns == 6:
     x0 = [E0, N0, V0, Chi0, 0, 0]  # E, N, V, Chi, Vdot, Chidot
     lb_VddotVal = -2 # fps3
     ub_VddotVal = 2 # fps3
-    lb_ChiddotVal = -200*np.pi/180 # rad/s2
-    ub_ChiddotVal = 200*np.pi/180 # rad/s2
+    lb_ChiddotVal = -20*np.pi/180 # rad/s2
+    ub_ChiddotVal = 20*np.pi/180 # rad/s2
     lataccel_maxVal = 0.25*32.2 # fps2
     useLatAccelCons = 1
-    #lb_V = 0.8*V0
-    #ub_V = 1.2*V0
+    lb_V = 0.8*V0
+    ub_V = 1.2*V0
 
     # Tracking Tuning and Data
     W_P = 1.0      #1.0
@@ -207,7 +207,7 @@ elif ns == 6:
     V_cmd = V0  # fps
 
     # Terminal constraint
-    delta_yRoad = 0.5/5 # ft
+    delta_yRoad = 0.1 # ft
     delta_yRoadRelaxed = 5 # ft, in safe zone
     delta_V = 1*mph2fps # fps
 
@@ -264,11 +264,24 @@ if ns == 2:
     idx_V = 1
     idx_Chi = 1
 
+    ns_option = None
+
 elif ns == 4:
     # problem size
     nx = 4
     nu = 2
-    ncons = 2 * N + 2  # running + lataccel + terminal constraint-y
+
+    ns_option = 2
+
+    if ns_option == 1:
+        ncons = 2*N + 4 # (option 1 in nlp.py) running + lataccel + V0 + terminal constraint-y + terminal constraint-V
+
+    elif ns_option == 2:
+        ncons = 2*N + 3 # (option 2 in nlp.py) running + lataccel + terminal constraint-y + terminal constraint-V
+
+    elif ns_option == 3:
+        ncons = 2*N + 2  # (option 3 in nlp.py) running + lataccel + terminal constraint-y
+
     t0 = 0
     u0 = np.zeros([N, nu])
     # mpciterations = int(18*N/(6))
@@ -285,15 +298,25 @@ elif ns == 4:
     idx_Vdot = 0
     idx_Chidot = 1
 
+
 elif ns == 6:
     # problem size
     nx = 6
     nu = 2
-    #ncons = 2*N + 4 #running + lataccel + V0 + terminal constraint-y + terminal constraint-V
-    ncons = 2*N + 2  # running + lataccel + terminal constraint-y
+
+    ns_option = 2
+
+    if ns_option == 1:
+        ncons = 2*N + 4 # (option 1 in nlp.py) running + lataccel + V0 + terminal constraint-y + terminal constraint-V
+
+    elif ns_option == 2:
+        ncons = 2*N + 3 # (option 2 in nlp.py) running + lataccel + terminal constraint-y + terminal constraint-V
+
+    elif ns_option == 3:
+        ncons = 2*N + 2  # (option 3 in nlp.py) running + lataccel + terminal constraint-y
+
     t0 = 0
     u0 = np.zeros([N,nu])
-    #mpciterations = int(18*N/(6))
 
     # nlpData
     nlpPrintLevel = 0

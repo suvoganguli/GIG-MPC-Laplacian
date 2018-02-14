@@ -121,15 +121,44 @@ class nlpProb(object):
 
 
         elif ns == 4:
-            u_mat = u.reshape(2,-1).T
 
-            consR2 = np.array([x[0, idx_V] * u_mat[0, idx_Chidot] * useLatAccelCons])  # lateral acceleration
+            if ns_option == 1:
 
-            consR = np.concatenate([consR1, consR2])
+                u_mat = u.reshape(2, -1).T
+                consR2 = np.array([x[0, idx_V] * u_mat[0, idx_Chidot] * useLatAccelCons])  # lateral acceleration
+                consR3 = np.array([x[0, idx_V]])  # current velocity
 
-            # terminal constraint
-            consT1, consT2 = prob.terminalCons(u, x[N-1], t0, lanes, obstacle, posIdx)  # ydist, VEnd
-            consT = consT1
+                constmp = np.concatenate([consR1, consR2])
+                consR = np.concatenate([constmp, consR3])
+
+                # terminal constraint (dy, V)
+                consT1, consT2 = prob.terminalCons(u, x[N - 1], t0, lanes, obstacle, posIdx)
+                consT = np.concatenate([consT1, consT2])
+
+            elif ns_option == 2:
+
+                u_mat = u.reshape(2, -1).T
+                consR2 = np.array([x[0, idx_V] * u_mat[0, idx_Chidot] * useLatAccelCons])  # lateral acceleration
+
+                consR = np.concatenate([consR1, consR2])
+
+                # terminal constraint
+                consT1, consT2 = prob.terminalCons(u, x[N-1], t0, lanes, obstacle, posIdx)  # ydist, VEnd
+                consT = np.concatenate([consT1, consT2])
+
+
+            elif ns_option == 3:
+
+                u_mat = u.reshape(2,-1).T
+                consR2 = np.array([x[0, idx_V] * u_mat[0, idx_Chidot] * useLatAccelCons])  # lateral acceleration
+
+                consR = np.concatenate([consR1, consR2])
+
+                # terminal constraint
+                consT1, consT2 = prob.terminalCons(u, x[N-1], t0, lanes, obstacle, posIdx)  # ydist, VEnd
+                consT = consT1
+
+
 
         # total constraints
         cons = np.concatenate([consR,consT])
@@ -236,43 +265,43 @@ class nlpProb(object):
         cl_tmp1 = np.concatenate([cl_running, [-lataccel_max]])
         cu_tmp1 = np.concatenate([cu_running, [+lataccel_max]])
 
-        if ns == 6:
+        # if ns == 6:
 
-            if ns_option == 3:
+        if ns_option == 1:
 
-                # Speed Constraint
-                cl_tmp2 = np.concatenate([cl_tmp1, [lb_V]])
-                cu_tmp2 = np.concatenate([cu_tmp1, [ub_V]])
-
-                # Terminal Constraint
-                cl_tmp3 = np.concatenate([cl_tmp2, [-dyRoadL]])
-                cu_tmp3 = np.concatenate([cu_tmp2, [dyRoadR]])
-
-                cl = np.concatenate([cl_tmp3, [-delta_V + V_cmd]])
-                cu = np.concatenate([cu_tmp3, [delta_V + V_cmd]])
-
-            elif ns_option == 2:
-
-                # Terminal Constraint
-                cl_tmp3 = np.concatenate([cl_tmp1, [-dyRoadL]])
-                cu_tmp3 = np.concatenate([cu_tmp1, [dyRoadR]])
-
-                cl = np.concatenate([cl_tmp3, [-delta_V + V_cmd]])
-                cu = np.concatenate([cu_tmp3, [delta_V + V_cmd]])
-
-
-            elif ns_option == 1:
-
-                # Terminal Constraint
-                cl = np.concatenate([cl_tmp1, [-dyRoadL]])
-                cu = np.concatenate([cu_tmp1, [dyRoadR]])
-
-
-        elif ns == 4:
+            # Speed Constraint
+            cl_tmp2 = np.concatenate([cl_tmp1, [lb_V]])
+            cu_tmp2 = np.concatenate([cu_tmp1, [ub_V]])
 
             # Terminal Constraint
-            cl = np.concatenate([cl_tmp1,[-dyRoadL]])
-            cu = np.concatenate([cu_tmp1,[ dyRoadR]])
+            cl_tmp3 = np.concatenate([cl_tmp2, [-dyRoadL]])
+            cu_tmp3 = np.concatenate([cu_tmp2, [dyRoadR]])
+
+            cl = np.concatenate([cl_tmp3, [-delta_V + V_cmd]])
+            cu = np.concatenate([cu_tmp3, [delta_V + V_cmd]])
+
+        elif ns_option == 2:
+
+            # Terminal Constraint
+            cl_tmp3 = np.concatenate([cl_tmp1, [-dyRoadL]])
+            cu_tmp3 = np.concatenate([cu_tmp1, [dyRoadR]])
+
+            cl = np.concatenate([cl_tmp3, [-delta_V + V_cmd]])
+            cu = np.concatenate([cu_tmp3, [delta_V + V_cmd]])
+
+
+        elif ns_option == 3:
+
+            # Terminal Constraint
+            cl = np.concatenate([cl_tmp1, [-dyRoadL]])
+            cu = np.concatenate([cu_tmp1, [dyRoadR]])
+
+
+        # elif ns == 4:
+        #
+        #     # Terminal Constraint
+        #     cl = np.concatenate([cl_tmp1,[-dyRoadL]])
+        #     cu = np.concatenate([cu_tmp1,[ dyRoadR]])
 
 
         if ncons != len(cl) and ncons != len(cu):

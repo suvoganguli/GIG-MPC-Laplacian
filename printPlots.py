@@ -132,8 +132,10 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         f, ax = plt.subplots(2)
         figno[1] = plt.gcf().number
         ax[0].plot(t, x[:,[2]])  # V
-        ax[0].plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
-        ax[0].plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
+
+        if ns_option != 3:
+            ax[0].plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
+            ax[0].plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
 
         ax[1].plot(t, x[:,[4]])  # Vdot
         ax[0].set_ylabel('V [fps]')
@@ -235,8 +237,11 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         f, ax = plt.subplots(2)
         figno[1] = plt.gcf().number
         ax[0].plot(t, x[:, [2]])  # V
-        ax[0].plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
-        ax[0].plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
+
+        if ns_option != 3:
+            ax[0].plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
+            ax[0].plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
+
         ax[0].set_ylabel('V [fps]')
 
         ax[1].plot(t, u[:, [0]])  # Vdot

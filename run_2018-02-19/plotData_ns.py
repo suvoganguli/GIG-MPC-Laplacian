@@ -86,6 +86,25 @@ if N == 6:
         title = 'N=6, T=0.4, no=2'
         n_stop = 14
 
+if N == 8:
+    if no == 0:
+        filenames = ['logFile_N8_Tp4_ns4_no0.txt',
+                     'logFile_N8_Tp4_ns6_no0.txt']
+        title = 'N=8, T=0.4, no=0'
+        n_stop = 36
+
+    elif no == 1:
+        filenames = ['logFile_N8_Tp4_ns4_no1.txt',
+                     'logFile_N8_Tp4_ns6_no1.txt']
+        title = 'N=8, T=0.4, no=1'
+        n_stop = 36
+
+    elif no == 2:
+        filenames = ['logFile_N8_Tp4_ns4_no2.txt',
+                     'logFile_N8_Tp4_ns6_no2.txt']
+        title = 'N=8, T=0.4, no=2'
+        n_stop = 14
+
 
 n = len(filenames)
 cputime_vec = np.zeros(n)

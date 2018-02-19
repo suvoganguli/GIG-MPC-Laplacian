@@ -31,7 +31,7 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # 'no' - number of obstacles
 
 # default
-N = 6
+N = 4
 T = 0.4
 ns = 4
 no = 1
@@ -48,7 +48,7 @@ if no == 0:
 elif no == 1:
     if N == 4:
         if ns == 4:
-            mpciterations = 40 #34
+            mpciterations = 1 #40 #34
         elif ns == 6:
             mpciterations = 34
 
@@ -287,7 +287,7 @@ elif ns == 4:
     # mpciterations = int(18*N/(6))
 
     # nlpData
-    nlpPrintLevel = 0
+    nlpPrintLevel = 5
 
     # State and Control indices
     idx_E = 0

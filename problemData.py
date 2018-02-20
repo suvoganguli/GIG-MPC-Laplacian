@@ -31,10 +31,10 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # 'no' - number of obstacles
 
 # default
-N = 6
+N = 8
 T = 0.4
-ns = 4
-no = 1
+ns = 6
+no = 2
 
 if no == 0:
     if N == 4:
@@ -47,12 +47,12 @@ if no == 0:
 elif no == 1:
     if N == 4:
         if ns == 4:
-            mpciterations = 36 #40 #34
+            mpciterations = 36 # 36
         elif ns == 6:
-            mpciterations = 18 #18
+            mpciterations = 18 # 18
     elif N == 6:
         if ns == 4:
-            mpciterations = 38 #34 #34
+            mpciterations = 34 # 34
         elif ns == 6:
             mpciterations = 38
     elif N == 8:
@@ -66,17 +66,18 @@ elif no == 2:
         if ns == 4:
             mpciterations = 42 # 42
         elif ns == 6:
-            mpciterations = 14
+            mpciterations = 14  # 14 = wider dy with V terminal constraint, unstable
     elif N == 6:
         if ns == 4:
-            mpciterations = 38 #38
+            mpciterations = 38 #
         elif ns == 6:
-            mpciterations = 36 #36
+            mpciterations = 20 # 20 = wider dt with V terminal constraint, stops
     elif N == 8:
         if ns == 4:
             mpciterations = 36 # 32
         elif ns == 6:
-            mpciterations = 18
+            mpciterations = 24 # 24 = wider dt with V terminal constraint,
+                                # unstable at 2nd turn "No solution found in runningCons". Why?
 
 
 
@@ -175,7 +176,7 @@ elif ns == 4:
     V_cmd = V0  # fps
 
     # Terminal constraint
-    delta_yRoad = 0.1  # ft
+    delta_yRoad = 0.1*5  # ft
     delta_yRoadRelaxed = 5  # ft, in safe zone
     delta_V = 1 * mph2fps  # fps
 
@@ -213,7 +214,7 @@ elif ns == 6:
     V_cmd = V0  # fps
 
     # Terminal constraint
-    delta_yRoad = 0.1 # ft
+    delta_yRoad = 0.1*5 # ft
     delta_yRoadRelaxed = 5 # ft, in safe zone
     delta_V = 1*mph2fps # fps
 
@@ -277,7 +278,7 @@ elif ns == 4:
     nx = 4
     nu = 2
 
-    ns_option = 2
+    ns_option = 3
 
     if ns_option == 1:
         ncons = 2*N + 4 # (option 1 in nlp.py) running + lataccel + V0 + terminal constraint-y + terminal constraint-V
@@ -293,7 +294,7 @@ elif ns == 4:
     # mpciterations = int(18*N/(6))
 
     # nlpData
-    nlpPrintLevel = 5
+    nlpPrintLevel = 0
 
     # State and Control indices
     idx_E = 0
@@ -310,7 +311,7 @@ elif ns == 6:
     nx = 6
     nu = 2
 
-    ns_option = 2
+    ns_option = 3
 
     if ns_option == 1:
         ncons = 2*N + 4 # (option 1 in nlp.py) running + lataccel + V0 + terminal constraint-y + terminal constraint-V
@@ -325,7 +326,7 @@ elif ns == 6:
     u0 = np.zeros([N,nu])
 
     # nlpData
-    nlpPrintLevel = 5
+    nlpPrintLevel = 0
 
     # State and Control indices
     idx_E = 0

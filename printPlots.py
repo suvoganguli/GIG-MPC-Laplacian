@@ -20,14 +20,17 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     East = x_mpciter[:,0]
     North = x_mpciter[:,1]
 
+    V_terminal = x_mpciter[-1,2]
+
     # figure 1
     f1 = plt.figure(1,figsize=(5, 7), dpi=100)
     plt.ylabel('N [ft]')
     plt.xlabel('E [ft]')
     #plt.axis('equal')
-    None
 
     if mpciter == 0:
+
+        plt.figure(f1.number)
 
         # Detailed Path
         plt.plot(path.pathData.E, path.pathData.N, linestyle='--', color='c')
@@ -102,15 +105,16 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     #ax1.set_xlim([0, 16])
     #ax1.set_ylim([0, 128])
 
+
     plt.pause(0.01)
     #if mpciter < mpciterations-1:
     #   ax1 = f1.gca()
     #   del ax1.lines[7:12]
 
-    None
+    return V_terminal
 
 
-def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
+def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal):
 
 
     if ns == 6:
@@ -180,47 +184,10 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         ax.set_xlabel('t [sec]')
         ax.grid(True)
 
-        # figure 7
-        # figno[5] = plt.gcf().number
-        # f, ax = plt.subplots(1, figsize=(5, 7), dpi=100)  #sharex=True
-        # lw = 1.0
-        # ax.plot(path.E, path.N, linewidth = lw, linestyle='--', color='k')
-        # ax.plot(x[:,0],x[:,1], linestyle='-', color='b')
-        # ax.set_ylabel('N [ft]')
-        # ax.set_xlabel('E [ft]')
-        # ax.grid(True)
-        # plt.xlim([0, 16])
-        # plt.ylim([0, 128])
-        # #plt.axis('equal')
-        #
-        # plt.plot(path.pathData.PathStartPoint[0], path.pathData.PathStartPoint[1], marker='o', markersize=8, color='r')
-        # plt.plot(path.pathData.PathEndPoint[0], path.pathData.PathEndPoint[1], marker='o', markersize=8, color='g')
-        #
-        # nObs = len(obstacle.E)
-        # if nObs > 0:
-        #     for k in range(nObs):
-        #         Efc = obstacle.E[k] + pathWidth / 2
-        #         Nfc = obstacle.N[k]
-        #         W = obstacle.w[k] - pathWidth
-        #         L = obstacle.l[k]
-        #         Theta = obstacle.Chi[k]
-        #         fc = "red"
-        #         polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
-        #
-        #         Efc = obstacle.E[k]
-        #         Nfc = obstacle.N[k]
-        #         W = obstacle.w[k]
-        #         L = obstacle.l[k]
-        #         Theta = obstacle.Chi[k]
-        #         fc = "green"
-        #         polygon_safezone = getPatch(Efc, Nfc, W, L, Theta, fc)
-        #
-        #         ax.add_patch(polygon_safezone)
-        #         ax.add_patch(polygon_obstacle)
 
     elif ns == 4:
 
-        figno = np.zeros(6)
+        figno = np.zeros(7)
 
         # figure 2
         f, ax = plt.subplots(2)
@@ -281,53 +248,25 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,case):
         ax.set_xlabel('t [sec]')
         ax.grid(True)
 
-        # figure 6
-        # figno[4] = plt.gcf().number
-        # f, ax = plt.subplots(1, figsize=(5, 7), dpi=100)  # sharex=True
-        # lw = 1.0
-        # ax.plot(path.pathData.E, path.pathData.N, linewidth=lw, linestyle='-', color='k')
-        # ax.plot(x[:, 0], x[:, 1], linestyle='-', color='b')
-        # ax.set_ylabel('N [ft]')
-        # ax.set_xlabel('E [ft]')
-        # ax.grid(True)
-        # plt.xlim([0, 16])
-        # plt.ylim([0, 128])
-        # # plt.axis('equal')
-        #
-        # plt.plot(path.pathData.PathStartPoint[0], path.pathData.PathStartPoint[1], marker='o', markersize=8, color='r')
-        # plt.plot(path.pathData.PathEndPoint[0], path.pathData.PathEndPoint[1], marker='o', markersize=8, color='g')
-        #
-        # nObs = len(obstacle.E)
-        # if nObs > 0:
-        #     for k in range(nObs):
-        #         Efc = obstacle.E[k] + pathWidth / 2
-        #         Nfc = obstacle.N[k]
-        #         W = obstacle.w[k] - pathWidth
-        #         L = obstacle.l[k]
-        #         Theta = obstacle.Chi[k]
-        #         fc = "red"
-        #         polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
-        #
-        #         Efc = obstacle.E[k]
-        #         Nfc = obstacle.N[k]
-        #         W = obstacle.w[k]
-        #         L = obstacle.l[k]
-        #         Theta = obstacle.Chi[k]
-        #         fc = "green"
-        #         polygon_safezone = getPatch(Efc, Nfc, W, L, Theta, fc)
-        #
-        #         ax.add_patch(polygon_safezone)
-        #         ax.add_patch(polygon_obstacle)
-
-
-
-    # figure 7
+    # figure 6/7
     iterations = np.arange(len(tElapsed))
     f, ax = plt.subplots(1)
     figno[5] = plt.gcf().number
     plt.plot(iterations, tElapsed)
     ax.set_ylabel('CPU Time [sec]')
     ax.set_xlabel('Iteration')
+    ax.grid(True)
+
+
+    # figure 7/8
+    f, ax = plt.subplots(1)
+    figno[6] = plt.gcf().number
+    plt.plot(t, V_terminal)
+    if ns_option != 3:
+        ax.plot(t, lb_V * np.ones(t.shape), linestyle='--', color='r')
+        ax.plot(t, ub_V * np.ones(t.shape), linestyle='--', color='r')
+    plt.ylabel('V-terminal [fps]')
+    plt.xlabel('time [sec]')
     ax.grid(True)
 
     plt.show()

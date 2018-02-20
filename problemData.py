@@ -33,7 +33,7 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # default
 N = 6
 T = 0.4
-ns = 6
+ns = 4
 no = 2
 
 if no == 0:
@@ -65,14 +65,14 @@ elif no == 1:
 elif no == 2:
     if N == 4:
         if ns == 4:
-            mpciterations = 42 # 50
+            mpciterations = 42 # 42
         elif ns == 6:
             mpciterations = 14
     elif N == 6:
         if ns == 4:
-            mpciterations = 38 #34
+            mpciterations = 38 #38
         elif ns == 6:
-            mpciterations = 36
+            mpciterations = 36 #36
     elif N == 8:
         if ns == 4:
             mpciterations = 36 # 32

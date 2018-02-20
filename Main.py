@@ -51,6 +51,7 @@ else:
 saveData = True
 
 tElapsed = np.zeros(mpciterations)
+VTerminal = np.zeros(mpciterations)
 
 posIdx = getPosIdx(x0[0], x0[1], path, posIdx0)
 
@@ -87,7 +88,7 @@ while mpciter < mpciterations:
     printPlots.nmpcPrint(mpciter, info, N, x0, u_new, writeToFile, fHandle, tElapsed[mpciter])
 
     # mpc  future path plot
-    printPlots.nmpcPlotSol(u_new, path, mpciter, x0, obstacle, None)
+    VTerminal[mpciter] = printPlots.nmpcPlotSol(u_new, path, mpciter, x0, obstacle, None)
 
     # store closed loop data
     t[mpciter] = tmeasure
@@ -129,7 +130,7 @@ if saveData == True:
     print('saved data and figure')
 
 # create plots
-figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, None)
+figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, VTerminal)
 print('done!')
 
 # Save Data

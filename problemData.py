@@ -34,7 +34,7 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 N = 6
 T = 0.4
 ns = 4
-no = 2
+no = 1
 
 if no == 0:
     if N == 4:
@@ -44,18 +44,17 @@ if no == 0:
     elif N == 8:
         mpciterations = 32 # 32
 
-
 elif no == 1:
     if N == 4:
         if ns == 4:
-            mpciterations = 40 #40 #34
+            mpciterations = 36 #40 #34
         elif ns == 6:
             mpciterations = 18 #18
     elif N == 6:
         if ns == 4:
-            mpciterations = 34 #34
+            mpciterations = 38 #34 #34
         elif ns == 6:
-            mpciterations = 34
+            mpciterations = 38
     elif N == 8:
         if ns == 4:
             mpciterations = 32 # 32
@@ -294,7 +293,7 @@ elif ns == 4:
     # mpciterations = int(18*N/(6))
 
     # nlpData
-    nlpPrintLevel = 0
+    nlpPrintLevel = 5
 
     # State and Control indices
     idx_E = 0
@@ -326,7 +325,7 @@ elif ns == 6:
     u0 = np.zeros([N,nu])
 
     # nlpData
-    nlpPrintLevel = 0
+    nlpPrintLevel = 5
 
     # State and Control indices
     idx_E = 0

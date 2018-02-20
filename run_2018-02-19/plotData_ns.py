@@ -44,7 +44,7 @@ def getColumns(inFile, delim=" ", header=True):
 # ---------------------------------------------------------------
 
 N = 6
-no = 0
+no = 2
 
 if N == 4:
     if no == 0:
@@ -84,7 +84,7 @@ if N == 6:
         filenames = ['logFile_N6_Tp4_ns4_no2.txt',
                      'logFile_N6_Tp4_ns6_no2.txt']
         title = 'N=6, T=0.4, no=2'
-        n_stop = 14
+        n_stop = 36
 
 if N == 8:
     if no == 0:

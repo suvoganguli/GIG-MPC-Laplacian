@@ -114,7 +114,7 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     return V_terminal
 
 
-def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal):
+def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError):
 
 
     if ns == 6:
@@ -177,12 +177,23 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal):
             ax[k].grid(True)
 
         # figure 6
-        f, ax = plt.subplots(1)
-        figno[4] = plt.gcf().number
-        plt.plot(t, x[:,[2]] * x[:,[5]] / 32.2)  # V*Chidot
-        ax.set_ylabel('Lat Accel [g]')
-        ax.set_xlabel('t [sec]')
-        ax.grid(True)
+        f, ax = plt.subplots(2)
+        figno[3] = plt.gcf().number
+        # ax[0].plot(t, x[:, [2]] * u[:, [1]] / 32.2)  # V*Chidot
+        ax[0].plot(t, latAccel)
+        if useLatAccelCons == 1:
+            ax[0].plot(t, lataccel_maxVal*np.ones(t.shape)/32.2, linestyle='--', color='r')
+            ax[0].plot(t, -lataccel_maxVal*np.ones(t.shape)/32.2, linestyle='--', color='r')
+
+        ax[0].set_ylabel('Lat Accel [g]')
+        ax[0].grid(True)
+
+        ax[1].plot(t, dyError)
+        ax[1].plot(t, delta_yRoad * np.ones(t.shape), linestyle='--', color='r')
+        ax[1].plot(t, -delta_yRoad * np.ones(t.shape), linestyle='--', color='r')
+        ax[1].set_ylabel('dy Error [m]')
+        ax[1].set_xlabel('t [sec]')
+        ax[1].grid(True)
 
 
     elif ns == 4:
@@ -223,9 +234,9 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal):
         # figure 4
         f, ax = plt.subplots(2)
         figno[2] = plt.gcf().number
-        ax[0].plot(t, x[:, [3]] * 180 / np.pi)
+        ax[0].plot(t, x[:, [3]]*180/np.pi)
 
-        ax[1].plot(t, u[:, [1]] * 180 / np.pi)
+        ax[1].plot(t, u[:, [1]]*180/np.pi)
         ax[1].plot(t, lb_ChidotVal*np.ones(t.shape)*180/np.pi,linestyle='--', color='r')
         ax[1].plot(t, ub_ChidotVal*np.ones(t.shape)*180/np.pi, linestyle='--', color='r')
 
@@ -237,16 +248,23 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal):
 
 
         # figure 5
-        f, ax = plt.subplots(1)
+        f, ax = plt.subplots(2)
         figno[3] = plt.gcf().number
-        ax.plot(t, x[:, [2]] * u[:, [1]] / 32.2)  # V*Chidot
+        # ax[0].plot(t, x[:, [2]] * u[:, [1]] / 32.2)  # V*Chidot
+        ax[0].plot(t, latAccel)
         if useLatAccelCons == 1:
-            ax.plot(t, lataccel_maxVal*np.ones(t.shape)/32.2,linestyle='--', color='r')
-            ax.plot(t, -lataccel_maxVal*np.ones(t.shape)/32.2, linestyle='--', color='r')
+            ax[0].plot(t, lataccel_maxVal*np.ones(t.shape)/32.2, linestyle='--', color='r')
+            ax[0].plot(t, -lataccel_maxVal*np.ones(t.shape)/32.2, linestyle='--', color='r')
 
-        ax.set_ylabel('Lat Accel [g]')
-        ax.set_xlabel('t [sec]')
-        ax.grid(True)
+        ax[0].set_ylabel('Lat Accel [g]')
+        ax[0].grid(True)
+
+        ax[1].plot(t, dyError)
+        ax[1].plot(t, delta_yRoad * np.ones(t.shape), linestyle='--', color='r')
+        ax[1].plot(t, -delta_yRoad * np.ones(t.shape), linestyle='--', color='r')
+        ax[1].set_ylabel('dy Error [m]')
+        ax[1].set_xlabel('t [sec]')
+        ax[1].grid(True)
 
     # figure 6/7
     iterations = np.arange(len(tElapsed))
@@ -273,7 +291,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal):
 
     return figno
 
-def nmpcPrint(mpciter, info, N, x, u_new, writeToFile, f, t):
+def nmpcPrint(mpciter, info, N, x, u_new, writeToFile, f, cpuTime, VTerminal):
 
     status = info['status']
     cost = info['obj_val']
@@ -292,7 +310,7 @@ def nmpcPrint(mpciter, info, N, x, u_new, writeToFile, f, t):
     status_msg = info['status_msg']
     u = info['x']
     u0 = u[0]  # Vddot
-    u1 = u[N]*180/np.pi  #Chiddot
+    u1 = u[N] #Chiddot
 
     if ns == 6:
         text_u0 = "Vddot"
@@ -339,28 +357,42 @@ def nmpcPrint(mpciter, info, N, x, u_new, writeToFile, f, t):
         #                                        7, "V", 7, "Chi",
         #                                        7, text_g1, 7, text_g2, 15, "status_msg",
         #                                        10, "cpuTime") )
-        #
+
         # f.write("%*d %*.1f %*.1f %*.1f %*.1f %*.1f %*.2f %*.2f %*s %*.1f\n" % (10, mpciter, 10, cost,
         #                                          7, u0, 7, u1,
         #                                          7, x[2], 7, x[3]*180/np.pi,
         #                                          7, g1, 7, g2, 15, status_msg_short,
-        #                                          10, t))
-        f.write("%d %0.2f\n" % (mpciter, t))
+        #                                          10, cpuTime))
+
+        if ns == 4:
+            f.write("%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %s\n" % (
+                x[0], x[1], x[2], x[3],
+                u0, u1,
+                g1, g2,
+                VTerminal, cost, cpuTime, status_msg_short ))
+
+        elif ns == 6:
+            f.write("%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %s\n" % (
+                x[0], x[1], x[2], x[3], x[4], x[5],
+                u0, u1,
+                g1, g2,
+                VTerminal, cost, cpuTime, status_msg_short ))
+
 
     if mpciter == 0:
-        print("%*s %*s %*s %*s %*s %*s %*s %*s %*s %*s\n" % (10, "mpciter", 10, "cost",
+        print("%*s %*s %*s %*s %*s %*s %*s %*s %*s %*s %*s\n" % (10, "mpciter", 10, "cost",
                                                7, text_u0, 7, text_u1,
-                                               7, "V", 7, "Chi",
+                                               7, "V", 7, "Chi", 7, "V-Terminal",
                                                7, text_g1, 7, text_g2, 15, "status_msg",
                                               10, "cpuTime") )
 
-    print("%*d %*.1f %*.1f %*.1f %*.1f %*.1f %*.2f %*.2f %*s %*.2f\n" % (10, mpciter, 10, cost,
-                                                 7, u0, 7, u1,
-                                                 7, x[2], 7, x[3]*180/np.pi,
+    print("%*d %*.1f %*.1f %*.1f %*.1f %*.1f %*.1f %*.2f %*.2f %*s %*.1f\n" % (10, mpciter, 10, cost,
+                                                 7, u0, 7, u1*180/np.pi,
+                                                 7, x[2], 7, x[3]*180/np.pi, 7, VTerminal,
                                                  7, g1, 7, g2, 15, status_msg_short,
-                                                10,t))
+                                                10, cpuTime))
 
-    None
+    return g1, g2
 
 def savePlots(dirname,figno):
     try:
@@ -377,3 +409,73 @@ def savePlots(dirname,figno):
         plt.savefig(figno[k])
 
     os.chdir(oldpwd)
+
+
+def plotSavedData(inFile, delim, header=True):
+
+    f = file(inFile, 'r')
+    cols, indexToName = getColumns(f, delim=delim, header=header)
+
+    if ns == 4:
+        nt = len(cols[0])
+
+        t = T * np.arange(0, nt)
+
+        x = np.zeros((4, nt))
+        x[0] = np.array(cols[0]).astype(np.float)
+        x[1] = np.array(cols[1]).astype(np.float)
+        x[2] = np.array(cols[2]).astype(np.float)
+        x[3] = np.array(cols[3]).astype(np.float)
+
+        u = np.zeros((2, nt))
+        u[0] = np.array(cols[4]).astype(np.float)
+        u[1] = np.array(cols[5]).astype(np.float)
+
+        path = None
+        obstacle = None
+
+        latAccel = np.array(cols[6]).astype(np.float)
+        dyError = np.array(cols[7]).astype(np.float)
+        VTerminal = np.array(cols[8]).astype(np.float)
+
+        cpuTime = np.array(cols[10]).astype(np.float)
+
+
+    elif ns == 6:
+        nt = len(cols[0])
+
+        t = T * np.arange(0, nt)
+
+        x = np.zeros((4, nt))
+        x[0] = np.array(cols[0]).astype(np.float)
+        x[1] = np.array(cols[1]).astype(np.float)
+        x[2] = np.array(cols[2]).astype(np.float)
+        x[3] = np.array(cols[3]).astype(np.float)
+        x[4] = np.array(cols[4]).astype(np.float)
+        x[5] = np.array(cols[5]).astype(np.float)
+
+        u = np.zeros((2, nt))
+        u[0] = np.array(cols[6]).astype(np.float)
+        u[1] = np.array(cols[7]).astype(np.float)
+
+        path = None
+        obstacle = None
+
+        latAccel = np.array(cols[8]).astype(np.float)
+        dyError = np.array(cols[9]).astype(np.float)
+        VTerminal = np.array(cols[10]).astype(np.float)
+
+        cpuTime = np.array(cols[12]).astype(np.float)
+
+
+    nmpcPlot(t, x.T, u.T, path, obstacle, cpuTime, VTerminal, latAccel, dyError)
+
+    f.close()
+
+    None
+
+    return cols, indexToName
+
+
+
+

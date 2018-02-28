@@ -31,7 +31,7 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # 'no' - number of obstacles
 
 # default
-N = 8
+N = 4
 T = 0.4
 ns = 6
 no = 2
@@ -278,7 +278,7 @@ elif ns == 4:
     nx = 4
     nu = 2
 
-    ns_option = 3
+    ns_option = 2
 
     if ns_option == 1:
         ncons = 2*N + 4 # (option 1 in nlp.py) running + lataccel + V0 + terminal constraint-y + terminal constraint-V
@@ -311,7 +311,7 @@ elif ns == 6:
     nx = 6
     nu = 2
 
-    ns_option = 3
+    ns_option = 2
 
     if ns_option == 1:
         ncons = 2*N + 4 # (option 1 in nlp.py) running + lataccel + V0 + terminal constraint-y + terminal constraint-V

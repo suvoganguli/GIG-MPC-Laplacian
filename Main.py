@@ -49,9 +49,12 @@ else:
     fileName = ''
 
 saveData = True
+plotData = True
 
 tElapsed = np.zeros(mpciterations)
 VTerminal = np.zeros(mpciterations)
+latAccel = np.zeros(mpciterations)
+dyError = np.zeros(mpciterations)
 
 posIdx = getPosIdx(x0[0], x0[1], path, posIdx0)
 
@@ -84,11 +87,12 @@ while mpciter < mpciterations:
     u_new, info = solveOptimalControlProblem(N, t0, x0, u0, T, ncons, nu, path, obstacle, posIdx, ns_option)
     tElapsed[mpciter] = (time.time() - tStart)
 
-    # solution information
-    printPlots.nmpcPrint(mpciter, info, N, x0, u_new, writeToFile, fHandle, tElapsed[mpciter])
-
     # mpc  future path plot
     VTerminal[mpciter] = printPlots.nmpcPlotSol(u_new, path, mpciter, x0, obstacle, None)
+
+    # solution information
+    latAccel[mpciter], dyError[mpciter] = printPlots.nmpcPrint(mpciter, info, N, x0, u_new, writeToFile,
+                                                               fHandle, tElapsed[mpciter], VTerminal[mpciter])
 
     # store closed loop data
     t[mpciter] = tmeasure
@@ -129,8 +133,9 @@ if saveData == True:
 
     print('saved data and figure')
 
+
 # create plots
-figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, VTerminal)
+figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, VTerminal, latAccel, dyError)
 print('done!')
 
 # Save Data

@@ -8,7 +8,7 @@ oldpwd = os.getcwd()
 # listDir = glob.glob("run*")
 # print(listDir)
 # dirName = raw_input("Input directory name: ")
-dirName = 'run_2018-02-28'
+dirName = 'run_2018-03-01'
 
 os.chdir(dirName)
 

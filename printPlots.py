@@ -344,9 +344,11 @@ def nmpcPrint(mpciter, info, N, x, u_new, writeToFile, f, cpuTime, VTerminal):
     elif status == 2:
         status_msg_short = "Infeasible"
     elif status == -1:
-        status_msg_short = "Max Iter"
+        status_msg_short = "Max-Iter"
     elif status == 5:
-        status_msg_short = "User Stop"
+        status_msg_short = "User-Stop"
+    elif status == -13:
+        status_msg_short = "Algorithm-Received"
     else:
         status_msg_short = status_msg[0:19]
 
@@ -446,7 +448,7 @@ def plotSavedData(inFile, delim, header=True):
 
         t = T * np.arange(0, nt)
 
-        x = np.zeros((4, nt))
+        x = np.zeros((6, nt))
         x[0] = np.array(cols[0]).astype(np.float)
         x[1] = np.array(cols[1]).astype(np.float)
         x[2] = np.array(cols[2]).astype(np.float)

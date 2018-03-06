@@ -3,24 +3,59 @@ import datetime
 import printPlots
 import glob
 
-oldpwd = os.getcwd()
+def createPlots(mode, dirName = None, fileNames=None):
+    # mode = 0 : get input from user
+    # mode = 1 : use hardcoded files
 
-# listDir = glob.glob("run*")
-# print(listDir)
-# dirName = raw_input("Input directory name: ")
-dirName = 'run_2018-03-01'
+    oldpwd = os.getcwd()
+    if mode == 0:
 
-os.chdir(dirName)
+        listDir = glob.glob("run*")
+        print(listDir)
+        dirName = raw_input("Input directory name: ")
 
-# listFile = glob.glob("*.txt")
-# print(listFile)
-# fileName = raw_input("Input file name (*.txt):")
-fileName = 'logFile_N4_Tp4_ns6_no2.txt'
+        os.chdir(dirName)
 
-cols, indexToName = printPlots.plotSavedData(fileName, delim=" ", header=False)
+        listFile = glob.glob("*.txt")
+        print(listFile)
+        fileName = raw_input("Input file name (*.txt):")
 
-print(cols)
+        ns = fileName[16]
 
-os.chdir(oldpwd)
+        cols, indexToName = printPlots.plotSavedData(fileName, ns, delim=" ", header=False)
 
-None
+        os.chdir(oldpwd)
+
+        return cols, indexToName
+
+
+    elif mode == 1:
+
+        oldpwd = os.getcwd()
+
+        os.chdir(dirName)
+
+        ns = int(fileNames[0][17])
+
+        for fileName in fileNames:
+            cols, indexToName = printPlots.plotSavedData(fileName, ns, delim=" ", header=False)
+
+        os.chdir(oldpwd)
+
+        return cols, indexToName
+
+# -----------------------------------------------------
+
+mode = 1    # user setting
+
+if mode == 0:
+    createPlots(mode)
+
+elif mode == 1:
+    dirName = 'run_2018-02-28'
+    fileNames = ['logFile_N4_Tp4_ns4_no2.txt',
+                 'logFile_N4_Tp4_ns6_no2.txt']
+
+    createPlots(mode, dirName, fileNames)
+
+# -----------------------------------------------------

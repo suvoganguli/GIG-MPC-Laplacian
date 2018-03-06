@@ -114,8 +114,7 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     return V_terminal
 
 
-def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError):
-
+def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,ns):
 
     if ns == 6:
 
@@ -413,7 +412,7 @@ def savePlots(dirname,figno):
     os.chdir(oldpwd)
 
 
-def plotSavedData(inFile, delim, header=True):
+def plotSavedData(inFile, ns, delim, header=False):
 
     f = file(inFile, 'r')
     cols, indexToName = getColumns(f, delim=delim, header=header)
@@ -470,7 +469,7 @@ def plotSavedData(inFile, delim, header=True):
         cpuTime = np.array(cols[12]).astype(np.float)
 
 
-    nmpcPlot(t, x.T, u.T, path, obstacle, cpuTime, VTerminal, latAccel, dyError)
+    nmpcPlot(t, x.T, u.T, path, obstacle, cpuTime, VTerminal, latAccel, dyError, ns)
 
     f.close()
 

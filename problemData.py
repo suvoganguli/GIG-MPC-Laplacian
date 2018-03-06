@@ -1,5 +1,7 @@
 import numpy as np
 from utils import *
+import datetime
+import shutil, distutils.dir_util
 
 # Units
 mph2fps = 4.4/3
@@ -33,12 +35,12 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # default
 N = 4
 T = 0.4
-ns = 6
-no = 2
+ns = 4
+no = 0
 
 if no == 0:
     if N == 4:
-        mpciterations = 36 #34
+        mpciterations = 3 #36
     elif N == 6:
         mpciterations = 34 #34
     elif N == 8:
@@ -69,7 +71,7 @@ elif no == 2:
             mpciterations = 14  # 14 = wider dy with V terminal constraint, unstable
     elif N == 6:
         if ns == 4:
-            mpciterations = 38 #
+            mpciterations = 38 # 38
         elif ns == 6:
             mpciterations = 20 # 20 = wider dt with V terminal constraint, stops
     elif N == 8:
@@ -341,3 +343,39 @@ elif ns == 6:
 
 else:
     print("Error in ns")
+
+# -------------------------------------------------------
+# Save settings in file
+
+fileName_problemData = 'settings.txt'
+f_problemData = open(fileName_problemData, 'w')
+
+if ns == 4:
+
+    f_problemData.write("%.d %.2f %.d %d %.2f %.2f %.2f %.2f %.2f\n" % (
+        N, T, ns, no,
+        lb_VdotVal, ub_VdotVal,
+        lb_ChidotVal, ub_ChidotVal,
+        delta_yRoad
+        ))
+elif ns == 6:
+
+    f_problemData.write("%.d %.2f %.d %d %.2f %.2f %.2f %.2f %.2f\n" % (
+        N, T, ns, no,
+        lb_VddotVal, ub_VddotVal,
+        lb_ChiddotVal, ub_ChiddotVal,
+        delta_yRoad
+        ))
+
+f_problemData.close()
+
+rundate = datetime.datetime.now().strftime("%Y-%m-%d")
+
+rundir = './run_' + rundate + '/'
+distutils.dir_util.mkpath(rundir)
+
+suffix = '_N' + str(N) + '_Tp' + str(int(10 * T)) + '_ns' + str(ns) + '_no' + str(no)
+dst_file = rundir + 'settings' + suffix + '.txt'
+shutil.copyfile('settings.txt', dst_file)
+
+

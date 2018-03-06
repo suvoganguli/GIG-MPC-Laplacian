@@ -4,6 +4,7 @@ from obstacleData import *
 import printPlots
 import time, datetime
 import shutil, distutils.dir_util
+import os
 
 # -------------------------------------------------------------------
 # Main.py lets the user run different test cases for Model
@@ -115,28 +116,53 @@ while mpciter < mpciterations:
 if writeToFile == True:
     fHandle.close()
 
+
+rundate = datetime.datetime.now().strftime("%Y-%m-%d")
+rundir = './run_' + rundate + '/'
+suffix = '_N' + str(N) + '_Tp' + str(int(10*T)) + '_ns' + str(ns) + '_no' + str(no)
+
 if saveData == True:
 
-    rundate = datetime.datetime.now().strftime("%Y-%m-%d")
-
-    rundir = './run_' + rundate + '/'
     distutils.dir_util.mkpath(rundir)
-
-    suffix = '_N' + str(N) + '_Tp' + str(int(10*T)) + '_ns' + str(ns) + '_no' + str(no)
     dst_file = rundir + 'logFile' + suffix + '.txt'
     shutil.copyfile('logFile.txt', dst_file)
 
+    # figure 1: path
     dst_fig = rundir + 'path' + suffix + '.png'
     fig = plt.figure(1)
     plt.pause(0.01)
     fig.savefig(dst_fig)
 
+
     print('saved data and figure')
 
 
+dummy = raw_input('Press Enter to continue: ')
+
 # create plots
-figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, VTerminal, latAccel, dyError)
+oldpwd = os.getcwd()
+os.chdir(rundir)
+settingsFile = 'settings' + suffix + '.txt'
+figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, VTerminal, dyError, latAccel, settingsFile)
+os.chdir(oldpwd)
+
+if saveData == True:
+    # figure 2: E, N
+    dst_fig = rundir + 'E-N' + suffix + '.png'
+    fig = plt.figure(2)
+    plt.pause(0.01)
+    fig.savefig(dst_fig)
+
+    # figure 3: V, Vdot
+    dst_fig = rundir + 'V-Vdot' + suffix + '.png'
+    fig = plt.figure(3)
+    plt.pause(0.01)
+    fig.savefig(dst_fig)
+
 print('done!')
+
+plt.show()
+#dummy = raw_input('Press Enter to quit: ')
 
 # Save Data
 # answer =  raw_input('Save Figures and Data [y/n]:  ')

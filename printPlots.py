@@ -23,14 +23,13 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     V_terminal = x_mpciter[-1,2]
 
     # figure 1
-    f1 = plt.figure(1,figsize=(5, 7), dpi=100)
+    plt.figure(1,figsize=(5, 7), dpi=100)
+
     plt.ylabel('N [ft]')
     plt.xlabel('E [ft]')
     #plt.axis('equal')
 
     if mpciter == 0:
-
-        plt.figure(f1.number)
 
         # Detailed Path
         plt.plot(path.pathData.E, path.pathData.N, linestyle='--', color='c')
@@ -67,8 +66,7 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
             #    y2 = path.pathData.LaneLeftEndPointsY[i]
             #    plt.plot([x1, x2], [y1, y2], 'm')
 
-        ax1 = f1.gca()
-        ax1.grid(True)
+        plt.grid(True)
 
         if True: # obstacle.Present == True:
 
@@ -93,200 +91,254 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
                     fc = "green"
                     polygon_safezone = getPatch(Efc, Nfc, W, L, Theta, fc)
 
-                    ax1.add_patch(polygon_safezone)
-                    ax1.add_patch(polygon_obstacle)
+                    plt.add_patch(polygon_safezone)
+                    plt.add_patch(polygon_obstacle)
 
-    plt.figure(f1.number)
     nEN = len(East)
     plt.plot(East[0:nEN], North[0:nEN], marker='x', markersize=4, color='b')
     plt.plot(East[0], North[0], marker='o', markersize=4, color='r')
     plt.xlim([0, 16])
     plt.ylim([0, 128])
-    #ax1.set_xlim([0, 16])
-    #ax1.set_ylim([0, 128])
 
-
+    #plt.draw()
     plt.pause(0.01)
-    #if mpciter < mpciterations-1:
-    #   ax1 = f1.gca()
-    #   del ax1.lines[7:12]
+    #if mpciter == mpciterations-1:
+        #   ax1 = f1.gca()
+        #   del ax1.lines[7:12]
+        #dummy = raw_input('Press Enter to continue: ')
 
     return V_terminal
 
 
-def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,ns):
+def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,dyError,latAccel,inFile):
 
-    if ns == 6:
+    f_pData = file(inFile, 'r')
+    cols, indexToName = getColumns(f_pData, delim=" ", header=False)
+    #N = np.array(cols[0]).astype(np.int)
+    #T = np.array(cols[1]).astype(np.int)
+    ns = np.array(cols[2]).astype(np.int)
+    #no = np.array(cols[3]).astype(np.int)
 
-        figno = np.zeros(7)
+    figno = np.zeros(8)
+    figno[0] = 1
+
+    if ns == 4:
+        lb_VdotVal = np.array(cols[4]).astype(np.float)
+        ub_VdotVal = np.array(cols[5]).astype(np.float)
+        lb_ChidotVal = np.array(cols[6]).astype(np.float)
+        ub_ChidotVal = np.array(cols[7]).astype(np.float)
+        delta_yRoad = np.array(cols[8]).astype(np.float)
+
+    elif ns == 6:
+        lb_VddotVal = np.array(cols[4]).astype(np.float)
+        ub_VddotVal = np.array(cols[5]).astype(np.float)
+        lb_ChiddotVal = np.array(cols[6]).astype(np.float)
+        ub_ChiddotVal = np.array(cols[7]).astype(np.float)
+        delta_yRoad = np.array(cols[8]).astype(np.float)
+
+
+    #plt.ion()
+    if ns == 4:
 
         # figure 2
-        f, ax = plt.subplots(2)
-        figno[0] =  plt.gcf().number
-        ax[0].plot(t, x[:,[0]])  # E
-        ax[1].plot(t, x[:,[1]])  # N
-        ax[0].set_ylabel('E [ft]')
-        ax[1].set_ylabel('N [ft]')
-        ax[1].set_xlabel('t [sec]')
-        for k in range(2):
-            ax[k].grid(True)
+        plt.figure(2)
+        figno[1] = plt.gcf().number
+
+        plt.subplot(211)
+        plt.plot(t, x[:, [0]])  # E
+        plt.ylabel('E [ft]')
+        plt.grid(True)
+
+        plt.subplot(212)
+        plt.plot(t, x[:, [1]])  # N
+        plt.ylabel('N [ft]')
+        plt.xlabel('t [sec]')
+        plt.grid(True)
+
 
         # figure 3
-        f, ax = plt.subplots(2)
-        figno[1] = plt.gcf().number
-        ax[0].plot(t, x[:,[2]])  # V
+        plt.figure(3)
+        figno[2] = plt.gcf().number
+
+        plt.subplot(211)
+        plt.plot(t, x[:, [2]])  # V
+        plt.grid(True)
 
         if ns_option != 3:
-            ax[0].plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
-            ax[0].plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
+            plt.plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
+            plt.plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
 
-        ax[1].plot(t, x[:,[4]])  # Vdot
-        ax[0].set_ylabel('V [fps]')
-        ax[1].set_ylabel('Vdot [fps2]')
-        ax[1].set_xlabel('t [sec]')
-        for k in range(2):
-            ax[k].grid(True)
+        plt.ylabel('V [fps]')
+
+        plt.subplot(212)
+        plt.plot(t, u[:, [0]])  # Vdot
+        plt.plot(t, lb_VdotVal*np.ones(t.shape),linestyle='--', color='r')
+        plt.plot(t, ub_VdotVal*np.ones(t.shape), linestyle='--', color='r')
+        plt.grid(True)
+
+        plt.ylabel('Vdot [fps2]')
+        plt.xlabel('t [sec]')
+        plt.grid(True)
 
         # figure 4
-        f, ax = plt.subplots(2)
-        figno[2] = plt.gcf().number
-        ax[0].plot(t, x[:,[3]]*180/np.pi)
-        ax[1].plot(t, x[:,[5]]*180/np.pi)
-        ax[0].set_ylabel('Chi [deg]')
-        ax[1].set_ylabel('Chidot [deg/s]')
-        ax[1].set_xlabel('t [sec]')
-        for k in range(2):
-            ax[k].grid(True)
+        plt.figure(4)
+        figno[3] = plt.gcf().number
+
+        plt.subplot(211)
+        plt.plot(t, x[:, [3]]*180/np.pi)
+        plt.ylabel('Chi [deg]')
+        plt.grid(True)
+
+        plt.subplot(212)
+        plt.plot(t, u[:, [1]]*180/np.pi)
+        plt.plot(t, lb_ChidotVal*np.ones(t.shape)*180/np.pi,linestyle='--', color='r')
+        plt.plot(t, ub_ChidotVal*np.ones(t.shape)*180/np.pi, linestyle='--', color='r')
+
+        plt.ylabel('Chidot [deg/s]')
+        plt.xlabel('t [sec]')
+        plt.grid(True)
+
 
         # figure 5
-        f, ax = plt.subplots(2)
+        plt.figure(5)
+        figno[4] = plt.gcf().number
+
+        plt.subplot(211)
+        plt.plot(t, latAccel)
+        if useLatAccelCons == 1:
+            plt.plot(t, lataccel_maxVal*np.ones(t.shape)/32.2, linestyle='--', color='r')
+            plt.plot(t, -lataccel_maxVal*np.ones(t.shape)/32.2, linestyle='--', color='r')
+
+        plt.ylabel('Lat Accel [g]')
+        plt.grid(True)
+
+        plt.subplot(212)
+        plt.plot(t, dyError)
+        plt.plot(t, delta_yRoad * np.ones(t.shape), linestyle='--', color='r')
+        plt.plot(t, -delta_yRoad * np.ones(t.shape), linestyle='--', color='r')
+        plt.ylabel('dy Error [m]')
+        plt.xlabel('t [sec]')
+        plt.grid(True)
+
+
+    elif ns == 6:
+
+        # figure 2
+        plt.figure(2)
+        figno[1] = plt.gcf().number
+
+        plt.subplot(211)
+        plt.plot(t, x[:,[0]])  # E
+        plt.ylabel('E [ft]')
+        plt.grid(True)
+
+        plt.subplot(212)
+        plt.plot(t, x[:,[1]])  # N
+        plt.ylabel('N [ft]')
+        plt.xlabel('t [sec]')
+        plt.grid(True)
+
+
+        # figure 3
+        plt.figure(3)
+        figno[2] = plt.gcf().number
+
+        plt.subplot(211)
+        plt.plot(t, x[:,[2]])  # V
+
+        if ns_option != 3:
+            plt.plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
+            plt.plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
+        plt.grid(True)
+
+        plt.subplot(212)
+        plt.plot(t, x[:,[4]])  # Vdot
+        plt.ylabel('V [fps]')
+        plt.ylabel('Vdot [fps2]')
+        plt.xlabel('t [sec]')
+        plt.grid(True)
+
+
+        # figure 4
+        plt.figure(4)
         figno[3] = plt.gcf().number
-        ax[0].plot(t, u[:,0])
-        ax[0].plot(t, lb_VddotVal*np.ones(t.shape),linestyle='--', color='r')
-        ax[0].plot(t, ub_VddotVal*np.ones(t.shape), linestyle='--', color='r')
 
-        ax[1].plot(t, u[:,1]*180/np.pi)
-        ax[1].plot(t, lb_ChiddotVal*np.ones(t.shape)*180/np.pi,linestyle='--', color='r')
-        ax[1].plot(t, ub_ChiddotVal*np.ones(t.shape)*180/np.pi, linestyle='--', color='r')
+        plt.subplot(211)
+        plt.plot(t, x[:,[3]]*180/np.pi)
+        plt.ylabel('Chi [deg]')
+        plt.grid(True)
 
-        ax[0].set_ylabel('Vddot [fps3]')
-        ax[1].set_ylabel('Chiddot [deg/s2]')
-        ax[1].set_xlabel('t [sec]')
-        for k in range(2):
-            ax[k].grid(True)
+        plt.subplot(212)
+        plt.plot(t, x[:,[5]]*180/np.pi)
+
+        plt.ylabel('Chidot [deg/s]')
+        plt.xlabel('t [sec]')
+        plt.grid(True)
+
+        # figure 5
+        plt.figure(5)
+        figno[4] = plt.gcf().number
+
+        plt.subplot(211)
+        plt.plot(t, u[:,0])
+        plt.plot(t, lb_VddotVal*np.ones(t.shape),linestyle='--', color='r')
+        plt.plot(t, ub_VddotVal*np.ones(t.shape), linestyle='--', color='r')
+        plt.ylabel('Vddot [fps3]')
+        plt.grid(True)
+
+        plt.subplot(212)
+        plt.plot(t, u[:,1]*180/np.pi)
+        plt.plot(t, lb_ChiddotVal*np.ones(t.shape)*180/np.pi,linestyle='--', color='r')
+        plt.plot(t, ub_ChiddotVal*np.ones(t.shape)*180/np.pi, linestyle='--', color='r')
+        plt.ylabel('Chiddot [deg/s2]')
+        plt.xlabel('t [sec]')
+        plt.grid(True)
 
         # figure 6
-        f, ax = plt.subplots(2)
-        figno[3] = plt.gcf().number
-        # ax[0].plot(t, x[:, [2]] * u[:, [1]] / 32.2)  # V*Chidot
-        ax[0].plot(t, latAccel)
+        plt.figure(6)
+        figno[5] = plt.gcf().number
+
+        plt.subplot(211)
+        plt.plot(t, latAccel)
         if useLatAccelCons == 1:
-            ax[0].plot(t, lataccel_maxVal*np.ones(t.shape)/32.2, linestyle='--', color='r')
-            ax[0].plot(t, -lataccel_maxVal*np.ones(t.shape)/32.2, linestyle='--', color='r')
+            plt.plot(t, lataccel_maxVal*np.ones(t.shape)/32.2, linestyle='--', color='r')
+            plt.plot(t, -lataccel_maxVal*np.ones(t.shape)/32.2, linestyle='--', color='r')
 
-        ax[0].set_ylabel('Lat Accel [g]')
-        ax[0].grid(True)
+        plt.ylabel('Lat Accel [g]')
+        plt.grid(True)
 
-        ax[1].plot(t, dyError)
-        ax[1].plot(t, delta_yRoad * np.ones(t.shape), linestyle='--', color='r')
-        ax[1].plot(t, -delta_yRoad * np.ones(t.shape), linestyle='--', color='r')
-        ax[1].set_ylabel('dy Error [m]')
-        ax[1].set_xlabel('t [sec]')
-        ax[1].grid(True)
-
-
-    elif ns == 4:
-
-        figno = np.zeros(7)
-
-        # figure 2
-        f, ax = plt.subplots(2)
-        figno[0] = plt.gcf().number
-        ax[0].plot(t, x[:, [0]])  # E
-        ax[1].plot(t, x[:, [1]])  # N
-        ax[0].set_ylabel('E [ft]')
-        ax[1].set_ylabel('N [ft]')
-        ax[1].set_xlabel('t [sec]')
-        for k in range(2):
-            ax[k].grid(True)
-
-        # figure 3
-        f, ax = plt.subplots(2)
-        figno[1] = plt.gcf().number
-        ax[0].plot(t, x[:, [2]])  # V
-
-        if ns_option != 3:
-            ax[0].plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
-            ax[0].plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
-
-        ax[0].set_ylabel('V [fps]')
-
-        ax[1].plot(t, u[:, [0]])  # Vdot
-        ax[1].plot(t, lb_VdotVal*np.ones(t.shape),linestyle='--', color='r')
-        ax[1].plot(t, ub_VdotVal*np.ones(t.shape), linestyle='--', color='r')
-
-        ax[1].set_ylabel('Vdot [fps2]')
-        ax[1].set_xlabel('t [sec]')
-        for k in range(2):
-            ax[k].grid(True)
-
-        # figure 4
-        f, ax = plt.subplots(2)
-        figno[2] = plt.gcf().number
-        ax[0].plot(t, x[:, [3]]*180/np.pi)
-
-        ax[1].plot(t, u[:, [1]]*180/np.pi)
-        ax[1].plot(t, lb_ChidotVal*np.ones(t.shape)*180/np.pi,linestyle='--', color='r')
-        ax[1].plot(t, ub_ChidotVal*np.ones(t.shape)*180/np.pi, linestyle='--', color='r')
-
-        ax[0].set_ylabel('Chi [deg]')
-        ax[1].set_ylabel('Chidot [deg/s]')
-        ax[1].set_xlabel('t [sec]')
-        for k in range(2):
-            ax[k].grid(True)
+        plt.subplot(212)
+        plt.plot(t, dyError)
+        plt.plot(t, delta_yRoad * np.ones(t.shape), linestyle='--', color='r')
+        plt.plot(t, -delta_yRoad * np.ones(t.shape), linestyle='--', color='r')
+        plt.ylabel('dy Error [m]')
+        plt.xlabel('t [sec]')
+        plt.grid(True)
 
 
-        # figure 5
-        f, ax = plt.subplots(2)
-        figno[3] = plt.gcf().number
-        # ax[0].plot(t, x[:, [2]] * u[:, [1]] / 32.2)  # V*Chidot
-        ax[0].plot(t, latAccel)
-        if useLatAccelCons == 1:
-            ax[0].plot(t, lataccel_maxVal*np.ones(t.shape)/32.2, linestyle='--', color='r')
-            ax[0].plot(t, -lataccel_maxVal*np.ones(t.shape)/32.2, linestyle='--', color='r')
-
-        ax[0].set_ylabel('Lat Accel [g]')
-        ax[0].grid(True)
-
-        ax[1].plot(t, dyError)
-        ax[1].plot(t, delta_yRoad * np.ones(t.shape), linestyle='--', color='r')
-        ax[1].plot(t, -delta_yRoad * np.ones(t.shape), linestyle='--', color='r')
-        ax[1].set_ylabel('dy Error [m]')
-        ax[1].set_xlabel('t [sec]')
-        ax[1].grid(True)
-
-    # figure 6/7
+    # figure 7
     iterations = np.arange(len(tElapsed))
-    f, ax = plt.subplots(1)
-    figno[5] = plt.gcf().number
-    plt.plot(iterations, tElapsed)
-    ax.set_ylabel('CPU Time [sec]')
-    ax.set_xlabel('Iteration')
-    ax.grid(True)
-
-
-    # figure 7/8
-    f, ax = plt.subplots(1)
+    plt.figure(7)
     figno[6] = plt.gcf().number
+
+    plt.plot(iterations, tElapsed)
+    plt.ylabel('CPU Time [sec]')
+    plt.xlabel('Iteration')
+    plt.grid(True)
+
+
+    # figure 8
+    plt.figure(8)
+    figno[7] = plt.gcf().number
     plt.plot(t, V_terminal)
     if ns_option != 3:
-        ax.plot(t, lb_V * np.ones(t.shape), linestyle='--', color='r')
-        ax.plot(t, ub_V * np.ones(t.shape), linestyle='--', color='r')
+        plt.plot(t, lb_V * np.ones(t.shape), linestyle='--', color='r')
+        plt.plot(t, ub_V * np.ones(t.shape), linestyle='--', color='r')
     plt.ylabel('V-terminal [fps]')
     plt.xlabel('time [sec]')
-    ax.grid(True)
+    plt.grid(True)
 
-    plt.show()
+    plt.show(block=False)
 
     return figno
 
@@ -412,9 +464,10 @@ def savePlots(dirname,figno):
     os.chdir(oldpwd)
 
 
-def plotSavedData(inFile, ns, delim, header=False):
+def plotSavedData(inFile, delim, header=False):
 
     f = file(inFile, 'r')
+    ns = np.array(inFile[17]).astype(np.int)
     cols, indexToName = getColumns(f, delim=delim, header=header)
 
     if ns == 4:
@@ -469,7 +522,9 @@ def plotSavedData(inFile, ns, delim, header=False):
         cpuTime = np.array(cols[12]).astype(np.float)
 
 
-    nmpcPlot(t, x.T, u.T, path, obstacle, cpuTime, VTerminal, latAccel, dyError, ns)
+    suffix = inFile[7:]
+    settingsFile = 'settings' + suffix
+    nmpcPlot(t, x.T, u.T, path, obstacle, cpuTime, VTerminal, latAccel, dyError, settingsFile)
 
     f.close()
 

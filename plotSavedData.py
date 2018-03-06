@@ -1,5 +1,4 @@
 import os
-import datetime
 import printPlots
 import glob
 
@@ -20,9 +19,7 @@ def createPlots(mode, dirName = None, fileNames=None):
         print(listFile)
         fileName = raw_input("Input file name (*.txt):")
 
-        ns = fileName[16]
-
-        cols, indexToName = printPlots.plotSavedData(fileName, ns, delim=" ", header=False)
+        cols, indexToName = printPlots.plotSavedData(fileName, delim=" ", header=False)
 
         os.chdir(oldpwd)
 
@@ -32,13 +29,13 @@ def createPlots(mode, dirName = None, fileNames=None):
     elif mode == 1:
 
         oldpwd = os.getcwd()
-
         os.chdir(dirName)
 
-        ns = int(fileNames[0][17])
-
-        for fileName in fileNames:
-            cols, indexToName = printPlots.plotSavedData(fileName, ns, delim=" ", header=False)
+        n = len(fileNames)
+        for k in range(n):
+            print(k)
+            fileName = fileNames[k]
+            cols, indexToName = printPlots.plotSavedData(fileName, delim=" ", header=False)
 
         os.chdir(oldpwd)
 
@@ -52,10 +49,11 @@ if mode == 0:
     createPlots(mode)
 
 elif mode == 1:
-    dirName = 'run_2018-02-28'
-    fileNames = ['logFile_N4_Tp4_ns4_no2.txt',
-                 'logFile_N4_Tp4_ns6_no2.txt']
+    dirName = 'run_2018-03-06'
+    fileNames = ['logFile_N4_Tp4_ns4_no0.txt']
+                 #'logFile_N6_Tp4_ns4_no2.txt']
 
     createPlots(mode, dirName, fileNames)
+    dummy = raw_input('Press Enter to Continue: ')
 
 # -----------------------------------------------------

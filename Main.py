@@ -4,6 +4,7 @@ from obstacleData import *
 import printPlots
 import time, datetime
 import shutil, distutils.dir_util
+import os
 
 # -------------------------------------------------------------------
 # Main.py lets the user run different test cases for Model
@@ -84,7 +85,7 @@ while mpciter < mpciterations:
 
     # solve optimal control problem
     tStart = time.time()
-    u_new, info = solveOptimalControlProblem(N, t0, x0, u0, T, ncons, nu, path, obstacle, posIdx, ns_option)
+    u_new, info = solveOptimalControlProblem(N, t0, x0, u0, T, ncons, nu, path, obstacle, posIdx, ncons_option)
     tElapsed[mpciter] = (time.time() - tStart)
 
     # mpc  future path plot
@@ -115,17 +116,18 @@ while mpciter < mpciterations:
 if writeToFile == True:
     fHandle.close()
 
+
+rundate = datetime.datetime.now().strftime("%Y-%m-%d")
+rundir = './run_' + rundate + '/'
+suffix = '_N' + str(N) + '_Tp' + str(int(10*T)) + '_ns' + str(ns) + '_no' + str(no)
+
 if saveData == True:
 
-    rundate = datetime.datetime.now().strftime("%Y-%m-%d")
-
-    rundir = './run_' + rundate + '/'
     distutils.dir_util.mkpath(rundir)
-
-    suffix = '_N' + str(N) + '_Tp' + str(int(10*T)) + '_ns' + str(ns) + '_no' + str(no)
     dst_file = rundir + 'logFile' + suffix + '.txt'
     shutil.copyfile('logFile.txt', dst_file)
 
+    # figure 1: path
     dst_fig = rundir + 'path' + suffix + '.png'
     fig = plt.figure(1)
     plt.pause(0.01)
@@ -135,8 +137,58 @@ if saveData == True:
 
 
 # create plots
-figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, VTerminal, latAccel, dyError)
+oldpwd = os.getcwd()
+os.chdir(rundir)
+settingsFile = 'settings' + suffix + '.txt'
+figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, VTerminal, dyError, latAccel, settingsFile)
+os.chdir(oldpwd)
+
+if saveData == True:
+    # figure 2: E, N
+    dst_fig = rundir + 'E-N' + suffix + '.png'
+    fig = plt.figure(2)
+    plt.pause(0.01)
+    fig.savefig(dst_fig)
+
+    # figure 3: V, Vdot
+    dst_fig = rundir + 'V-Vdot' + suffix + '.png'
+    fig = plt.figure(3)
+    plt.pause(0.01)
+    fig.savefig(dst_fig)
+
+    # figure 4: Chi, Chidot
+    dst_fig = rundir + 'Chi-Chidot' + suffix + '.png'
+    fig = plt.figure(4)
+    plt.pause(0.01)
+    fig.savefig(dst_fig)
+
+    # figure 5: LatAccel, dy
+    dst_fig = rundir + 'LatAccel-dy' + suffix + '.png'
+    fig = plt.figure(5)
+    plt.pause(0.01)
+    fig.savefig(dst_fig)
+
+    if ns == 6:
+        # figure 6: V, Vdot
+        dst_fig = rundir + 'Vddot-Chiddot' + suffix + '.png'
+        fig = plt.figure(6)
+        plt.pause(0.01)
+        fig.savefig(dst_fig)
+
+    # figure 7: CPU time
+    dst_fig = rundir + 'CPUtime' + suffix + '.png'
+    fig = plt.figure(7)
+    plt.pause(0.01)
+    fig.savefig(dst_fig)
+
+    # figure 8: V-terminal
+    dst_fig = rundir + 'V-terminal' + suffix + '.png'
+    fig = plt.figure(8)
+    plt.pause(0.01)
+    fig.savefig(dst_fig)
+
 print('done!')
+
 
 # Save Data
 # answer =  raw_input('Save Figures and Data [y/n]:  ')

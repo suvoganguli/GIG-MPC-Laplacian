@@ -1,5 +1,7 @@
 import numpy as np
 from utils import *
+import datetime
+import shutil, distutils.dir_util
 
 # Units
 mph2fps = 4.4/3
@@ -33,12 +35,12 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # default
 N = 4
 T = 0.4
-ns = 6
+ns = 4
 no = 2
 
 if no == 0:
     if N == 4:
-        mpciterations = 36 #34
+        mpciterations = 36 #36
     elif N == 6:
         mpciterations = 34 #34
     elif N == 8:
@@ -54,29 +56,29 @@ elif no == 1:
         if ns == 4:
             mpciterations = 34 # 34
         elif ns == 6:
-            mpciterations = 38
+            mpciterations = 38 # 38
     elif N == 8:
         if ns == 4:
             mpciterations = 32 # 32
         elif ns == 6:
-            mpciterations = 24
+            mpciterations = 24 #24
 
 elif no == 2:
     if N == 4:
         if ns == 4:
-            mpciterations = 42 # 42
+            mpciterations = 5 # 42
         elif ns == 6:
-            mpciterations = 14  # 14 = wider dy with V terminal constraint, unstable
+            mpciterations = 14 # 14 = wider dy with V terminal constraint, unstable
     elif N == 6:
         if ns == 4:
-            mpciterations = 38 #
+            mpciterations = 38 # 38
         elif ns == 6:
-            mpciterations = 20 # 20 = wider dt with V terminal constraint, stops
+            mpciterations = 36 # 20 = wider dy with V terminal constraint, stops
     elif N == 8:
         if ns == 4:
             mpciterations = 36 # 32
         elif ns == 6:
-            mpciterations = 24 # 24 = wider dt with V terminal constraint,
+            mpciterations = 34 # 24 = wider dy with V terminal constraint,
                                 # unstable at 2nd turn "No solution found in runningCons". Why?
 
 
@@ -137,7 +139,7 @@ if ns == 2:
     V_cmd = V0  # fps
 
     # Terminal constraint
-    delta_yRoad = 0.5 * 5  # ft
+    delta_yRoad = 0.5  # ft
     delta_yRoadRelaxed = 5  # ft, in safe zone
     delta_V = 1 * mph2fps  # fps
 
@@ -176,7 +178,7 @@ elif ns == 4:
     V_cmd = V0  # fps
 
     # Terminal constraint
-    delta_yRoad = 0.1*5  # ft
+    delta_yRoad = 0.1  # ft
     delta_yRoadRelaxed = 5  # ft, in safe zone
     delta_V = 1 * mph2fps  # fps
 
@@ -214,7 +216,7 @@ elif ns == 6:
     V_cmd = V0  # fps
 
     # Terminal constraint
-    delta_yRoad = 0.1*5 # ft
+    delta_yRoad = 0.1 # ft
     delta_yRoadRelaxed = 5 # ft, in safe zone
     delta_V = 1*mph2fps # fps
 
@@ -271,22 +273,22 @@ if ns == 2:
     idx_V = 1
     idx_Chi = 1
 
-    ns_option = None
+    ncons_option = None
 
 elif ns == 4:
     # problem size
     nx = 4
     nu = 2
 
-    ns_option = 2
+    ncons_option = 2
 
-    if ns_option == 1:
+    if ncons_option == 1:
         ncons = 2*N + 4 # (option 1 in nlp.py) running + lataccel + V0 + terminal constraint-y + terminal constraint-V
 
-    elif ns_option == 2:
+    elif ncons_option == 2:
         ncons = 2*N + 3 # (option 2 in nlp.py) running + lataccel + terminal constraint-y + terminal constraint-V
 
-    elif ns_option == 3:
+    elif ncons_option == 3:
         ncons = 2*N + 2  # (option 3 in nlp.py) running + lataccel + terminal constraint-y
 
     t0 = 0
@@ -311,15 +313,15 @@ elif ns == 6:
     nx = 6
     nu = 2
 
-    ns_option = 2
+    ncons_option = 2
 
-    if ns_option == 1:
+    if ncons_option == 1:
         ncons = 2*N + 4 # (option 1 in nlp.py) running + lataccel + V0 + terminal constraint-y + terminal constraint-V
 
-    elif ns_option == 2:
+    elif ncons_option == 2:
         ncons = 2*N + 3 # (option 2 in nlp.py) running + lataccel + terminal constraint-y + terminal constraint-V
 
-    elif ns_option == 3:
+    elif ncons_option == 3:
         ncons = 2*N + 2  # (option 3 in nlp.py) running + lataccel + terminal constraint-y
 
     t0 = 0
@@ -341,3 +343,41 @@ elif ns == 6:
 
 else:
     print("Error in ns")
+
+# -------------------------------------------------------
+# Save settings in file
+
+fileName_problemData = 'settings.txt'
+f_problemData = open(fileName_problemData, 'w')
+
+if ns == 4:
+
+    f_problemData.write("%d %.2f %d %d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n" % (
+        N, T, ns, no,
+        lb_VdotVal, ub_VdotVal,
+        lb_ChidotVal, ub_ChidotVal,
+        delta_yRoad, lataccel_maxVal,
+        lb_V, ub_V
+        ))
+elif ns == 6:
+
+    f_problemData.write("%d %.2f %d %d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n" % (
+        N, T, ns, no,
+        lb_VddotVal, ub_VddotVal,
+        lb_ChiddotVal, ub_ChiddotVal,
+        delta_yRoad, lataccel_maxVal,
+        lb_V, ub_V
+        ))
+
+f_problemData.close()
+
+rundate = datetime.datetime.now().strftime("%Y-%m-%d")
+
+rundir = './run_' + rundate + '/'
+distutils.dir_util.mkpath(rundir)
+
+suffix = '_N' + str(N) + '_Tp' + str(int(10 * T)) + '_ns' + str(ns) + '_no' + str(no)
+dst_file = rundir + 'settings' + suffix + '.txt'
+shutil.copyfile('settings.txt', dst_file)
+
+

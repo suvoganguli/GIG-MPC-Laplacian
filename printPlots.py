@@ -353,7 +353,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,dyError,latAccel,settingsFi
     plt.xlabel('time [sec]')
     plt.grid(True)
 
-    plt.show(block=False)
+    plt.show()
 
     return figno
 

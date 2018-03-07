@@ -187,7 +187,6 @@ if saveData == True:
     plt.pause(0.01)
     fig.savefig(dst_fig)
 
-dummy = raw_input('Press Enter to quit: ')
 print('done!')
 
 

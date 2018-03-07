@@ -1,5 +1,5 @@
 import numpy as np
-from probInfo import *
+import probInfo
 import matplotlib.pyplot as plt
 import matplotlib.figure as fig
 import matplotlib.patches as patches
@@ -16,7 +16,7 @@ from utils import *
 def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
 
     u_mpciter = u_new.flatten(1)
-    x_mpciter = computeOpenloopSolution(u_mpciter, N, T, t0, x0)
+    x_mpciter = probInfo.computeOpenloopSolution(u_mpciter, pdata.N, pdata.T, pdata.t0, x0)
     East = x_mpciter[:,0]
     North = x_mpciter[:,1]
 
@@ -74,9 +74,9 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
             if nObs > 0:
                 for k in range(nObs):
 
-                    Efc = obstacle.E[k] + pathWidth/2
+                    Efc = obstacle.E[k] + pdata.pathWidth/2
                     Nfc = obstacle.N[k]
-                    W = obstacle.w[k] - pathWidth
+                    W = obstacle.w[k] - pdata.pathWidth
                     L = obstacle.l[k]
                     Theta = obstacle.Chi[k]
                     fc = "red"
@@ -91,8 +91,9 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
                     fc = "green"
                     polygon_safezone = getPatch(Efc, Nfc, W, L, Theta, fc)
 
-                    plt.add_patch(polygon_safezone)
-                    plt.add_patch(polygon_obstacle)
+                    ax = plt.gca()
+                    ax.add_patch(polygon_safezone)
+                    ax.add_patch(polygon_obstacle)
 
     nEN = len(East)
     plt.plot(East[0:nEN], North[0:nEN], marker='x', markersize=4, color='b')
@@ -110,9 +111,9 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     return V_terminal
 
 
-def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,dyError,latAccel,inFile):
+def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,dyError,latAccel,settingsFile):
 
-    f_pData = file(inFile, 'r')
+    f_pData = file(settingsFile, 'r')
     cols, indexToName = getColumns(f_pData, delim=" ", header=False)
     #N = np.array(cols[0]).astype(np.int)
     #T = np.array(cols[1]).astype(np.int)
@@ -122,12 +123,24 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,dyError,latAccel,inFile):
     figno = np.zeros(8)
     figno[0] = 1
 
+    # ncons_option is now hard-coded here since we want to create plot from
+    # plotSavedData.py also.
+    ncons_option = 2
+
+    # useLatAccelCons is now hard-coded here since we want to create plot from
+    # plotSavedData.py also.
+    useLatAccelCons = 1
+
     if ns == 4:
         lb_VdotVal = np.array(cols[4]).astype(np.float)
         ub_VdotVal = np.array(cols[5]).astype(np.float)
         lb_ChidotVal = np.array(cols[6]).astype(np.float)
         ub_ChidotVal = np.array(cols[7]).astype(np.float)
         delta_yRoad = np.array(cols[8]).astype(np.float)
+        lataccel_maxVal = np.array(cols[9]).astype(np.float)
+        lb_V = np.array(cols[10]).astype(np.float)
+        ub_V = np.array(cols[11]).astype(np.float)
+
 
     elif ns == 6:
         lb_VddotVal = np.array(cols[4]).astype(np.float)
@@ -135,9 +148,10 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,dyError,latAccel,inFile):
         lb_ChiddotVal = np.array(cols[6]).astype(np.float)
         ub_ChiddotVal = np.array(cols[7]).astype(np.float)
         delta_yRoad = np.array(cols[8]).astype(np.float)
+        lataccel_maxVal = np.array(cols[9]).astype(np.float)
+        lb_V = np.array(cols[10]).astype(np.float)
+        ub_V = np.array(cols[11]).astype(np.float)
 
-
-    #plt.ion()
     if ns == 4:
 
         # figure 2
@@ -164,7 +178,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,dyError,latAccel,inFile):
         plt.plot(t, x[:, [2]])  # V
         plt.grid(True)
 
-        if ns_option != 3:
+        if ncons_option != 3:
             plt.plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
             plt.plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
 
@@ -245,15 +259,16 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,dyError,latAccel,inFile):
 
         plt.subplot(211)
         plt.plot(t, x[:,[2]])  # V
+        plt.ylabel('V [fps]')
 
-        if ns_option != 3:
+        if ncons_option != 3:
             plt.plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
             plt.plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
         plt.grid(True)
 
         plt.subplot(212)
         plt.plot(t, x[:,[4]])  # Vdot
-        plt.ylabel('V [fps]')
+
         plt.ylabel('Vdot [fps2]')
         plt.xlabel('t [sec]')
         plt.grid(True)
@@ -331,7 +346,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,dyError,latAccel,inFile):
     plt.figure(8)
     figno[7] = plt.gcf().number
     plt.plot(t, V_terminal)
-    if ns_option != 3:
+    if ncons_option != 3:
         plt.plot(t, lb_V * np.ones(t.shape), linestyle='--', color='r')
         plt.plot(t, ub_V * np.ones(t.shape), linestyle='--', color='r')
     plt.ylabel('V-terminal [fps]')
@@ -348,10 +363,10 @@ def nmpcPrint(mpciter, info, N, x, u_new, writeToFile, f, cpuTime, VTerminal):
     cost = info['obj_val']
     g = info['g']
     idx_lataccel = 2*N
-    if ns == 6:
+    if pdata.ns == 6:
         #idx_trackingerror = 2*N + 2 # (nlp.py, option 1)
         idx_trackingerror = 2*N + 1 # (nlp.py, option 2,3)
-    elif ns == 4:
+    elif pdata.ns == 4:
         idx_trackingerror = 2*N + 1
     g1 = g[idx_lataccel]/32.2 # g
     g2 = g[idx_trackingerror] # ft
@@ -363,10 +378,10 @@ def nmpcPrint(mpciter, info, N, x, u_new, writeToFile, f, cpuTime, VTerminal):
     u0 = u[0]  # Vddot
     u1 = u[N] #Chiddot
 
-    if ns == 6:
+    if pdata.ns == 6:
         text_u0 = "Vddot"
         text_u1 = "Chiddot"
-    elif ns == 4:
+    elif pdata.ns == 4:
         text_u0 = "Vdot"
         text_u1 = "Chidot"
 
@@ -417,14 +432,14 @@ def nmpcPrint(mpciter, info, N, x, u_new, writeToFile, f, cpuTime, VTerminal):
         #                                          7, g1, 7, g2, 15, status_msg_short,
         #                                          10, cpuTime))
 
-        if ns == 4:
+        if pdata.ns == 4:
             f.write("%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %s\n" % (
                 x[0], x[1], x[2], x[3],
                 u0, u1,
                 g1, g2,
                 VTerminal, cost, cpuTime, status_msg_short ))
 
-        elif ns == 6:
+        elif pdata.ns == 6:
             f.write("%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %s\n" % (
                 x[0], x[1], x[2], x[3], x[4], x[5],
                 u0, u1,
@@ -467,12 +482,12 @@ def savePlots(dirname,figno):
 def plotSavedData(inFile, delim, header=False):
 
     f = file(inFile, 'r')
+    T = np.array(inFile[13]).astype(np.int)
     ns = np.array(inFile[17]).astype(np.int)
     cols, indexToName = getColumns(f, delim=delim, header=header)
 
     if ns == 4:
         nt = len(cols[0])
-
         t = T * np.arange(0, nt)
 
         x = np.zeros((4, nt))
@@ -528,10 +543,11 @@ def plotSavedData(inFile, delim, header=False):
 
     f.close()
 
-    None
+    plt.pause(0.5)
 
     return cols, indexToName
 
-
+def test():
+    None
 
 

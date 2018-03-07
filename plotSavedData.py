@@ -28,6 +28,8 @@ def createPlots(mode, dirName = None, fileNames=None):
 
     elif mode == 1:
 
+        printPlots.test()
+
         oldpwd = os.getcwd()
         os.chdir(dirName)
 
@@ -50,8 +52,9 @@ if mode == 0:
 
 elif mode == 1:
     dirName = 'run_2018-03-06'
-    fileNames = ['logFile_N4_Tp4_ns4_no0.txt']
-                 #'logFile_N6_Tp4_ns4_no2.txt']
+    fileNames = ['logFile_N6_Tp4_ns4_no0.txt',
+                 'logFile_N6_Tp4_ns4_no1.txt',
+                 'logFile_N6_Tp4_ns4_no2.txt']
 
     createPlots(mode, dirName, fileNames)
     dummy = raw_input('Press Enter to Continue: ')

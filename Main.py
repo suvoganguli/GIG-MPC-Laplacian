@@ -85,7 +85,7 @@ while mpciter < mpciterations:
 
     # solve optimal control problem
     tStart = time.time()
-    u_new, info = solveOptimalControlProblem(N, t0, x0, u0, T, ncons, nu, path, obstacle, posIdx, ns_option)
+    u_new, info = solveOptimalControlProblem(N, t0, x0, u0, T, ncons, nu, path, obstacle, posIdx, ncons_option)
     tElapsed[mpciter] = (time.time() - tStart)
 
     # mpc  future path plot
@@ -133,11 +133,8 @@ if saveData == True:
     plt.pause(0.01)
     fig.savefig(dst_fig)
 
-
     print('saved data and figure')
 
-
-dummy = raw_input('Press Enter to continue: ')
 
 # create plots
 oldpwd = os.getcwd()
@@ -159,10 +156,40 @@ if saveData == True:
     plt.pause(0.01)
     fig.savefig(dst_fig)
 
+    # figure 4: Chi, Chidot
+    dst_fig = rundir + 'Chi-Chidot' + suffix + '.png'
+    fig = plt.figure(4)
+    plt.pause(0.01)
+    fig.savefig(dst_fig)
+
+    # figure 5: LatAccel, dy
+    dst_fig = rundir + 'LatAccel-dy' + suffix + '.png'
+    fig = plt.figure(5)
+    plt.pause(0.01)
+    fig.savefig(dst_fig)
+
+    if ns == 6:
+        # figure 6: V, Vdot
+        dst_fig = rundir + 'Vddot-Chiddot' + suffix + '.png'
+        fig = plt.figure(6)
+        plt.pause(0.01)
+        fig.savefig(dst_fig)
+
+    # figure 7: CPU time
+    dst_fig = rundir + 'CPUtime' + suffix + '.png'
+    fig = plt.figure(7)
+    plt.pause(0.01)
+    fig.savefig(dst_fig)
+
+    # figure 8: V-terminal
+    dst_fig = rundir + 'V-terminal' + suffix + '.png'
+    fig = plt.figure(8)
+    plt.pause(0.01)
+    fig.savefig(dst_fig)
+
+dummy = raw_input('Press Enter to quit: ')
 print('done!')
 
-plt.show()
-#dummy = raw_input('Press Enter to quit: ')
 
 # Save Data
 # answer =  raw_input('Save Figures and Data [y/n]:  ')

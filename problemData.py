@@ -33,7 +33,7 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # 'no' - number of obstacles
 
 # default
-N = 6
+N = 10
 T = 0.4
 ns = 4
 no = 2
@@ -45,6 +45,9 @@ if no == 0:
         mpciterations = 34 #34
     elif N == 8:
         mpciterations = 32 # 32
+    elif N == 10:
+        mpciterations = 30 # 30
+
 
 elif no == 1:
     if N == 4:
@@ -56,12 +59,17 @@ elif no == 1:
         if ns == 4:
             mpciterations = 34 # 34
         elif ns == 6:
-            mpciterations = 38 # 38
+            mpciterations = 38 # 38 - check mpciterations
     elif N == 8:
         if ns == 4:
             mpciterations = 32 # 32
         elif ns == 6:
-            mpciterations = 24 #24
+            mpciterations = 36 #24 - check mpciterations
+    elif N == 10:
+        if ns == 4:
+            mpciterations = 30 # ?
+        elif ns == 6:
+            mpciterations = 30 # ?
 
 elif no == 2:
     if N == 4:
@@ -71,17 +79,20 @@ elif no == 2:
             mpciterations = 14 # 14 = wider dy with V terminal constraint, unstable
     elif N == 6:
         if ns == 4:
-            mpciterations = 12 # 38
+            mpciterations = 38 # 38
         elif ns == 6:
             mpciterations = 36 # 20 = wider dy with V terminal constraint, stops
     elif N == 8:
         if ns == 4:
-            mpciterations = 36 # 32
+            mpciterations = 36 # 36
         elif ns == 6:
             mpciterations = 34 # 24 = wider dy with V terminal constraint,
                                 # unstable at 2nd turn "No solution found in runningCons". Why?
-
-
+    elif N == 10:
+        if ns == 4:
+            mpciterations = 30 # ?
+        elif ns == 6:
+            mpciterations = 30 # ?
 
 
 # Number of states
@@ -376,7 +387,12 @@ rundate = datetime.datetime.now().strftime("%Y-%m-%d")
 rundir = './run_' + rundate + '/'
 distutils.dir_util.mkpath(rundir)
 
-suffix = '_N' + str(N) + '_Tp' + str(int(10 * T)) + '_ns' + str(ns) + '_no' + str(no)
+if N < 10:
+    suffix = '_N0' + str(N) + '_Tp' + str(int(10 * T)) + '_ns' + str(ns) + '_no' + str(no)
+else:
+    suffix = '_N' + str(N) + '_Tp' + str(int(10 * T)) + '_ns' + str(ns) + '_no' + str(no)
+
+
 dst_file = rundir + 'settings' + suffix + '.txt'
 shutil.copyfile('settings.txt', dst_file)
 

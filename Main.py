@@ -119,7 +119,10 @@ if writeToFile == True:
 
 rundate = datetime.datetime.now().strftime("%Y-%m-%d")
 rundir = './run_' + rundate + '/'
-suffix = '_N' + str(N) + '_Tp' + str(int(10*T)) + '_ns' + str(ns) + '_no' + str(no)
+if N < 10:
+    suffix = '_N0' + str(N) + '_Tp' + str(int(10*T)) + '_ns' + str(ns) + '_no' + str(no)
+else:
+    suffix = '_N' + str(N) + '_Tp' + str(int(10 * T)) + '_ns' + str(ns) + '_no' + str(no)
 
 if saveData == True:
 

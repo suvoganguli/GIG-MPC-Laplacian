@@ -42,12 +42,14 @@ def createPlots(mode, dirName = None, fileNames=None):
             print(k)
             fileName = fileNames[k]
             cpuMeanTime[k] = printPlots.plotSavedData(fileName, delim=" ", header=False)
-            noVec[k] = np.array(fileName[21]).astype(np.int)
+            noVec[k] = np.array(fileName[22]).astype(np.int)
 
         os.chdir(oldpwd)
 
         min_cpuMeanTime = 0.248
+        print('CPU time:')
         print(cpuMeanTime)
+        print('CPU time - normalized:')
         print(cpuMeanTime / min_cpuMeanTime)
 
         plt.figure(10)
@@ -69,11 +71,14 @@ if mode == 0:
 
 elif mode == 1:
     dirName = 'run_2018-03-06'
-    fileNames = ['logFile_N6_Tp4_ns4_no1.txt',
-                 'logFile_N6_Tp4_ns6_no1.txt']
+    fileNames = ['logFile_N04_Tp4_ns4_no2.txt',
+                 'logFile_N06_Tp4_ns4_no2.txt',
+                 'logFile_N08_Tp4_ns4_no2.txt',
+                 'logFile_N10_Tp4_ns4_no2.txt']
 
     createPlots(mode, dirName, fileNames)
 
+    None
     dummy = raw_input('Press Enter to Continue: ')
 
 # -----------------------------------------------------

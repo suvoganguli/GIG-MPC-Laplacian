@@ -481,8 +481,8 @@ def savePlots(dirname,figno):
 def plotSavedData(inFile, delim, header=False):
 
     f = file(inFile, 'r')
-    T = np.array(inFile[13]).astype(np.int)
-    ns = np.array(inFile[17]).astype(np.int)
+    T = np.array(inFile[14]).astype(np.int)
+    ns = np.array(inFile[18]).astype(np.int)
     cols, indexToName = getColumns(f, delim=delim, header=header)
 
     if ns == 4:

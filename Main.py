@@ -140,7 +140,7 @@ if saveData == True:
 oldpwd = os.getcwd()
 os.chdir(rundir)
 settingsFile = 'settings' + suffix + '.txt'
-figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, VTerminal, dyError, latAccel, settingsFile)
+figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, VTerminal, latAccel, dyError, settingsFile)
 os.chdir(oldpwd)
 
 if saveData == True:

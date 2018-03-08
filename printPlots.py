@@ -111,7 +111,7 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     return V_terminal
 
 
-def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,dyError,latAccel,settingsFile):
+def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFile):
 
     f_pData = file(settingsFile, 'r')
     cols, indexToName = getColumns(f_pData, delim=" ", header=False)
@@ -178,9 +178,8 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,dyError,latAccel,settingsFi
         plt.plot(t, x[:, [2]])  # V
         plt.grid(True)
 
-        if ncons_option != 3:
-            plt.plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
-            plt.plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
+        #plt.plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
+        #plt.plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
 
         plt.ylabel('V [fps]')
 
@@ -214,7 +213,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,dyError,latAccel,settingsFi
 
 
         # figure 5
-        plt.figure(5)
+        plt.figure(6)
         figno[4] = plt.gcf().number
 
         plt.subplot(211)
@@ -261,9 +260,8 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,dyError,latAccel,settingsFi
         plt.plot(t, x[:,[2]])  # V
         plt.ylabel('V [fps]')
 
-        if ncons_option != 3:
-            plt.plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
-            plt.plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
+        #plt.plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
+        #plt.plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
         plt.grid(True)
 
         plt.subplot(212)
@@ -353,7 +351,8 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,dyError,latAccel,settingsFi
     plt.xlabel('time [sec]')
     plt.grid(True)
 
-    plt.show()
+    plt.pause(0.1)
+    #plt.show()
 
     return figno
 
@@ -543,11 +542,9 @@ def plotSavedData(inFile, delim, header=False):
 
     f.close()
 
-    plt.pause(0.5)
+    plt.pause(0.1)
 
-    return cols, indexToName
+    return np.mean(cpuTime)
 
-def test():
-    None
 
 

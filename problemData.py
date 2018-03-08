@@ -33,7 +33,7 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # 'no' - number of obstacles
 
 # default
-N = 4
+N = 6
 T = 0.4
 ns = 4
 no = 2
@@ -66,12 +66,12 @@ elif no == 1:
 elif no == 2:
     if N == 4:
         if ns == 4:
-            mpciterations = 5 # 42
+            mpciterations = 42 # 42
         elif ns == 6:
             mpciterations = 14 # 14 = wider dy with V terminal constraint, unstable
     elif N == 6:
         if ns == 4:
-            mpciterations = 38 # 38
+            mpciterations = 12 # 38
         elif ns == 6:
             mpciterations = 36 # 20 = wider dy with V terminal constraint, stops
     elif N == 8:

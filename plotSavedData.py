@@ -1,6 +1,8 @@
 import os
-import printPlots
 import glob
+import printPlots
+import matplotlib.pyplot as plt
+import numpy as np
 
 def createPlots(mode, dirName = None, fileNames=None):
     # mode = 0 : get input from user
@@ -28,7 +30,9 @@ def createPlots(mode, dirName = None, fileNames=None):
 
     elif mode == 1:
 
-        printPlots.test()
+        n = len(fileNames)
+        cpuMeanTime = np.zeros(n)
+        noVec = np.zeros(n)
 
         oldpwd = os.getcwd()
         os.chdir(dirName)
@@ -37,11 +41,24 @@ def createPlots(mode, dirName = None, fileNames=None):
         for k in range(n):
             print(k)
             fileName = fileNames[k]
-            cols, indexToName = printPlots.plotSavedData(fileName, delim=" ", header=False)
+            cpuMeanTime[k] = printPlots.plotSavedData(fileName, delim=" ", header=False)
+            noVec[k] = np.array(fileName[21]).astype(np.int)
 
         os.chdir(oldpwd)
 
-        return cols, indexToName
+        min_cpuMeanTime = 0.248
+        print(cpuMeanTime)
+        print(cpuMeanTime / min_cpuMeanTime)
+
+        plt.figure(10)
+        plt.plot(noVec, cpuMeanTime, marker='x')
+        plt.xlabel('Number of Obstacles')
+        plt.ylabel('Average CPU time [sec]')
+        #plt.title('Number of Obstacles')
+        plt.grid(True)
+        plt.show()
+
+
 
 # -----------------------------------------------------
 
@@ -52,11 +69,11 @@ if mode == 0:
 
 elif mode == 1:
     dirName = 'run_2018-03-06'
-    fileNames = ['logFile_N6_Tp4_ns4_no0.txt',
-                 'logFile_N6_Tp4_ns4_no1.txt',
-                 'logFile_N6_Tp4_ns4_no2.txt']
+    fileNames = ['logFile_N6_Tp4_ns4_no1.txt',
+                 'logFile_N6_Tp4_ns6_no1.txt']
 
     createPlots(mode, dirName, fileNames)
+
     dummy = raw_input('Press Enter to Continue: ')
 
 # -----------------------------------------------------

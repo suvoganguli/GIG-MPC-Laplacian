@@ -33,7 +33,7 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # 'no' - number of obstacles
 
 # default
-N = 10
+N = 4
 T = 0.4
 ns = 4
 no = 2
@@ -74,7 +74,7 @@ elif no == 1:
 elif no == 2:
     if N == 4:
         if ns == 4:
-            mpciterations = 42 # 42
+            mpciterations = 13 # 42
         elif ns == 6:
             mpciterations = 14 # 14 = wider dy with V terminal constraint, unstable
     elif N == 6:
@@ -90,9 +90,9 @@ elif no == 2:
                                 # unstable at 2nd turn "No solution found in runningCons". Why?
     elif N == 10:
         if ns == 4:
-            mpciterations = 14 # ?
+            mpciterations = 14 # 30 (for total run)
         elif ns == 6:
-            mpciterations = 30 # ?
+            mpciterations = 12 # 30 (for total run)
 
 
 # Number of states

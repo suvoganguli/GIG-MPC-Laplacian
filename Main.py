@@ -1,6 +1,7 @@
 from path import *
 from nmpc import *
 from obstacleData import *
+import problemData as pdata
 import printPlots
 import time, datetime
 import shutil, distutils.dir_util
@@ -124,6 +125,8 @@ if N < 10:
 else:
     suffix = '_N' + str(N) + '_Tp' + str(int(10 * T)) + '_ns' + str(ns) + '_no' + str(no)
 
+pathObj = makePathObj(pdata, path, obstacle)
+
 if saveData == True:
 
     distutils.dir_util.mkpath(rundir)
@@ -136,6 +139,9 @@ if saveData == True:
     plt.pause(0.01)
     fig.savefig(dst_fig)
 
+    file_pkl = rundir + 'pathDict_no' + str(no) + '_NoPopup' + '.pkl'
+    savepkl(pathObj, file_pkl)
+
     print('saved data and figure')
 
 
@@ -143,7 +149,7 @@ if saveData == True:
 oldpwd = os.getcwd()
 os.chdir(rundir)
 settingsFile = 'settings' + suffix + '.txt'
-figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, VTerminal, latAccel, dyError, settingsFile)
+figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, VTerminal, latAccel, dyError, settingsFile, pathObj)
 os.chdir(oldpwd)
 
 if saveData == True:

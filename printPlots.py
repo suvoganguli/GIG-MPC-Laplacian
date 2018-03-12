@@ -111,7 +111,7 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     return V_terminal
 
 
-def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFile):
+def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFile,pathObj):
 
     f_pData = file(settingsFile, 'r')
     cols, indexToName = getColumns(f_pData, delim=" ", header=False)
@@ -358,49 +358,69 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
     figno[8] = plt.gcf().number
 
     # Planned Path
-    plt.plot(path.pathData.E, path.pathData.N, linestyle='--', color='c')
 
-    plt.plot(path.pathData.PathStartPoint[0], path.pathData.PathStartPoint[1], marker='o', markersize=8, color='r')
-    plt.plot(path.pathData.PathEndPoint[0], path.pathData.PathEndPoint[1], marker='o', markersize=8, color='g')
+    PathE = pathObj['PathE']
+    PathN = pathObj['PathN']
+    PathStartPoint = pathObj['PathStartPoint']
+    PathEndPoint = pathObj['PathEndPoint']
+    PathRightEndPointsE = pathObj['PathRightEndPointsE']
+    PathRightEndPointsN = pathObj['PathRightEndPointsN']
+    PathLeftEndPointsE = pathObj['PathLeftEndPointsE']
+    PathLeftEndPointsN = pathObj['PathLeftEndPointsN']
+    PathCenterEndPointsE = pathObj['PathCenterEndPointsE']
+    PathCenterEndPointsN = pathObj['PathCenterEndPointsN']
+    PathThetaEndpoints = pathObj['PathThetaEndpoints']
+    PathDeltaYRoad = pathObj['PathDeltaYRoad']
+    PathWidth = pathObj['PathWidth']
+    ObstacleE = pathObj['ObstacleE']
+    ObstacleN = pathObj['ObstacleN']
+    ObstacleW = pathObj['ObstacleW']
+    ObstacleL = pathObj['ObstacleL']
+    ObstacleChi = pathObj['ObstacleChi']
+
+    plt.plot(PathE, PathN, linestyle='--', color='c')
+
+    plt.plot(PathStartPoint[0], PathStartPoint[1], marker='o', markersize=8, color='r')
+    plt.plot(PathEndPoint[0], PathEndPoint[1], marker='o', markersize=8, color='g')
 
     if True:
-        plt.plot(path.pathData.PathRightEndPointsE, path.pathData.PathRightEndPointsN,'m+')
-        plt.plot(path.pathData.PathLeftEndPointsE, path.pathData.PathLeftEndPointsN,'m+')
+        plt.plot(PathRightEndPointsE, PathRightEndPointsN,'m+')
+        plt.plot(PathLeftEndPointsE, PathLeftEndPointsN,'m+')
 
-        x1 = path.pathData.PathRightEndPointsE
-        x2 = path.pathData.PathLeftEndPointsE
-        y1 = path.pathData.PathRightEndPointsN
-        y2 = path.pathData.PathLeftEndPointsN
+        x1 = PathRightEndPointsE
+        x2 = PathLeftEndPointsE
+        y1 = PathRightEndPointsN
+        y2 = PathLeftEndPointsN
         plt.plot(x1, y1, 'm', x2, y2, 'm')
 
-        x1 = path.pathData.PathCenterEndPointsE - pdata.delta_yRoad*np.sin(path.pathData.Theta_endpoints)
-        x2 = path.pathData.PathCenterEndPointsE + pdata.delta_yRoad*np.sin(path.pathData.Theta_endpoints)
-        y1 = path.pathData.PathCenterEndPointsN + pdata.delta_yRoad*np.cos(path.pathData.Theta_endpoints)
-        y2 = path.pathData.PathCenterEndPointsN - pdata.delta_yRoad*np.cos(path.pathData.Theta_endpoints)
+        x1 = PathCenterEndPointsE - PathDeltaYRoad*np.sin(PathThetaEndpoints)
+        x2 = PathCenterEndPointsE + PathDeltaYRoad*np.sin(PathThetaEndpoints)
+        y1 = PathCenterEndPointsN + PathDeltaYRoad*np.cos(PathThetaEndpoints)
+        y2 = PathCenterEndPointsN - PathDeltaYRoad*np.cos(PathThetaEndpoints)
         plt.plot(x1, y1, 'r', x2, y2, 'r')
 
     plt.grid(True)
 
     if True: # obstacle.Present == True:
 
-        nObs = len(obstacle.E)
+        nObs = len(ObstacleE)
         if nObs > 0:
             for k in range(nObs):
 
-                Efc = obstacle.E[k] + pdata.pathWidth/2
-                Nfc = obstacle.N[k]
-                W = obstacle.w[k] - pdata.pathWidth
-                L = obstacle.l[k]
-                Theta = obstacle.Chi[k]
+                Efc = ObstacleE[k] + PathWidth/2
+                Nfc = ObstacleN[k]
+                W = ObstacleW[k] - PathWidth
+                L = ObstacleL[k]
+                Theta = ObstacleChi[k]
                 fc = "red"
                 polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
 
 
-                Efc = obstacle.E[k]
-                Nfc = obstacle.N[k]
-                W = obstacle.w[k]
-                L = obstacle.l[k]
-                Theta = obstacle.Chi[k]
+                Efc = ObstacleE[k]
+                Nfc = ObstacleN[k]
+                W = ObstacleW[k]
+                L = ObstacleL[k]
+                Theta = ObstacleChi[k]
                 fc = "green"
                 polygon_safezone = getPatch(Efc, Nfc, W, L, Theta, fc)
 
@@ -416,21 +436,21 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
     plt.ylabel('N [ft]')
     plt.xlabel('E [ft]')
 
-    if no == 1:
-        idx_LP = 658
-        idx_EN = 23
-    elif no == 2:
-        idx_LP = 341
-        idx_EN = 12
-    if len(x[:,0]) >= idx_EN:
-        plt.plot(path.pathData.E[idx_LP], path.pathData.N[idx_LP], marker='o', markersize=6, color='g')
-        plt.plot(x[idx_EN,0], x[idx_EN,1], marker='o', markersize=6, color='g')
+    if no != 0:
+        if no == 1:
+            idx_LP = 658
+            idx_EN = 23
+        elif no == 2:
+            idx_LP = 341
+            idx_EN = 12
+        if len(x[:,0]) >= idx_EN:
+            plt.plot(PathE[idx_LP], PathN[idx_LP], marker='o', markersize=6, color='g')
+            plt.plot(x[idx_EN,0], x[idx_EN,1], marker='o', markersize=6, color='g')
 
-        p1 = np.array([path.pathData.E[idx_LP],path.pathData.N[idx_LP]])
-        p2 = np.array([x[idx_EN,0], x[idx_EN,1]])
-        print('Cornering Distance from Laplacian Path [ft]:')
-        print(distance(p1,p2))
-
+            p1 = np.array([PathE[idx_LP],PathN[idx_LP]])
+            p2 = np.array([x[idx_EN,0], x[idx_EN,1]])
+            print('Cornering Distance from Laplacian Path [ft]:')
+            print(distance(p1,p2))
 
     return figno
 
@@ -556,7 +576,7 @@ def savePlots(dirname,figno):
     os.chdir(oldpwd)
 
 
-def plotSavedData(inFile, delim, header=False):
+def plotSavedData(inFile, filePkl, delim, header=False):
 
     f = file(inFile, 'r')
     T = np.array(inFile[14]).astype(np.int)
@@ -616,7 +636,7 @@ def plotSavedData(inFile, delim, header=False):
 
     suffix = inFile[7:]
     settingsFile = 'settings' + suffix
-    nmpcPlot(t, x.T, u.T, path, obstacle, cpuTime, VTerminal, latAccel, dyError, settingsFile)
+    nmpcPlot(t, x.T, u.T, path, obstacle, cpuTime, VTerminal, latAccel, dyError, settingsFile, filePkl)
 
     f.close()
 

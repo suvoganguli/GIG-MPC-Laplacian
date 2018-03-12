@@ -3,8 +3,9 @@ import glob
 import printPlots
 import matplotlib.pyplot as plt
 import numpy as np
+from utils import *
 
-def createPlots(mode, dirName = None, fileNames=None):
+def createPlots(mode, pathObj=None, dirName = None, fileNames=None):
     # mode = 0 : get input from user
     # mode = 1 : use hardcoded files
 
@@ -19,13 +20,17 @@ def createPlots(mode, dirName = None, fileNames=None):
 
         listFile = glob.glob("*.txt")
         print(listFile)
-        fileName = raw_input("Input file name (*.txt):")
+        fileName = raw_input("Input file name (*.txt): ")
 
-        cols, indexToName = printPlots.plotSavedData(fileName, delim=" ", header=False)
+        listFile = glob.glob("*.pkl")
+        print(listFile)
+        filePkl = raw_input("Input file name (*.pkl): ")
+
+        cpuMeanTime = printPlots.plotSavedData(fileName, filePkl, delim=" ", header=False)
+        print('CPU time:')
+        print(cpuMeanTime)
 
         os.chdir(oldpwd)
-
-        return cols, indexToName
 
 
     elif mode == 1:
@@ -41,7 +46,7 @@ def createPlots(mode, dirName = None, fileNames=None):
         for k in range(n):
             print(k)
             fileName = fileNames[k]
-            cpuMeanTime[k] = printPlots.plotSavedData(fileName, delim=" ", header=False)
+            cpuMeanTime[k] = printPlots.plotSavedData(fileName, pathObj, delim=" ", header=False)
             noVec[k] = np.array(fileName[22]).astype(np.int)
 
         os.chdir(oldpwd)
@@ -56,11 +61,13 @@ def createPlots(mode, dirName = None, fileNames=None):
         plt.plot(noVec, cpuMeanTime, marker='x')
         plt.xlabel('Number of Obstacles')
         plt.ylabel('Average CPU time [sec]')
-        #plt.title('Number of Obstacles')
         plt.grid(True)
         plt.show()
 
 
+
+
+    return None
 
 # -----------------------------------------------------
 
@@ -70,15 +77,23 @@ if mode == 0:
     createPlots(mode)
 
 elif mode == 1:
+
+    plots = 'N'
+
+    #if plots == 'N'
+
     dirName = 'run_2018-03-06'
     fileNames = ['logFile_N04_Tp4_ns4_no2.txt',
                  'logFile_N06_Tp4_ns4_no2.txt',
                  'logFile_N08_Tp4_ns4_no2.txt',
                  'logFile_N10_Tp4_ns4_no2.txt']
 
-    createPlots(mode, dirName, fileNames)
+    filePkl = dirName + '/' +'pathDict_no2_NoPopup.pkl'
+    
+    pathObj = loadpkl(filePkl)
 
-    None
+    createPlots(mode, pathObj, dirName, fileNames)
+
     dummy = raw_input('Press Enter to Continue: ')
 
 # -----------------------------------------------------

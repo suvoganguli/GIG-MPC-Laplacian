@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib.patches import Polygon
+import pickle
 
 def getPosIdx(E, N, path, posIdx0 = None):
 
@@ -244,3 +245,34 @@ def getColumns(inFile, delim=" ", header=True):     # delim="\t"
 
     return cols, indexToName
 
+def savepkl(obj, file_pkl):
+    with open(file_pkl, 'wb') as f:
+        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+        #pickle.dump(obj, f, pickle.0)
+
+def loadpkl(file_pkl):
+    with open(file_pkl, 'rb') as f:
+        return pickle.load(f)
+
+def makePathObj(pdata, path, obstacle):
+    pathObj = { 'PathE': path.pathData.E,
+                'PathN': path.pathData.N,
+                'PathStartPoint': path.pathData.PathStartPoint,
+                'PathEndPoint': path.pathData.PathStartPoint,
+                'PathRightEndPointsE': path.pathData.PathRightEndPointsE,
+                'PathRightEndPointsN': path.pathData.PathRightEndPointsN,
+                'PathLeftEndPointsE': path.pathData.PathLeftEndPointsE,
+                'PathLeftEndPointsN': path.pathData.PathLeftEndPointsN,
+                'PathCenterEndPointsE': path.pathData.PathCenterEndPointsE,
+                'PathCenterEndPointsN': path.pathData.PathCenterEndPointsN,
+                'PathThetaEndpoints': path.pathData.Theta_endpoints,
+                'PathDeltaYRoad':  pdata.delta_yRoad,
+                'PathWidth': pdata.pathWidth,
+                'ObstacleE': obstacle.E,
+                'ObstacleN': obstacle.N,
+                'ObstacleW': obstacle.w,
+                'ObstacleL': obstacle.l,
+                'ObstacleChi': obstacle.Chi,
+            }
+
+    return pathObj

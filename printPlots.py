@@ -118,9 +118,9 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
     #N = np.array(cols[0]).astype(np.int)
     #T = np.array(cols[1]).astype(np.int)
     ns = np.array(cols[2]).astype(np.int)
-    #no = np.array(cols[3]).astype(np.int)
+    no = np.array(cols[3]).astype(np.int)
 
-    figno = np.zeros(8)
+    figno = np.zeros(9)
     figno[0] = 1
 
     # ncons_option is now hard-coded here since we want to create plot from
@@ -214,7 +214,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
 
         # figure 5
         plt.figure(6)
-        figno[4] = plt.gcf().number
+        figno[5] = plt.gcf().number
 
         plt.subplot(211)
         plt.plot(t, latAccel)
@@ -352,7 +352,85 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
     plt.grid(True)
 
     plt.pause(0.1)
-    #plt.show()
+
+    # figure 9
+    plt.figure(9,figsize=(5, 7), dpi=100)
+    figno[8] = plt.gcf().number
+
+    # Planned Path
+    plt.plot(path.pathData.E, path.pathData.N, linestyle='--', color='c')
+
+    plt.plot(path.pathData.PathStartPoint[0], path.pathData.PathStartPoint[1], marker='o', markersize=8, color='r')
+    plt.plot(path.pathData.PathEndPoint[0], path.pathData.PathEndPoint[1], marker='o', markersize=8, color='g')
+
+    if True:
+        plt.plot(path.pathData.PathRightEndPointsE, path.pathData.PathRightEndPointsN,'m+')
+        plt.plot(path.pathData.PathLeftEndPointsE, path.pathData.PathLeftEndPointsN,'m+')
+
+        x1 = path.pathData.PathRightEndPointsE
+        x2 = path.pathData.PathLeftEndPointsE
+        y1 = path.pathData.PathRightEndPointsN
+        y2 = path.pathData.PathLeftEndPointsN
+        plt.plot(x1, y1, 'm', x2, y2, 'm')
+
+        x1 = path.pathData.PathCenterEndPointsE - pdata.delta_yRoad*np.sin(path.pathData.Theta_endpoints)
+        x2 = path.pathData.PathCenterEndPointsE + pdata.delta_yRoad*np.sin(path.pathData.Theta_endpoints)
+        y1 = path.pathData.PathCenterEndPointsN + pdata.delta_yRoad*np.cos(path.pathData.Theta_endpoints)
+        y2 = path.pathData.PathCenterEndPointsN - pdata.delta_yRoad*np.cos(path.pathData.Theta_endpoints)
+        plt.plot(x1, y1, 'r', x2, y2, 'r')
+
+    plt.grid(True)
+
+    if True: # obstacle.Present == True:
+
+        nObs = len(obstacle.E)
+        if nObs > 0:
+            for k in range(nObs):
+
+                Efc = obstacle.E[k] + pdata.pathWidth/2
+                Nfc = obstacle.N[k]
+                W = obstacle.w[k] - pdata.pathWidth
+                L = obstacle.l[k]
+                Theta = obstacle.Chi[k]
+                fc = "red"
+                polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
+
+
+                Efc = obstacle.E[k]
+                Nfc = obstacle.N[k]
+                W = obstacle.w[k]
+                L = obstacle.l[k]
+                Theta = obstacle.Chi[k]
+                fc = "green"
+                polygon_safezone = getPatch(Efc, Nfc, W, L, Theta, fc)
+
+                ax = plt.gca()
+                ax.add_patch(polygon_safezone)
+                ax.add_patch(polygon_obstacle)
+
+    # Actual Path
+    plt.plot(x[:,0], x[:,1], color='b')
+    plt.plot(x[:,0], x[:,1], marker='o', markersize=4, color='b')
+    plt.xlim([0, 16])
+    plt.ylim([0, 128])
+    plt.ylabel('N [ft]')
+    plt.xlabel('E [ft]')
+
+    if no == 1:
+        idx_LP = 658
+        idx_EN = 23
+    elif no == 2:
+        idx_LP = 341
+        idx_EN = 12
+    if len(x[:,0]) >= idx_EN:
+        plt.plot(path.pathData.E[idx_LP], path.pathData.N[idx_LP], marker='o', markersize=6, color='g')
+        plt.plot(x[idx_EN,0], x[idx_EN,1], marker='o', markersize=6, color='g')
+
+        p1 = np.array([path.pathData.E[idx_LP],path.pathData.N[idx_LP]])
+        p2 = np.array([x[idx_EN,0], x[idx_EN,1]])
+        print('Cornering Distance from Laplacian Path [ft]:')
+        print(distance(p1,p2))
+
 
     return figno
 

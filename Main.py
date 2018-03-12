@@ -167,14 +167,14 @@ if saveData == True:
 
     # figure 5: LatAccel, dy
     dst_fig = rundir + 'LatAccel-dy' + suffix + '.png'
-    fig = plt.figure(5)
+    fig = plt.figure(6)
     plt.pause(0.01)
     fig.savefig(dst_fig)
 
     if ns == 6:
         # figure 6: V, Vdot
         dst_fig = rundir + 'Vddot-Chiddot' + suffix + '.png'
-        fig = plt.figure(6)
+        fig = plt.figure(5)
         plt.pause(0.01)
         fig.savefig(dst_fig)
 
@@ -191,6 +191,7 @@ if saveData == True:
     fig.savefig(dst_fig)
 
 print('done!')
+plt.show()
 
 
 # Save Data

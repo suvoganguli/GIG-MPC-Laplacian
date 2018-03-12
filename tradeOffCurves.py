@@ -101,27 +101,64 @@ plt.plot(no,CT_model_ns4[ix_N,:],no,CT_data_ns4[ix_N,:])
 plt.xlabel('no')
 plt.ylabel('CPU Time (normalized)')
 plt.grid(True)
-plt.show()
 
 # -------------------------------------------------------------
-# a = 2.0
-# b = 0.5
-# N0 = 3.8
-#
-# n_N = 3
-# n_no = 3
-# CT_model_ns6 = np.zeros((n_N, n_no))
-# error_ns6 = np.zeros((n_N, n_no))
-#
-# N = np.array([4, 6, 8])
-# no = np.array([0, 1, 2])
-#
-# for i in range(n_N):
-#     for j in range(n_no):
-#
-#         CT_model_ns6[i,j] = a * (1 - np.exp(-b * (N[j] - N0))) * (no[i] + 1)**2
-#         error_ns6[i,j] = CT_data_ns6[i,j] - CT_model_ns6[i,j]
-#
-#
-# print(error_ns6)
-# print(np.linalg.norm(error_ns6))
+a = 0.4/3/0.24
+b = 1.2
+c = 1.55
+d = 1
+N0 = 4
+
+n_N = 3
+n_no = 3
+CT_model_ns6 = np.zeros((n_N, n_no))
+error_ns6 = np.zeros((n_N, n_no))
+
+N = np.array([4, 6, 8])
+no = np.array([0, 1, 2])
+
+for i in range(n_N):
+    for j in range(n_no):
+        CT_model_ns6[i, j] = a * b**( c * (2*N[i]+3) ) * (1 - np.exp(-d*no[j])) - 8
+        error_ns6[i, j] = CT_data_ns6[i, j] - CT_model_ns6[i, j]
+
+
+print(CT_data_ns6)
+print('')
+print(CT_model_ns6)
+print('')
+print(error_ns6)
+print('')
+print(np.linalg.norm(error_ns6))
+print('')
+
+
+ix_no = 1
+ix_N = 2
+plt.figure(2, figsize=(5, 7))
+plt.subplot(211)
+plt.plot(N,CT_model_ns6[:,ix_no],N,CT_data_ns6[:,ix_no])
+plt.xlabel('N')
+plt.ylabel('CPU Time (normalized)')
+plt.grid(True)
+plt.subplot(212)
+plt.plot(no,CT_model_ns4[ix_N,:],no,CT_data_ns4[ix_N,:])
+plt.xlabel('no')
+plt.ylabel('CPU Time (normalized)')
+plt.grid(True)
+
+
+# -------------------------------------------------------------
+
+# smoothness (ns=4, no=1)
+
+data = np.array([0.25, 0.89, 1.44, 2.04])  # ft
+N = np.array([4,6,8,10])
+
+plt.figure(3)
+plt.plot(N,data,color='b')
+plt.plot(N,data,marker='o',markersize=4,color='b')
+plt.xlabel('N')
+plt.ylabel('Cornering Distance [ft]')
+plt.grid(True)
+plt.show()

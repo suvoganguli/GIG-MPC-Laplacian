@@ -90,7 +90,7 @@ elif no == 2:
                                 # unstable at 2nd turn "No solution found in runningCons". Why?
     elif N == 10:
         if ns == 4:
-            mpciterations = 30 # ?
+            mpciterations = 14 # ?
         elif ns == 6:
             mpciterations = 30 # ?
 

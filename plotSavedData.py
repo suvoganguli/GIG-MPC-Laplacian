@@ -89,7 +89,7 @@ elif mode == 1:
                  'logFile_N10_Tp4_ns4_no2.txt']
 
     filePkl = dirName + '/' +'pathDict_no2_NoPopup.pkl'
-    
+
     pathObj = loadpkl(filePkl)
 
     createPlots(mode, pathObj, dirName, fileNames)

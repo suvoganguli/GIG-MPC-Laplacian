@@ -36,11 +36,11 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 N = 4
 T = 0.4
 ns = 4
-no = 2
+no = 0
 
 if no == 0:
     if N == 4:
-        mpciterations = 36 #36
+        mpciterations = 3 #36
     elif N == 6:
         mpciterations = 34 #34
     elif N == 8:
@@ -74,7 +74,7 @@ elif no == 1:
 elif no == 2:
     if N == 4:
         if ns == 4:
-            mpciterations = 13 # 42
+            mpciterations = 42 # 42
         elif ns == 6:
             mpciterations = 14 # 14 = wider dy with V terminal constraint, unstable
     elif N == 6:

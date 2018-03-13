@@ -33,10 +33,10 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # 'no' - number of obstacles
 
 # default
-N = 4
+N = 6
 T = 0.4
 ns = 4
-no = 2
+no = 1
 
 if no == 0:
     if N == 4:
@@ -59,7 +59,7 @@ elif no == 1:
         if ns == 4:
             mpciterations = 34 # 34
         elif ns == 6:
-            mpciterations = 38 # 38 - check mpciterations
+            mpciterations = 34 # 38 - check mpciterations
     elif N == 8:
         if ns == 4:
             mpciterations = 32 # 32

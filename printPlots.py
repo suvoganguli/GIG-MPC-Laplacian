@@ -442,7 +442,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
     plt.ylabel('N [ft]')
     plt.xlabel('E [ft]')
 
-    if no != 2:
+    if no != 0:
         if no == 1:
             idx_LP = 658
             idx_EN = 23
@@ -591,9 +591,9 @@ def plotSavedData(inFile, filePkl, delim, header=False):
 
     if ns == 4:
         nt = len(cols[0])
-        t = T * np.arange(0, nt)
+        t = np.float(T) * np.arange(0, nt)
 
-        x = np.zeros((4, nt))
+        x = np.zeros((4, nt))/10
         x[0] = np.array(cols[0]).astype(np.float)
         x[1] = np.array(cols[1]).astype(np.float)
         x[2] = np.array(cols[2]).astype(np.float)
@@ -616,7 +616,7 @@ def plotSavedData(inFile, filePkl, delim, header=False):
     elif ns == 6:
         nt = len(cols[0])
 
-        t = T * np.arange(0, nt)
+        t = np.float(T) * np.arange(0, nt)/10
 
         x = np.zeros((6, nt))
         x[0] = np.array(cols[0]).astype(np.float)

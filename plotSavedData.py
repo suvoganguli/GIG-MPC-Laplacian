@@ -96,11 +96,11 @@ elif mode == 1:
 
     dirName = 'run_2018-03-06'
 
-    # fileNames = ['logFile_N04_Tp4_ns4_no2.txt',
-    #              'logFile_N06_Tp4_ns4_no2.txt',
-    #              'logFile_N08_Tp4_ns4_no2.txt',
-    #              'logFile_N10_Tp4_ns4_no2.txt'
-    #              ]
+    fileNames = ['logFile_N04_Tp4_ns4_no2.txt',
+                 'logFile_N06_Tp4_ns4_no2.txt',
+                 'logFile_N08_Tp4_ns4_no2.txt',
+                 'logFile_N10_Tp4_ns4_no2.txt'
+                 ]
 
     # fileNames = ['logFile_N04_Tp4_ns6_no2.txt',
     #              'logFile_N06_Tp4_ns6_no2.txt',
@@ -111,8 +111,8 @@ elif mode == 1:
     #              'logFile_N06_Tp4_ns6_no2.txt',
     #              ]
 
-    fileNames = ['logFile_N08_Tp4_ns6_no2.txt'
-                 ]
+    # fileNames = ['logFile_N08_Tp4_ns6_no2.txt'
+    #              ]
 
 
     filePkl = dirName + '/' +'pathDict_no2_NoPopup.pkl'

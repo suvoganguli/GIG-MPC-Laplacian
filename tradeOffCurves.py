@@ -172,6 +172,7 @@ data_Vdot_ns4 = np.array([14.3, 12.03, 8.92, 6.33, ])  # ft
 data_Chidot_ns4 = np.array([178.76, 140.94, 101.41, 71.05])  # deg
 data_latAcel_ns4 = np.array([0.56, 0.46, 0.34, 0.25])  # fps
 
+# note for ns=6 and N=4, the trajectory is unstable and terminated early
 data_Vdot_ns6 = np.array([4.63, 8.42, 7.23 ])
 data_Chidot_ns6 = np.array([126.05, 173.03, 140.37 ])
 data_latAcel_ns6 = np.array([0.42, 0.58, 0.5])  # fps
@@ -211,5 +212,6 @@ plt.xlabel('N')
 # plt.plot(N,data_Chidot,marker='o',markersize=4,color='b')
 # plt.ylabel('Intg(Chidot.dt) [deg]')
 # plt.grid(True)
+
 
 plt.show()

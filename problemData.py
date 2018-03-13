@@ -36,11 +36,11 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 N = 4
 T = 0.4
 ns = 4
-no = 0
+no = 2
 
 if no == 0:
     if N == 4:
-        mpciterations = 3 #36
+        mpciterations = 36 #36
     elif N == 6:
         mpciterations = 34 #34
     elif N == 8:
@@ -363,21 +363,21 @@ f_problemData = open(fileName_problemData, 'w')
 
 if ns == 4:
 
-    f_problemData.write("%d %.2f %d %d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n" % (
+    f_problemData.write("%d %.2f %d %d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n" % (
         N, T, ns, no,
         lb_VdotVal, ub_VdotVal,
         lb_ChidotVal, ub_ChidotVal,
         delta_yRoad, lataccel_maxVal,
-        lb_V, ub_V
+        lb_V, ub_V, V_cmd
         ))
 elif ns == 6:
 
-    f_problemData.write("%d %.2f %d %d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n" % (
+    f_problemData.write("%d %.2f %d %d %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f\n" % (
         N, T, ns, no,
         lb_VddotVal, ub_VddotVal,
         lb_ChiddotVal, ub_ChiddotVal,
         delta_yRoad, lataccel_maxVal,
-        lb_V, ub_V
+        lb_V, ub_V, V_cmd
         ))
 
 f_problemData.close()

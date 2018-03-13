@@ -17,6 +17,7 @@ CT_data_ns6 = np.array([[0.23,	0.60,	0.54],
 
 
 # -------------------------------------------------------------
+# N vs CT (ns4)
 
 model = 3
 
@@ -77,7 +78,7 @@ elif model == 3:
             CT_model_ns4[i, j] = a * b**( c * (2*N[i]+3) ) * (1 - np.exp(-d*no[j]))
             error_ns4[i, j] = CT_data_ns4[i, j] - CT_model_ns4[i, j]
 
-
+print('ns4 data:')
 print(CT_data_ns4)
 print('')
 print(CT_model_ns4)
@@ -103,6 +104,8 @@ plt.ylabel('CPU Time (normalized)')
 plt.grid(True)
 
 # -------------------------------------------------------------
+# N vs CT (ns4)
+
 a = 0.4/3/0.24
 b = 1.2
 c = 1.55
@@ -122,7 +125,7 @@ for i in range(n_N):
         CT_model_ns6[i, j] = a * b**( c * (2*N[i]+3) ) * (1 - np.exp(-d*no[j])) - 8
         error_ns6[i, j] = CT_data_ns6[i, j] - CT_model_ns6[i, j]
 
-
+print('ns6 data:')
 print(CT_data_ns6)
 print('')
 print(CT_model_ns6)
@@ -149,8 +152,7 @@ plt.grid(True)
 
 
 # -------------------------------------------------------------
-
-# smoothness (ns=4, no=1)
+# Smoothness (ns=4, no=2)
 
 data = np.array([0.25, 0.89, 1.44, 2.04])  # ft
 N = np.array([4,6,8,10])
@@ -161,4 +163,53 @@ plt.plot(N,data,marker='o',markersize=4,color='b')
 plt.xlabel('N')
 plt.ylabel('Cornering Distance [ft]')
 plt.grid(True)
+
+
+# -------------------------------------------------------------
+# N vs intg(Vdot.dt), intg(Chidot.dt), intg(latAccel.dt)
+
+data_Vdot_ns4 = np.array([14.3, 12.03, 8.92, 6.33, ])  # ft
+data_Chidot_ns4 = np.array([178.76, 140.94, 101.41, 71.05])  # deg
+data_latAcel_ns4 = np.array([0.56, 0.46, 0.34, 0.25])  # fps
+
+data_Vdot_ns6 = np.array([4.63, 8.42, 7.23 ])
+data_Chidot_ns6 = np.array([126.05, 173.03, 140.37 ])
+data_latAcel_ns6 = np.array([0.42, 0.58, 0.5])  # fps
+
+N_ns4 = np.array([4,6,8,10])
+N_ns6 = np.array([6,8,10])
+
+plt.figure(4, figsize=(5, 7))
+plt.subplot(311)
+plt.plot(N,data_Vdot_ns4,color='b')
+plt.plot(N,data_Vdot_ns4,marker='o',markersize=4,color='b')
+plt.ylabel('Intg(Vdot.dt) [ft]')
+plt.grid(True)
+
+plt.subplot(312)
+plt.plot(N,data_Chidot_ns4,color='b')
+plt.plot(N,data_Chidot_ns4,marker='o',markersize=4,color='b')
+plt.ylabel('Intg(Chidot.dt) [deg]')
+plt.grid(True)
+
+plt.subplot(313)
+plt.plot(N,data_latAcel_ns4,color='b')
+plt.plot(N,data_latAcel_ns4,marker='o',markersize=4,color='b')
+plt.ylabel('Intg(latAccel.dt) [fps]')
+plt.grid(True)
+plt.xlabel('N')
+
+# plt.figure(5, figsize=(5, 7))
+# plt.subplot(211)
+# plt.plot(N,data_Vdot,color='b')
+# plt.plot(N,data_Vdot,marker='o',markersize=4,color='b')
+# plt.ylabel('Intg(Vdot.dt) [ft]')
+# plt.grid(True)
+#
+# plt.subplot(212)
+# plt.plot(N,data_Chidot,color='b')
+# plt.plot(N,data_Chidot,marker='o',markersize=4,color='b')
+# plt.ylabel('Intg(Chidot.dt) [deg]')
+# plt.grid(True)
+
 plt.show()

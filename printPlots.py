@@ -178,9 +178,6 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
         plt.plot(t, x[:, [2]])  # V
         plt.grid(True)
 
-        #plt.plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
-        #plt.plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
-
         plt.ylabel('V [fps]')
 
         plt.subplot(212)
@@ -192,6 +189,8 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
         plt.ylabel('Vdot [fps2]')
         plt.xlabel('t [sec]')
         plt.grid(True)
+
+        print('intg(Vdot.dt) = ' + np.str(sum(abs(u[:,0]))))
 
         # figure 4
         plt.figure(4)
@@ -211,6 +210,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
         plt.xlabel('t [sec]')
         plt.grid(True)
 
+        print('intg(Chidot.dt) = ' + np.str(sum(abs(u[:, 1])*180/np.pi)))
 
         # figure 5
         plt.figure(6)
@@ -233,6 +233,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
         plt.xlabel('t [sec]')
         plt.grid(True)
 
+        print('intg(latAccel.dt) = ' + np.str(sum(abs(latAccel))))
 
     elif ns == 6:
 
@@ -259,9 +260,6 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
         plt.subplot(211)
         plt.plot(t, x[:,[2]])  # V
         plt.ylabel('V [fps]')
-
-        #plt.plot(t, lb_V*np.ones(t.shape),linestyle='--', color='g')
-        #plt.plot(t, ub_V*np.ones(t.shape), linestyle='--', color='g')
         plt.grid(True)
 
         plt.subplot(212)
@@ -271,6 +269,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
         plt.xlabel('t [sec]')
         plt.grid(True)
 
+        #print('intg(Vdot.dt) = ' + np.str(sum(abs(x[:,4]))))
 
         # figure 4
         plt.figure(4)
@@ -287,6 +286,8 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
         plt.ylabel('Chidot [deg/s]')
         plt.xlabel('t [sec]')
         plt.grid(True)
+
+        #print('intg(Chidot.dt) = ' + np.str(sum(abs(x[:,5]*180/np.pi))))
 
         # figure 5
         plt.figure(5)
@@ -307,6 +308,9 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
         plt.xlabel('t [sec]')
         plt.grid(True)
 
+        print('intg(Vddot.dt) = ' + np.str(sum(abs(u[:,0]))))
+        print('intg(Chiddot.dt) = ' + np.str(sum(abs(u[:,1]*180/np.pi))))
+
         # figure 6
         plt.figure(6)
         figno[5] = plt.gcf().number
@@ -319,6 +323,8 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
 
         plt.ylabel('Lat Accel [g]')
         plt.grid(True)
+
+        print('intg(latAccel.dt) = ' + np.str(sum(abs(latAccel))))
 
         plt.subplot(212)
         plt.plot(t, dyError)
@@ -436,7 +442,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
     plt.ylabel('N [ft]')
     plt.xlabel('E [ft]')
 
-    if no != 0:
+    if no != 2:
         if no == 1:
             idx_LP = 658
             idx_EN = 23

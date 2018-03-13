@@ -1,6 +1,8 @@
 
 
-2018/02/05
-- improve usage of obstacle detection output
-- update path to use only detected obstacles 
+2018/03/13
+
+- Complete tradeoff slides
+- Add pop-up obstacle case
+- Try adding cost for difference of current position to end point. Possibly have less constraints.
 

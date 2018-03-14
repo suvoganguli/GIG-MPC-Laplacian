@@ -94,7 +94,7 @@ if mode == 0:
 
 elif mode == 1:
 
-    dirName = 'run_2018-03-06'
+    dirName = 'run_2018-03-14'
 
     # fileNames = ['logFile_N04_Tp4_ns4_no2.txt',
     #              'logFile_N06_Tp4_ns4_no2.txt',
@@ -107,16 +107,20 @@ elif mode == 1:
     #              'logFile_N08_Tp4_ns6_no2.txt'
     #              ]
 
-    fileNames = ['logFile_N06_Tp4_ns4_no2.txt',
-                 'logFile_N06_Tp4_ns6_no2.txt',
-                 ]
-
-    # fileNames = ['logFile_N08_Tp4_ns6_no2.txt'
+    # fileNames = ['logFile_N06_Tp4_ns4_no2.txt',
+    #              'logFile_N06_Tp4_ns6_no2.txt',
     #              ]
+
+    # fileNames = ['logFile_N04_Tp8_ns4_no2.txt'
+    #              ]
+
+    fileNames = ['logFile_N06_Tp2_ns4_no2.txt',
+                 'logFile_N06_Tp4_ns4_no2.txt',
+                 'logFile_N06_Tp6_ns4_no2.txt']
 
 
     filePkl = dirName + '/' +'pathDict_no2_NoPopup.pkl'
-    fileSettings = dirName + '/' + 'settings_N04_Tp4_ns4_no2.txt' # used for V0 only (V0=Vcmd)
+    fileSettings = dirName + '/' + 'settings_N06_Tp6_ns4_no2.txt' # used for V0 only (V0=Vcmd)
 
     f = file(fileSettings, 'r')
     cols, indexToName = getColumns(f, delim=" ", header=False)

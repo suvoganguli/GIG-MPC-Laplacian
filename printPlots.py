@@ -116,7 +116,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
     f_pData = file(settingsFile, 'r')
     cols, indexToName = getColumns(f_pData, delim=" ", header=False)
     #N = np.array(cols[0]).astype(np.int)
-    #T = np.array(cols[1]).astype(np.int)
+    T = np.array(cols[1]).astype(np.float)
     ns = np.array(cols[2]).astype(np.int)
     no = np.array(cols[3]).astype(np.int)
 
@@ -442,7 +442,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
     plt.ylabel('N [ft]')
     plt.xlabel('E [ft]')
 
-    if no != 0:
+    if no != 0 and T == 0.4:
         if no == 1:
             idx_LP = 658
             idx_EN = 23

@@ -32,67 +32,73 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # 'ns' - number of states
 # 'no' - number of obstacles
 
+sf_T = 1.5
+
 # default
 N = 6
-T = 0.4
+T = 0.4*sf_T
 ns = 4
-no = 1
+no = 0
 
 if no == 0:
     if N == 4:
-        mpciterations = 36 #36
+        mpciterations = 35/sf_T #36
     elif N == 6:
-        mpciterations = 34 #34
+        mpciterations = 33/sf_T #34
     elif N == 8:
-        mpciterations = 32 # 32
+        mpciterations = 31/sf_T # 32
     elif N == 10:
-        mpciterations = 30 # 30
+        mpciterations = 29/sf_T  # 30
 
 
 elif no == 1:
     if N == 4:
         if ns == 4:
-            mpciterations = 36 # 36
+            mpciterations = 36/sf_T  # 36
         elif ns == 6:
-            mpciterations = 18 # 18
+            mpciterations = 18/sf_T  # 18
     elif N == 6:
         if ns == 4:
-            mpciterations = 34 # 34
+            mpciterations = 34/sf_T  # 34
         elif ns == 6:
-            mpciterations = 34 # 38 - check mpciterations
+            mpciterations = 34/sf_T  # 38 - check mpciterations
     elif N == 8:
         if ns == 4:
-            mpciterations = 32 # 32
+            mpciterations = 32/sf_T  # 32
         elif ns == 6:
-            mpciterations = 36 #24 - check mpciterations
+            mpciterations = 36/sf_T  #24 - check mpciterations
     elif N == 10:
         if ns == 4:
-            mpciterations = 30 # ?
+            mpciterations = 30/sf_T  # ?
         elif ns == 6:
-            mpciterations = 30 # ?
+            mpciterations = 30/sf_T  # ?
 
 elif no == 2:
     if N == 4:
         if ns == 4:
-            mpciterations = 42 # 42
+            mpciterations = 41/sf_T  # 42
         elif ns == 6:
-            mpciterations = 14 # 14 = wider dy with V terminal constraint, unstable
+            mpciterations = 14/sf_T  # 14 = wider dy with V terminal constraint, unstable
     elif N == 6:
         if ns == 4:
-            mpciterations = 38 # 38
+            mpciterations = 38/sf_T  # 38
         elif ns == 6:
-            mpciterations = 36 # 20 = wider dy with V terminal constraint, stops
+            mpciterations = 36/sf_T  # 20 = wider dy with V terminal constraint, stops
     elif N == 8:
         if ns == 4:
-            mpciterations = 36 # 36
+            mpciterations = 36/sf_T  # 36
         elif ns == 6:
-            mpciterations = 34 # 24 = wider dy with V terminal constraint,
+            mpciterations = 34/sf_T  # 24 = wider dy with V terminal constraint,
                                 # unstable at 2nd turn "No solution found in runningCons". Why?
     elif N == 10:
         if ns == 4:
-            mpciterations = 14 # 30 (for total run)
+            mpciterations = 14/sf_T  # 30 (for total run)
         elif ns == 6:
-            mpciterations = 12 # 30 (for total run)
+            mpciterations = 12/sf_T  # 30 (for total run)
+
+
+N = int(N)
+mpciterations = int(mpciterations)
 
 
 # Number of states

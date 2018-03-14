@@ -122,8 +122,11 @@ elif mode == 1:
     # fileNames = ['logFile_N04_Tp8_ns4_no2.txt'
     #              ]
 
-    fileNames = ['logFile_N06_Tp2_ns4_no2.txt',
-                 'logFile_N06_Tp4_ns4_no2.txt',
+    # fileNames = ['logFile_N06_Tp2_ns4_no2.txt',
+    #              'logFile_N06_Tp4_ns4_no2.txt',
+    #              'logFile_N06_Tp6_ns4_no2.txt']
+
+    fileNames = ['logFile_N09_Tp4_ns4_no2.txt',
                  'logFile_N06_Tp6_ns4_no2.txt']
 
 

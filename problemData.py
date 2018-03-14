@@ -32,13 +32,13 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # 'ns' - number of states
 # 'no' - number of obstacles
 
-sf_T = 1.5
+sf_T = 1.0
 
 # default
-N = 6
+N = 9
 T = 0.4*sf_T
 ns = 4
-no = 0
+no = 2
 
 if no == 0:
     if N == 4:
@@ -95,6 +95,12 @@ elif no == 2:
             mpciterations = 14/sf_T  # 30 (for total run)
         elif ns == 6:
             mpciterations = 12/sf_T  # 30 (for total run)
+
+    elif N == 9:
+        if ns == 4:
+            mpciterations = 28/sf_T  # 30 (for total run)
+        elif ns == 6:
+            mpciterations = 10/sf_T  # 30 (for total run)
 
 
 N = int(N)

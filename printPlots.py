@@ -442,21 +442,21 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
     plt.ylabel('N [ft]')
     plt.xlabel('E [ft]')
 
-    if no != 0 and T == 0.4:
-        if no == 1:
-            idx_LP = 658
-            idx_EN = 23
-        elif no == 2:
-            idx_LP = 341
-            idx_EN = 12
-        if len(x[:,0]) >= idx_EN:
-            plt.plot(PathE[idx_LP], PathN[idx_LP], marker='o', markersize=6, color='g')
-            plt.plot(x[idx_EN,0], x[idx_EN,1], marker='o', markersize=6, color='g')
-
-            p1 = np.array([PathE[idx_LP],PathN[idx_LP]])
-            p2 = np.array([x[idx_EN,0], x[idx_EN,1]])
-            print('Cornering Distance from Laplacian Path [ft]:')
-            print(distance(p1,p2))
+    # if no != 0 and T == 0.4:
+    #     if no == 1:
+    #         idx_LP = 658
+    #         idx_EN = 23
+    #     elif no == 2:
+    #         idx_LP = 341
+    #         idx_EN = 12
+    #     if len(x[:,0]) >= idx_EN:
+    #         plt.plot(PathE[idx_LP], PathN[idx_LP], marker='o', markersize=6, color='g')
+    #         plt.plot(x[idx_EN,0], x[idx_EN,1], marker='o', markersize=6, color='g')
+    #
+    #         p1 = np.array([PathE[idx_LP],PathN[idx_LP]])
+    #         p2 = np.array([x[idx_EN,0], x[idx_EN,1]])
+    #         print('Cornering Distance from Laplacian Path [ft]:')
+    #         print(distance(p1,p2))
 
     return figno
 

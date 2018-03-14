@@ -39,6 +39,7 @@ def createPlots(mode, pathObj = None, dirName = None, fileNames=None):
         cpuMeanTime = np.zeros(n)
         noVec = np.zeros(n)
         NVec = np.zeros(n)
+        TVec = np.zeros(n)
 
         oldpwd = os.getcwd()
         os.chdir(dirName)
@@ -50,6 +51,7 @@ def createPlots(mode, pathObj = None, dirName = None, fileNames=None):
             cpuMeanTime[k] = printPlots.plotSavedData(fileName, pathObj, delim=" ", header=False)
             noVec[k] = np.array(fileName[22]).astype(np.int)
             NVec[k] = np.array(fileName[9:11]).astype(np.int)
+            TVec[k] = np.array(fileName[14]).astype(np.float)/10
 
         os.chdir(oldpwd)
 
@@ -77,6 +79,12 @@ def createPlots(mode, pathObj = None, dirName = None, fileNames=None):
         plt.figure(12)
         plt.plot(NVec*T*V_cmd, cpuMeanTime, marker='x')
         plt.xlabel('Horizon Distance [ft]')
+        plt.ylabel('Average CPU time [sec]')
+        plt.grid(True)
+
+        plt.figure(13)
+        plt.plot(TVec, cpuMeanTime, marker='x')
+        plt.xlabel('Time Step (T)')
         plt.ylabel('Average CPU time [sec]')
         plt.grid(True)
 

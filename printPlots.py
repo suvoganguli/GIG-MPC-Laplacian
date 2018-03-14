@@ -591,7 +591,7 @@ def plotSavedData(inFile, filePkl, delim, header=False):
 
     if ns == 4:
         nt = len(cols[0])
-        t = np.float(T) * np.arange(0, nt)
+        t = np.float(T) * np.arange(0, nt)/10
 
         x = np.zeros((4, nt))/10
         x[0] = np.array(cols[0]).astype(np.float)

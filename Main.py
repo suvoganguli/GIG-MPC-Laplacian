@@ -125,6 +125,11 @@ if N < 10:
 else:
     suffix = '_N' + str(N) + '_Tp' + str(int(10 * T)) + '_ns' + str(ns) + '_no' + str(no)
 
+if V_cmd/mph2fps < 10.0:
+    suffix = suffix + '_Vcmd0' + str(int(V_cmd/mph2fps))
+else:
+    suffix = suffix + '_Vcmd' + str(int(V_cmd/mph2fps))
+
 pathObj = makePathObj(pdata, path, obstacle)
 
 if saveData == True:

@@ -31,6 +31,7 @@ endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 # 'T - time step
 # 'ns' - number of states
 # 'no' - number of obstacles
+# 'V0' - initial speed
 
 sf_T = 1
 
@@ -39,69 +40,98 @@ N = 4
 T = 0.4*sf_T
 ns = 4
 no = 2
+V0 = 10*mph2fps
 
-if no == 0:
-    if N == 4:
-        mpciterations = 35/sf_T #36
-    elif N == 6:
-        mpciterations = 33/sf_T #34
-    elif N == 8:
-        mpciterations = 31/sf_T # 32
-    elif N == 10:
-        mpciterations = 29/sf_T  # 30
+if abs(V0 - 5*mph2fps) <= 10**(-3):
+    if no == 0:
+        if N == 4:
+            mpciterations = 35/sf_T #36
+        elif N == 6:
+            mpciterations = 33/sf_T #34
+        elif N == 8:
+            mpciterations = 31/sf_T # 32
+        elif N == 10:
+            mpciterations = 29/sf_T  # 30
 
 
-elif no == 1:
-    if N == 4:
-        if ns == 4:
-            mpciterations = 36/sf_T  # 36
-        elif ns == 6:
-            mpciterations = 18/sf_T  # 18
-    elif N == 6:
-        if ns == 4:
-            mpciterations = 34/sf_T  # 34
-        elif ns == 6:
-            mpciterations = 34/sf_T  # 38 - check mpciterations
-    elif N == 8:
-        if ns == 4:
-            mpciterations = 32/sf_T  # 32
-        elif ns == 6:
-            mpciterations = 36/sf_T  #24 - check mpciterations
-    elif N == 10:
-        if ns == 4:
-            mpciterations = 30/sf_T  # ?
-        elif ns == 6:
-            mpciterations = 30/sf_T  # ?
+    elif no == 1:
+        if N == 4:
+            if ns == 4:
+                mpciterations = 36/sf_T  # 36
+            elif ns == 6:
+                mpciterations = 18/sf_T  # 18
+        elif N == 6:
+            if ns == 4:
+                mpciterations = 34/sf_T  # 34
+            elif ns == 6:
+                mpciterations = 34/sf_T  # 38 - check mpciterations
+        elif N == 8:
+            if ns == 4:
+                mpciterations = 32/sf_T  # 32
+            elif ns == 6:
+                mpciterations = 36/sf_T  #24 - check mpciterations
+        elif N == 10:
+            if ns == 4:
+                mpciterations = 30/sf_T  # ?
+            elif ns == 6:
+                mpciterations = 30/sf_T  # ?
 
-elif no == 2:
-    if N == 4:
-        if ns == 4:
-            mpciterations = 41/sf_T  # 42
-            #mpciterations = 10
-        elif ns == 6:
-            mpciterations = 14/sf_T  # 14 = wider dy with V terminal constraint, unstable
-    elif N == 6:
-        if ns == 4:
-            mpciterations = 38/sf_T  # 38
-        elif ns == 6:
-            mpciterations = 36/sf_T  # 20 = wider dy with V terminal constraint, stops
-    elif N == 8:
-        if ns == 4:
-            mpciterations = 36/sf_T  # 36
-        elif ns == 6:
-            mpciterations = 34/sf_T  # 24 = wider dy with V terminal constraint,
-                                # unstable at 2nd turn "No solution found in runningCons". Why?
-    elif N == 10:
-        if ns == 4:
-            mpciterations = 14/sf_T  # 30 (for total run)
-        elif ns == 6:
-            mpciterations = 12/sf_T  # 30 (for total run)
+    elif no == 2:
+        if N == 4:
+            if ns == 4:
+                mpciterations = 41/sf_T  # 41
+            elif ns == 6:
+                mpciterations = 14/sf_T  # 14 = wider dy with V terminal constraint, unstable
+        elif N == 6:
+            if ns == 4:
+                mpciterations = 38/sf_T  # 38
+            elif ns == 6:
+                mpciterations = 36/sf_T  # 20 = wider dy with V terminal constraint, stops
+        elif N == 8:
+            if ns == 4:
+                mpciterations = 36/sf_T  # 36
+            elif ns == 6:
+                mpciterations = 34/sf_T  # 24 = wider dy with V terminal constraint,
+                                    # unstable at 2nd turn "No solution found in runningCons". Why?
+        elif N == 10:
+            if ns == 4:
+                mpciterations = 14/sf_T  # 30 (for total run)
+            elif ns == 6:
+                mpciterations = 12/sf_T  # 30 (for total run)
 
-    elif N == 9:
-        if ns == 4:
-            mpciterations = 28/sf_T  # 30 (for total run)
-        elif ns == 6:
-            mpciterations = 10/sf_T  # 30 (for total run)
+        elif N == 9:
+            if ns == 4:
+                mpciterations = 28/sf_T  # 30 (for total run)
+            elif ns == 6:
+                mpciterations = 10/sf_T  # 30 (for total run)
+
+elif abs(V0 - 10*mph2fps) <= 10**(-3):
+
+    if no == 2:
+        if N == 4:
+            if ns == 4:
+                mpciterations = 18/sf_T  # 18
+            elif ns == 6:
+                mpciterations = 14/sf_T  # 14 = wider dy with V terminal constraint, unstable
+        elif N == 6:
+            if ns == 4:
+                mpciterations = 38/sf_T  # 38
+            elif ns == 6:
+                mpciterations = 36/sf_T  # 20 = wider dy with V terminal constraint, stops
+
+elif abs(V0 - 15*mph2fps) <= 10**(-3):
+
+    if no == 2:
+        if N == 4:
+            if ns == 4:
+                mpciterations = 12/sf_T  # 41
+            elif ns == 6:
+                mpciterations = 14/sf_T  # 14 = wider dy with V terminal constraint, unstable
+        elif N == 6:
+            if ns == 4:
+                mpciterations = 38/sf_T  # 38
+            elif ns == 6:
+                mpciterations = 36/sf_T  # 20 = wider dy with V terminal constraint, stops
 
 
 N = int(N)
@@ -142,7 +172,6 @@ if ns == 2:
     E0 = startPoint[0]  # ft (North, long)
     N0 = startPoint[1]  # ft (East, lat)
     Chi0 = 0 * np.pi / 180  # rad
-    V0 = 10 * mph2fps
     x0 = [E0, N0]  # E, N, V, Chi, Vdot, Chidot
 
     lb_VdotVal = -2  # fps3
@@ -181,7 +210,6 @@ elif ns == 4:
     E0 = startPoint[0]  # ft (North, long)
     N0 = startPoint[1]  # ft (East, lat)
     Chi0 = 0 * np.pi / 180  # rad
-    V0 = 5 * mph2fps
     x0 = [E0, N0, V0, Chi0]  # E, N, V, Chi, Vdot, Chidot
 
     lb_VdotVal = -2  # fps3
@@ -209,6 +237,11 @@ elif ns == 4:
     # Path parameters
     pathWidth = 5.0 # ft
 
+    print('experimenting with different speed')
+    lataccel_maxVal = 0.20 * 32.2  # fps2
+    delta_yRoad = 0.5
+
+
 elif ns == 6:
 
     # Ipopt settings
@@ -219,8 +252,7 @@ elif ns == 6:
 
     E0 = startPoint[0]  # ft (North, long)
     N0 = startPoint[1]  # ft (East, lat)
-    Chi0 = 0*np.pi/180 # rad (w.r.t. North)
-    V0 = 5*mph2fps
+    Chi0 = 0 * np.pi/180 # rad (w.r.t. North)
     x0 = [E0, N0, V0, Chi0, 0, 0]  # E, N, V, Chi, Vdot, Chidot
     lb_VddotVal = -2 # fps3
     ub_VddotVal = 2 # fps3
@@ -404,7 +436,6 @@ if N < 10:
     suffix = '_N0' + str(N) + '_Tp' + str(int(10 * T)) + '_ns' + str(ns) + '_no' + str(no)
 else:
     suffix = '_N' + str(N) + '_Tp' + str(int(10 * T)) + '_ns' + str(ns) + '_no' + str(no)
-
 
 dst_file = rundir + 'settings' + suffix + '.txt'
 shutil.copyfile('settings.txt', dst_file)

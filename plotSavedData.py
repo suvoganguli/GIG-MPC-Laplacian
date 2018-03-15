@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from utils import *
 
-def createPlots(mode, pathObj = None, dirName = None, fileNames=None):
+def createPlots(mode, pathObj = None, dirNames = None, fileNames=None):
     # mode = 0 : get input from user
     # mode = 1 : use hardcoded files
 
@@ -14,9 +14,9 @@ def createPlots(mode, pathObj = None, dirName = None, fileNames=None):
 
         listDir = glob.glob("run*")
         print(listDir)
-        dirName = raw_input("Input directory name: ")
+        dirNames = raw_input("Input directory name: ")
 
-        os.chdir(dirName)
+        os.chdir(dirNames)
 
         listFile = glob.glob("*.txt")
         print(listFile)
@@ -35,28 +35,25 @@ def createPlots(mode, pathObj = None, dirName = None, fileNames=None):
 
     elif mode == 1:
 
+        oldpwd = os.getcwd()
+
         n = len(fileNames)
         cpuMeanTime = np.zeros(n)
         noVec = np.zeros(n)
         NVec = np.zeros(n)
         TVec = np.zeros(n)
 
-        oldpwd = os.getcwd()
-        os.chdir(dirName)
-
-        n = len(fileNames)
         for k in range(n):
             print(k)
+            os.chdir(dirNames[k])
+
             fileName = fileNames[k]
             cpuMeanTime[k] = printPlots.plotSavedData(fileName, pathObj, delim=" ", header=False)
             noVec[k] = np.array(fileName[22]).astype(np.int)
             NVec[k] = np.array(fileName[9:11]).astype(np.int)
             TVec[k] = np.array(fileName[14]).astype(np.float)/10
 
-        os.chdir(oldpwd)
-
-        T = np.array(fileName[14]).astype(np.float)/10
-        V_cmd = pathObj['V_cmd']  # strictly speaking the horz dist [ft] will vary with V, but always has a constant N
+            os.chdir(oldpwd)
 
         min_cpuMeanTime = 0.248
         print('CPU time:')
@@ -77,12 +74,6 @@ def createPlots(mode, pathObj = None, dirName = None, fileNames=None):
         plt.grid(True)
 
         plt.figure(12)
-        plt.plot(NVec*T*V_cmd, cpuMeanTime, marker='x')
-        plt.xlabel('Horizon Distance [ft]')
-        plt.ylabel('Average CPU time [sec]')
-        plt.grid(True)
-
-        plt.figure(13)
         plt.plot(TVec, cpuMeanTime, marker='x')
         plt.xlabel('Time Step (T)')
         plt.ylabel('Average CPU time [sec]')
@@ -102,45 +93,94 @@ if mode == 0:
 
 elif mode == 1:
 
-    dirName = 'run_2018-03-14'
+    # case:
+    # 1 - run_2018-03-06 (comprehensive runs for different N, ns and no)
+    # 2 - run_2018-03-14 (tradeoff charts for various T)
+    # 3 - run_2018-03-14 vs run_2018-03-15 (V = 5 mph vs 10 mph)
+    case = 3
 
-    # fileNames = ['logFile_N04_Tp4_ns4_no2.txt',
-    #              'logFile_N06_Tp4_ns4_no2.txt',
-    #              'logFile_N08_Tp4_ns4_no2.txt',
-    #              'logFile_N10_Tp4_ns4_no2.txt'
-    #              ]
+    if case == 1:
 
-    # fileNames = ['logFile_N04_Tp4_ns6_no2.txt',
-    #              'logFile_N06_Tp4_ns6_no2.txt',
-    #              'logFile_N08_Tp4_ns6_no2.txt'
-    #              ]
+        dirNames = ['run_2018-03-06',
+                    'run_2018-03-06',
+                    'run_2018-03-06',
+                    'run_2018-03-06']
 
-    # fileNames = ['logFile_N06_Tp4_ns4_no2.txt',
-    #              'logFile_N06_Tp4_ns6_no2.txt',
-    #              ]
+        fileNames = ['logFile_N04_Tp4_ns4_no2.txt',
+                     'logFile_N06_Tp4_ns4_no2.txt',
+                     'logFile_N08_Tp4_ns4_no2.txt',
+                     'logFile_N10_Tp4_ns4_no2.txt'
+                     ]
 
-    # fileNames = ['logFile_N04_Tp8_ns4_no2.txt'
-    #              ]
+        # dirNames = ['run_2018-03-14',
+        #             'run_2018-03-14',
+        #             'run_2018-03-14']
 
-    # fileNames = ['logFile_N06_Tp2_ns4_no2.txt',
-    #              'logFile_N06_Tp4_ns4_no2.txt',
-    #              'logFile_N06_Tp6_ns4_no2.txt']
+        # fileNames = ['logFile_N04_Tp4_ns6_no2.txt',
+        #              'logFile_N06_Tp4_ns6_no2.txt',
+        #              'logFile_N08_Tp4_ns6_no2.txt'
+        #              ]
 
-    fileNames = ['logFile_N09_Tp4_ns4_no2.txt',
-                 'logFile_N04_Tp9_ns4_no2.txt']
+        # dirNames = ['run_2018-03-14',
+        #             'run_2018-03-14']
+
+        # fileNames = ['logFile_N06_Tp4_ns4_no2.txt',
+        #              'logFile_N06_Tp4_ns6_no2.txt',
+        #              ]
+
+        fileSettings = dirNames[0] + '/' + 'settings_N04_Tp4_ns4_no2.txt' # used for V0 only (V0=Vcmd)
+        f = file(fileSettings, 'r')
+        cols, indexToName = getColumns(f, delim=" ", header=False)
+        V_cmd = cols[12] # V_cmd is stored for information only
+
+    if case == 2:
+
+        dirNames = ['run_2018-03-14',
+                    'run_2018-03-14',
+                    'run_2018-03-14']
+
+        fileNames = ['logFile_N06_Tp2_ns4_no2.txt',
+                     'logFile_N06_Tp4_ns4_no2.txt',
+                     'logFile_N06_Tp6_ns4_no2.txt']
+
+        # dirNames = ['run_2018-03-14',
+        #             'run_2018-03-14']
+
+        # fileNames = ['logFile_N09_Tp4_ns4_no2.txt',
+        #              'logFile_N04_Tp9_ns4_no2.txt']
 
 
-    filePkl = dirName + '/' +'pathDict_no2_NoPopup.pkl'
-    fileSettings = dirName + '/' + 'settings_N06_Tp6_ns4_no2.txt' # used for V0 only (V0=Vcmd)
+        fileSettings = dirNames[0] + '/' + 'settings_N06_Tp6_ns4_no2.txt' # used for V0 only (V0=Vcmd)
+        f = file(fileSettings, 'r')
+        cols, indexToName = getColumns(f, delim=" ", header=False)
+        V_cmd = cols[12] # V_cmd is stored for information only
 
-    f = file(fileSettings, 'r')
-    cols, indexToName = getColumns(f, delim=" ", header=False)
-    V_cmd = np.array(cols[12]).astype(np.float)
+    elif case == 3:
 
+        dirNames = ['run_2018-03-14',   # V_cmd = 5 mph
+                    'run_2018-03-15']   # V_cmd = 10 mph
+
+        fileNames = ['logFile_N04_Tp4_ns4_no2.txt',
+                     'logFile_N04_Tp4_ns4_no2.txt'
+                     ]
+
+        n = len(dirNames)
+        fileSettings = []
+        V_cmd = np.zeros(n)
+
+        for k in range(n):
+            file_tmp = dirNames[k] + '/' + 'settings_N04_Tp4_ns4_no2.txt' # used for varying V0 (V0=Vcmd)
+            fileSettings.append(file_tmp)
+
+            f = file(fileSettings[k], 'r')
+            cols, indexToName = getColumns(f, delim=" ", header=False)
+            V_cmd[k] = np.array(cols[12]).astype(np.float)
+
+    filePkl = dirNames[0] + '/' + 'pathDict_no2_NoPopup.pkl'  # used for path as a function of no
     pathObj = loadpkl(filePkl)
-    pathObj['V_cmd'] = V_cmd
+    pathObj['V_cmd'] = V_cmd  # V_cmd is stored for information only
 
-    createPlots(mode, pathObj, dirName, fileNames)
+    createPlots(mode, pathObj, dirNames, fileNames)
 
     dummy = raw_input('Press Enter to Continue: ')
 

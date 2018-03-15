@@ -4,7 +4,7 @@
 
 - Complete tradeoff slides (done - except for 1 slide)
 - Run sim for different T (done)
-- Run sim with V = 10 mph
+- Run sim with V = 10 mph (done)
 - Add pop-up obstacle case
 - Try adding cost for difference of current position to end point. Possibly have less constraints.
 

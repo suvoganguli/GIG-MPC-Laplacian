@@ -237,9 +237,9 @@ elif ns == 4:
     # Path parameters
     pathWidth = 5.0 # ft
 
-    print('experimenting with different speed')
-    lataccel_maxVal = 0.20 * 32.2  # fps2
-    delta_yRoad = 0.5
+    #print('experimenting with different speed')
+    #lataccel_maxVal = 0.20 * 32.2  # fps2
+    #delta_yRoad = 0.5
 
 
 elif ns == 6:

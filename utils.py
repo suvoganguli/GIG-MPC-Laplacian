@@ -115,6 +115,19 @@ def intersect(laneLines, acrossLines, idx):
 
     return x, y
 
+def intersect2(a1,b1,c1,a2,b2,c2):
+
+    determinant = a1*b2 - a2*b1
+
+    if (determinant == 0):
+        return []
+    else:
+        x = (c1*b2 - c2*b1) / determinant
+        y = (a1*c2 - a2*c1) / determinant
+
+    return x, y
+
+
 def getPatch(Efc,Nfc,W,L,theta,fc):
 
     # create object with heading = 0 deg

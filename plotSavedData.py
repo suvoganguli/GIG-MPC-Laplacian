@@ -127,7 +127,7 @@ elif mode == 1:
     #              'logFile_N06_Tp6_ns4_no2.txt']
 
     fileNames = ['logFile_N09_Tp4_ns4_no2.txt',
-                 'logFile_N06_Tp6_ns4_no2.txt']
+                 'logFile_N04_Tp9_ns4_no2.txt']
 
 
     filePkl = dirName + '/' +'pathDict_no2_NoPopup.pkl'

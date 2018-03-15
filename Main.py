@@ -22,7 +22,7 @@ import os
 # -------------------------------------------------------------------
 
 # Path data
-pathClass = pathInfo('default')
+pathClass = pathInfo('default', startPoint, endPoint)
 path = pathClass()
 
 # Obstacle data (static)
@@ -60,29 +60,32 @@ dyError = np.zeros(mpciterations)
 
 posIdx = getPosIdx(x0[0], x0[1], path, posIdx0)
 
+# create initial path
+# pathClass = pathInfo('default', startPoint, endPoint)
+# path = pathClass()
+# xmeasure[3] = np.pi/2 - path.pathData.Theta[0]  # align vehicle heading with road heading
+runIfDetected = True
 
 # Main loop
 while mpciter < mpciterations:
-
-    #if mpciter % 25 == 0:
-    #    print(" k = %d" % mpciter)
 
     #  get new initial value
     t0, x0 = measureInitialValue(tmeasure, xmeasure)
 
     # search for obstacle
     detected = detectObstacle(x0, detectionWindow, obstacle)
-    if runOnce == True:
-        detected = True
-        runOnce = False
-    else:
-        detected = False
 
-    # create new path, if necessary
-    if detected == True:
-        pathClass = pathInfo('newpath', obstacle)
+    # create new path (only once), if obstacle detected
+    if detected == True and runIfDetected == True:
+        d = 5.0
+        chi = np.pi/2 - path.pathData.Theta[0]
+        dN = d*np.cos(chi)
+        dE = d*np.sin(chi)
+        startPoint = np.array([x0[0]-dE, x0[1]-dN])
+        pathClass = pathInfo('newpath', startPoint, endPoint, obstacle)
         path = pathClass()
-        x0[3] = np.pi/2 - path.pathData.Theta[0]  # align vehicle heading with road heading
+        x0[3] = chi  # align vehicle heading with road heading
+        runIfDetected = False
 
     # solve optimal control problem
     tStart = time.time()
@@ -125,6 +128,7 @@ if N < 10:
 else:
     suffix = '_N' + str(N) + '_Tp' + str(int(10 * T)) + '_ns' + str(ns) + '_no' + str(no)
 
+suffix = suffix + '_Popup'
 
 pathObj = makePathObj(pdata, path, obstacle)
 
@@ -135,12 +139,12 @@ if saveData == True:
     shutil.copyfile('logFile.txt', dst_file)
 
     # figure 1: path
-    dst_fig = rundir + 'path' + suffix + '.png'
+    dst_fig = rundir + 'path' + suffix + '_Before.png'
     fig = plt.figure(1)
     plt.pause(0.01)
     fig.savefig(dst_fig)
 
-    file_pkl = rundir + 'pathDict_no' + str(no) + '_NoPopup' + '.pkl'
+    file_pkl = rundir + 'pathDict_no' + str(no) + '_Popup' + '.pkl'
     savepkl(pathObj, file_pkl)
 
     print('saved data and figure')
@@ -154,6 +158,7 @@ figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, VTerminal, latAcc
 os.chdir(oldpwd)
 
 if saveData == True:
+
     # figure 2: E, N
     dst_fig = rundir + 'E-N' + suffix + '.png'
     fig = plt.figure(2)
@@ -196,6 +201,13 @@ if saveData == True:
     fig = plt.figure(8)
     plt.pause(0.01)
     fig.savefig(dst_fig)
+
+    # figure 9: path
+    dst_fig = rundir + 'path' + suffix + '_After.png'
+    fig = plt.figure(9)
+    plt.pause(0.01)
+    fig.savefig(dst_fig)
+
 
 print('done!')
 plt.show()

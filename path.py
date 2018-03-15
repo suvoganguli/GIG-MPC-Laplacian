@@ -5,7 +5,7 @@ from pathCons import *
 from pathLines import *
 from utils import *
 
-def pathInfo(case, obstacle=None):
+def pathInfo(case, startPoint, endPoint, obstacle=None):
 
     # Path initial data
     if case == 'newpath':

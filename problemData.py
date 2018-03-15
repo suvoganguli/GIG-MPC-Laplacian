@@ -39,8 +39,8 @@ sf_T = 1
 N = 4
 T = 0.4*sf_T
 ns = 4
-no = 2
-V0 = 10*mph2fps
+no = 1
+V0 = 5*mph2fps
 
 if abs(V0 - 5*mph2fps) <= 10**(-3):
     if no == 0:
@@ -284,7 +284,7 @@ elif ns == 6:
 # Obstacle Data
 
 if no == 0:
-    runOnce = False
+    #runOnce = False
     obstacleE = np.array([]) * scaleFactor # ft, left-bottom
     obstacleN = np.array([]) * scaleFactor # ft, left-bottom
     obstacleChi = np.array([]) * scaleFactor  # rad
@@ -292,7 +292,7 @@ if no == 0:
     obstacleWidth = np.array([]) * scaleFactor # ft
 
 elif no == 1:
-    runOnce = True
+    #runOnce = True
     obstacleE = np.array([3.0]) * scaleFactor # ft, left-bottom
     obstacleN = np.array([63.0]) * scaleFactor # ft, left-bottom
     obstacleChi = np.array([0.0]) * scaleFactor  # rad
@@ -300,7 +300,7 @@ elif no == 1:
     obstacleWidth = np.array([8.0]) * scaleFactor # ft
 
 elif no == 2:
-    runOnce = True
+    #runOnce = True
     obstacleE = np.array([4.0, 7.0]) * scaleFactor # ft, left-bottom
     obstacleN = np.array([31.0, 63.0]) * scaleFactor # ft, left-bottom
     obstacleChi = np.array([0.0, 0.0]) * scaleFactor  # rad
@@ -436,6 +436,8 @@ if N < 10:
     suffix = '_N0' + str(N) + '_Tp' + str(int(10 * T)) + '_ns' + str(ns) + '_no' + str(no)
 else:
     suffix = '_N' + str(N) + '_Tp' + str(int(10 * T)) + '_ns' + str(ns) + '_no' + str(no)
+
+suffix = suffix + '_Popup'
 
 dst_file = rundir + 'settings' + suffix + '.txt'
 shutil.copyfile('settings.txt', dst_file)

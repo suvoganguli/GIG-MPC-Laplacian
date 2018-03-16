@@ -41,7 +41,7 @@ sf_T = 1
 N = 4
 T = 0.4*sf_T
 ns = 4
-no = 2
+no = 1
 V0 = 5*mph2fps
 
 if abs(V0 - 5*mph2fps) <= 10**(-3):
@@ -232,16 +232,12 @@ elif ns == 4:
     V_cmd = V0  # fps
 
     # Terminal constraint
-    delta_yRoad = 0.1  # ft
+    delta_yRoad = 0.1*10  # ft
     delta_yRoadRelaxed = 5  # ft, in safe zone
     delta_V = 1 * mph2fps  # fps
 
     # Path parameters
     pathWidth = 5.0 # ft
-
-    #print('experimenting with different speed')
-    #lataccel_maxVal = 0.20 * 32.2  # fps2
-    #delta_yRoad = 0.5
 
 
 elif ns == 6:
@@ -297,11 +293,11 @@ if no == 0:
 
 elif no == 1:
     #runOnce = True
-    obstacleE = np.array([3.0]) * scaleFactor # ft, left-bottom
+    obstacleE = np.array([4.0]) * scaleFactor # ft, left-bottom
     obstacleN = np.array([63.0]) * scaleFactor # ft, left-bottom
     obstacleChi = np.array([0.0]) * scaleFactor  # rad
     obstacleLength = np.array([4.0]) * scaleFactor # ft
-    obstacleWidth = np.array([8.0]) * scaleFactor # ft
+    obstacleWidth = np.array([6.0]) * scaleFactor # ft
 
 elif no == 2:
     #runOnce = True

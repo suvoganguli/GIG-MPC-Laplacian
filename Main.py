@@ -41,7 +41,7 @@ xmeasure = x0
 u_new = np.zeros([1,nu])
 mpciter = 0
 
-# print to File
+# Print to File
 writeToFile = True
 if writeToFile == True:
     fileName = 'logFile.txt'
@@ -50,21 +50,24 @@ else:
     fHandle = -1
     fileName = ''
 
-saveData = True
-plotData = True
-
+# Initialize storage arrays
 tElapsed = np.zeros(mpciterations)
 VTerminal = np.zeros(mpciterations)
 latAccel = np.zeros(mpciterations)
 dyError = np.zeros(mpciterations)
 
+# Speficy initial position index
 posIdx = getPosIdx(x0[0], x0[1], path, posIdx0)
 
-# create initial path
-# pathClass = pathInfo('default', startPoint, endPoint)
-# path = pathClass()
-# xmeasure[3] = np.pi/2 - path.pathData.Theta[0]  # align vehicle heading with road heading
+# Specify Booleans
+saveData = True
+plotData = True
+drawLPPath = True
 runIfDetected = True
+
+# Create array of paths
+pathObj = makePathObj(pdata, path, obstacle)
+pathObjArray = [pathObj]
 
 # Main loop
 while mpciter < mpciterations:
@@ -82,10 +85,16 @@ while mpciter < mpciterations:
         dN = d*np.cos(chi)
         dE = d*np.sin(chi)
         startPoint = np.array([x0[0]-dE, x0[1]-dN])
+
         pathClass = pathInfo('newpath', startPoint, endPoint, obstacle)
         path = pathClass()
+
+        pathObj = makePathObj(pdata, path, obstacle)
+        pathObjArray.append(pathObj)
+
         x0[3] = chi  # align vehicle heading with road heading
         runIfDetected = False
+        drawLPPath = True
 
     # solve optimal control problem
     tStart = time.time()
@@ -93,7 +102,8 @@ while mpciter < mpciterations:
     tElapsed[mpciter] = (time.time() - tStart)
 
     # mpc  future path plot
-    VTerminal[mpciter] = printPlots.nmpcPlotSol(u_new, path, mpciter, x0, obstacle, None)
+    VTerminal[mpciter] = printPlots.nmpcPlotSol(u_new, path, drawLPPath, x0, obstacle)
+    drawLPPath = False
 
     # solution information
     latAccel[mpciter], dyError[mpciter] = printPlots.nmpcPrint(mpciter, info, N, x0, u_new, writeToFile,
@@ -130,8 +140,6 @@ else:
 
 suffix = suffix + '_Popup'
 
-pathObj = makePathObj(pdata, path, obstacle)
-
 if saveData == True:
 
     distutils.dir_util.mkpath(rundir)
@@ -145,7 +153,7 @@ if saveData == True:
     fig.savefig(dst_fig)
 
     file_pkl = rundir + 'pathDict_no' + str(no) + '_Popup' + '.pkl'
-    savepkl(pathObj, file_pkl)
+    savepkl(pathObjArray, file_pkl)
 
     print('saved data and figure')
 
@@ -154,7 +162,7 @@ if saveData == True:
 oldpwd = os.getcwd()
 os.chdir(rundir)
 settingsFile = 'settings' + suffix + '.txt'
-figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, VTerminal, latAccel, dyError, settingsFile, pathObj)
+figno = printPlots.nmpcPlot(t, x, u, path, obstacle, tElapsed, VTerminal, latAccel, dyError, settingsFile, pathObjArray)
 os.chdir(oldpwd)
 
 if saveData == True:

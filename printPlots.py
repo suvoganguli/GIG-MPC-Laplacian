@@ -13,7 +13,7 @@ from utils import *
 # *X, *Y = E [ft], N [ft], theta [rad] (theta is w.r.t +E axis)
 
 
-def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
+def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle):
 
     u_mpciter = u_new.flatten(1)
     x_mpciter = probInfo.computeOpenloopSolution(u_mpciter, pdata.N, pdata.T, pdata.t0, x0)
@@ -29,16 +29,10 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     plt.xlabel('E [ft]')
     #plt.axis('equal')
 
-    if mpciter == 0:
+    if drawLPPath == True:
 
         # Detailed Path
         plt.plot(path.pathData.E, path.pathData.N, linestyle='--', color='c')
-
-        # Laplacian Path
-        #plt.plot(path.pathData.pathLaplacian[0,:], path.pathData.pathLaplacian[1,:], linestyle='--', color='k')
-
-        #plt.plot(path.pathData.PathLeftBoundaryE, path.pathData.PathLeftBoundaryN, linestyle='-', color='k')
-        #plt.plot(path.pathData.PathRightBoundaryE, path.pathData.PathRightBoundaryN, linestyle='-', color='k')
 
         plt.plot(path.pathData.PathStartPoint[0], path.pathData.PathStartPoint[1], marker='o', markersize=8, color='r')
         plt.plot(path.pathData.PathEndPoint[0], path.pathData.PathEndPoint[1], marker='o', markersize=8, color='g')
@@ -111,7 +105,7 @@ def nmpcPlotSol(u_new,path,mpciter,x0,obstacle,case):
     return V_terminal
 
 
-def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFile,pathObj):
+def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFile,pathObjArray):
 
     f_pData = file(settingsFile, 'r')
     cols, indexToName = getColumns(f_pData, delim=" ", header=False)
@@ -365,74 +359,82 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
 
     # Planned Path
 
-    PathE = pathObj['PathE']
-    PathN = pathObj['PathN']
-    PathStartPoint = pathObj['PathStartPoint']
-    PathEndPoint = pathObj['PathEndPoint']
-    PathRightEndPointsE = pathObj['PathRightEndPointsE']
-    PathRightEndPointsN = pathObj['PathRightEndPointsN']
-    PathLeftEndPointsE = pathObj['PathLeftEndPointsE']
-    PathLeftEndPointsN = pathObj['PathLeftEndPointsN']
-    PathCenterEndPointsE = pathObj['PathCenterEndPointsE']
-    PathCenterEndPointsN = pathObj['PathCenterEndPointsN']
-    PathThetaEndpoints = pathObj['PathThetaEndpoints']
-    PathDeltaYRoad = pathObj['PathDeltaYRoad']
-    PathWidth = pathObj['PathWidth']
-    ObstacleE = pathObj['ObstacleE']
-    ObstacleN = pathObj['ObstacleN']
-    ObstacleW = pathObj['ObstacleW']
-    ObstacleL = pathObj['ObstacleL']
-    ObstacleChi = pathObj['ObstacleChi']
+    nPath = len(pathObjArray)
 
-    plt.plot(PathE, PathN, linestyle='--', color='c')
+    for iPath in range(nPath):
 
-    plt.plot(PathStartPoint[0], PathStartPoint[1], marker='o', markersize=8, color='r')
-    plt.plot(PathEndPoint[0], PathEndPoint[1], marker='o', markersize=8, color='g')
+        pathObj = pathObjArray[iPath]
 
-    if True:
-        plt.plot(PathRightEndPointsE, PathRightEndPointsN,'m+')
-        plt.plot(PathLeftEndPointsE, PathLeftEndPointsN,'m+')
+        PathE = pathObj['PathE']
+        PathN = pathObj['PathN']
+        PathStartPoint = pathObj['PathStartPoint']
+        PathEndPoint = pathObj['PathEndPoint']
+        PathRightEndPointsE = pathObj['PathRightEndPointsE']
+        PathRightEndPointsN = pathObj['PathRightEndPointsN']
+        PathLeftEndPointsE = pathObj['PathLeftEndPointsE']
+        PathLeftEndPointsN = pathObj['PathLeftEndPointsN']
+        PathCenterEndPointsE = pathObj['PathCenterEndPointsE']
+        PathCenterEndPointsN = pathObj['PathCenterEndPointsN']
+        PathThetaEndpoints = pathObj['PathThetaEndpoints']
+        PathDeltaYRoad = pathObj['PathDeltaYRoad']
+        PathWidth = pathObj['PathWidth']
+        ObstacleE = pathObj['ObstacleE']
+        ObstacleN = pathObj['ObstacleN']
+        ObstacleW = pathObj['ObstacleW']
+        ObstacleL = pathObj['ObstacleL']
+        ObstacleChi = pathObj['ObstacleChi']
 
-        x1 = PathRightEndPointsE
-        x2 = PathLeftEndPointsE
-        y1 = PathRightEndPointsN
-        y2 = PathLeftEndPointsN
-        plt.plot(x1, y1, 'm', x2, y2, 'm')
+        plt.plot(PathE, PathN, linestyle='--', color='c')
 
-        x1 = PathCenterEndPointsE - PathDeltaYRoad*np.sin(PathThetaEndpoints)
-        x2 = PathCenterEndPointsE + PathDeltaYRoad*np.sin(PathThetaEndpoints)
-        y1 = PathCenterEndPointsN + PathDeltaYRoad*np.cos(PathThetaEndpoints)
-        y2 = PathCenterEndPointsN - PathDeltaYRoad*np.cos(PathThetaEndpoints)
-        plt.plot(x1, y1, 'r', x2, y2, 'r')
+        plt.plot(PathStartPoint[0], PathStartPoint[1], marker='o', markersize=8, color='r')
+        plt.plot(PathEndPoint[0], PathEndPoint[1], marker='o', markersize=8, color='g')
 
-    plt.grid(True)
+        if True:
+            plt.plot(PathRightEndPointsE, PathRightEndPointsN,'m+')
+            plt.plot(PathLeftEndPointsE, PathLeftEndPointsN,'m+')
 
-    if True: # obstacle.Present == True:
+            x1 = PathRightEndPointsE
+            x2 = PathLeftEndPointsE
+            y1 = PathRightEndPointsN
+            y2 = PathLeftEndPointsN
+            plt.plot(x1, y1, 'm', x2, y2, 'm')
 
-        nObs = len(ObstacleE)
-        if nObs > 0:
-            for k in range(nObs):
+            x1 = PathCenterEndPointsE - PathDeltaYRoad*np.sin(PathThetaEndpoints)
+            x2 = PathCenterEndPointsE + PathDeltaYRoad*np.sin(PathThetaEndpoints)
+            y1 = PathCenterEndPointsN + PathDeltaYRoad*np.cos(PathThetaEndpoints)
+            y2 = PathCenterEndPointsN - PathDeltaYRoad*np.cos(PathThetaEndpoints)
+            plt.plot(x1, y1, 'r', x2, y2, 'r')
 
-                Efc = ObstacleE[k] + PathWidth/2
-                Nfc = ObstacleN[k]
-                W = ObstacleW[k] - PathWidth
-                L = ObstacleL[k]
-                Theta = ObstacleChi[k]
-                fc = "red"
-                polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
+        plt.grid(True)
+
+        if True: # obstacle.Present == True:
+
+            nObs = len(ObstacleE)
+            if nObs > 0:
+                for k in range(nObs):
+
+                    Efc = ObstacleE[k] + PathWidth/2
+                    Nfc = ObstacleN[k]
+                    W = ObstacleW[k] - PathWidth
+                    L = ObstacleL[k]
+                    Theta = ObstacleChi[k]
+                    fc = "red"
+                    polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
 
 
-                Efc = ObstacleE[k]
-                Nfc = ObstacleN[k]
-                W = ObstacleW[k]
-                L = ObstacleL[k]
-                Theta = ObstacleChi[k]
-                fc = "green"
-                polygon_safezone = getPatch(Efc, Nfc, W, L, Theta, fc)
+                    Efc = ObstacleE[k]
+                    Nfc = ObstacleN[k]
+                    W = ObstacleW[k]
+                    L = ObstacleL[k]
+                    Theta = ObstacleChi[k]
+                    fc = "green"
+                    polygon_safezone = getPatch(Efc, Nfc, W, L, Theta, fc)
 
-                ax = plt.gca()
-                ax.add_patch(polygon_safezone)
-                ax.add_patch(polygon_obstacle)
+                    ax = plt.gca()
+                    ax.add_patch(polygon_safezone)
+                    ax.add_patch(polygon_obstacle)
+
+
 
     # Actual Path
     plt.plot(x[:,0], x[:,1], color='b')
@@ -582,7 +584,7 @@ def savePlots(dirname,figno):
     os.chdir(oldpwd)
 
 
-def plotSavedData(inFile, filePkl, delim, header=False):
+def plotSavedData(inFile, pathObjArray, delim, header=False):
 
     f = file(inFile, 'r')
     T = np.array(inFile[14]).astype(np.int)
@@ -642,7 +644,7 @@ def plotSavedData(inFile, filePkl, delim, header=False):
 
     suffix = inFile[7:]
     settingsFile = 'settings' + suffix
-    nmpcPlot(t, x.T, u.T, path, obstacle, cpuTime, VTerminal, latAccel, dyError, settingsFile, filePkl)
+    nmpcPlot(t, x.T, u.T, path, obstacle, cpuTime, VTerminal, latAccel, dyError, settingsFile, pathObjArray)
 
     f.close()
 

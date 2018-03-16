@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from utils import *
 
-def createPlots(mode, pathObj = None, dirNames = None, fileNames=None):
+def createPlots(mode, pathObjArray = None, dirNames = None, fileNames=None):
     # mode = 0 : get input from user
     # mode = 1 : use hardcoded files
 
@@ -48,7 +48,7 @@ def createPlots(mode, pathObj = None, dirNames = None, fileNames=None):
             os.chdir(dirNames[k])
 
             fileName = fileNames[k]
-            cpuMeanTime[k] = printPlots.plotSavedData(fileName, pathObj, delim=" ", header=False)
+            cpuMeanTime[k] = printPlots.plotSavedData(fileName, pathObjArray, delim=" ", header=False)
             noVec[k] = np.array(fileName[22]).astype(np.int)
             NVec[k] = np.array(fileName[9:11]).astype(np.int)
             TVec[k] = np.array(fileName[14]).astype(np.float)/10
@@ -157,30 +157,36 @@ elif mode == 1:
 
     elif case == 3:
 
-        dirNames = ['run_2018-03-14',   # V_cmd = 5 mph
-                    'run_2018-03-15']   # V_cmd = 10 mph
+        # dirNames = ['run_2018-03-14',   # V_cmd = 5 mph
+        #             'run_2018-03-15']   # V_cmd = 10 mph
+        #
+        # fileNames = ['logFile_N04_Tp4_ns4_no2.txt',
+        #              'logFile_N04_Tp4_ns4_no2.txt'
+        #              ]
 
-        fileNames = ['logFile_N04_Tp4_ns4_no2.txt',
-                     'logFile_N04_Tp4_ns4_no2.txt'
+        dirNames = ['run_2018-03-16']   # V_cmd = 5 mph
+
+        fileNames = ['logFile_N04_Tp4_ns4_no1_Popup.txt'
                      ]
+
 
         n = len(dirNames)
         fileSettings = []
         V_cmd = np.zeros(n)
 
         for k in range(n):
-            file_tmp = dirNames[k] + '/' + 'settings_N04_Tp4_ns4_no2.txt' # used for varying V0 (V0=Vcmd)
+            file_tmp = dirNames[k] + '/' + 'settings_N04_Tp4_ns4_no1_Popup.txt' # used for varying V0 (V0=Vcmd)
             fileSettings.append(file_tmp)
 
             f = file(fileSettings[k], 'r')
             cols, indexToName = getColumns(f, delim=" ", header=False)
             V_cmd[k] = np.array(cols[12]).astype(np.float)
 
-    filePkl = dirNames[0] + '/' + 'pathDict_no2_NoPopup.pkl'  # used for path as a function of no
-    pathObj = loadpkl(filePkl)
-    pathObj['V_cmd'] = V_cmd  # V_cmd is stored for information only
+    filePkl = dirNames[0] + '/' + 'pathDict_no1_Popup.pkl'  # used for path as a function of no
+    pathObjArray = loadpkl(filePkl)
+    pathObjArray[0]['V_cmd'] = V_cmd  # V_cmd is stored for information only
 
-    createPlots(mode, pathObj, dirNames, fileNames)
+    createPlots(mode, pathObjArray, dirNames, fileNames)
 
     dummy = raw_input('Press Enter to Continue: ')
 

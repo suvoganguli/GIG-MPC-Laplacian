@@ -116,9 +116,6 @@ while mpciter < mpciterations:
     VTerminal[mpciter] = printPlots.nmpcPlotSol(u_new, path, drawLPPath, x0, obstacle)
     drawLPPath = False
 
-    
-
-
     # solution information
     latAccel[mpciter], dyError[mpciter] = printPlots.nmpcPrint(mpciter, info, N, x0, u_new, writeToFile,
                                                                fHandle, tElapsed[mpciter], VTerminal[mpciter])

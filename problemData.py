@@ -157,7 +157,7 @@ mpciterations = int(mpciterations)
 # obstaclePresent = False
 
 # Detection Window
-detectionWindow = {'L': 40, 'W': 11}
+detectionWindow = {'L': 20, 'W': 11}
 
 # Positon Index w.r.t. Path Sections
 posIdx0 = {'number': 0}
@@ -239,9 +239,9 @@ elif ns == 4:
     # Path parameters
     pathWidth = 5.0 # ft
 
-    print('experimenting with different dy constraint')
+    #print('experimenting with different speed')
     #lataccel_maxVal = 0.20 * 32.2  # fps2
-    delta_yRoad = 0.5
+    #delta_yRoad = 0.5
 
 
 elif ns == 6:

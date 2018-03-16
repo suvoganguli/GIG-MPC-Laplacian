@@ -178,14 +178,21 @@ def runningCons(u, x, t0, path, obstacle, posIdx=None):
                 cons[1] = np.sign(yDist[1]) # not used
                 return yDist
             else:
+                # calculate the yDist anyway
+                yDist[0] = (a1 * x[0] + b1 * x[1] - c1) / np.sqrt(a1 ** 2 + b1 ** 2)
+                yDist[1] = (a2 * x[0] + b2 * x[1] - c2) / np.sqrt(a2 ** 2 + b2 ** 2)
                 continue
 
         else:
             None
 
     if found_sol == False:
-        print('No solution found in runningCons function')
-        return ([np.NAN, np.NAN])
+        # print('No solution found in runningCons function')
+        # return ([np.NAN, np.NaN])
+        # return the yDist anyway
+        return yDist
+
+
 
 
 def terminalCons(u, x, t0, path, obstacle, posIdx=None):

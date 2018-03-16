@@ -63,7 +63,6 @@ posIdx = getPosIdx(x0[0], x0[1], path, posIdx0)
 saveData = True
 plotData = True
 drawLPPath = True
-runIfDetected = True
 
 # Create array of paths
 pathObj = makePathObj(pdata, path, obstacle)
@@ -79,22 +78,34 @@ while mpciter < mpciterations:
     detected = detectObstacle(x0, detectionWindow, obstacle)
 
     # create new path (only once), if obstacle detected
-    if detected == True and runIfDetected == True:
-        d = 5.0
-        chi = np.pi/2 - path.pathData.Theta[0]
-        dN = d*np.cos(chi)
-        dE = d*np.sin(chi)
-        startPoint = np.array([x0[0]-dE, x0[1]-dN])
+    if detected == True:
 
-        pathClass = pathInfo('newpath', startPoint, endPoint, obstacle)
+        # Get position and orientation for correction
+        chi = np.pi/2 - path.pathData.Theta[0]
+        dN = dNewPathAdjust*np.cos(chi)
+        dE = dNewPathAdjust*np.sin(chi)
+        startPoint = np.array([x0[0]-dE, x0[1]-dN])
+        #x0[3] = chi  # align vehicle heading with road heading
+
+        currentObstacleClass = getCurrentObstacle(obstacle)
+        currentObstacle = currentObstacleClass()
+        pathClass = pathInfo('newpath', startPoint, endPoint, currentObstacle)
         path = pathClass()
 
+        # Update array with new path
         pathObj = makePathObj(pdata, path, obstacle)
         pathObjArray.append(pathObj)
 
-        x0[3] = chi  # align vehicle heading with road heading
-        runIfDetected = False
-        drawLPPath = True
+        # Discard current object in view
+        print(obstacle.E.size)
+        if obstacle.E.size > 0:
+            remainingObstacleClass = remainingObstacle(obstacle)
+            obstacle = remainingObstacleClass()
+
+        drawLPPath = True # draw path again
+
+        # setup for next obstacle
+        detected = False
 
     # solve optimal control problem
     tStart = time.time()

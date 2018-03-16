@@ -62,9 +62,10 @@ def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle):
 
         plt.grid(True)
 
-        if True: # obstacle.Present == True:
+        if True: # obstacle is present:
 
-            nObs = len(obstacle.E)
+            nObs = obstacle.E.size
+
             if nObs > 0:
                 for k in range(nObs):
 

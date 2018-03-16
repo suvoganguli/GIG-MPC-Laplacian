@@ -43,7 +43,7 @@ def createObstacleData(nE, nN, nU, gridsize, obstacle):
 
 def detectObstacle(x0, detectionWindow, obstacle):
 
-    nObs = len(obstacle.E)
+    nObs = obstacle.E.size
 
     # corners of detection window
     E = x0[0]
@@ -88,3 +88,60 @@ def detectObstacle(x0, detectionWindow, obstacle):
         detected = detected or det1 or det2 or det3 or det4
 
     return detected
+
+
+def getObstacleData(obstacle, obstacleIdx):
+
+    class obstacleIdxData(object):
+
+        def __init__(self):
+            self.Present = obstacle.Present
+            self.E = np.array([obstacle.E[obstacleIdx]])
+            self.N = np.array([obstacle.N[obstacleIdx]])
+            self.w = np.array([obstacle.w[obstacleIdx]])
+            self.l = np.array([obstacle.l[obstacleIdx]])
+            self.Chi = np.array([obstacle.Chi[obstacleIdx]])
+            pass
+
+    return obstacleIdxData
+
+
+def remainingObstacle(obstacle):
+
+    class obstacleRemainingData(object):
+        def __init__(self):
+
+            self.Present = obstacle.Present
+
+            n = obstacle.E.size
+            if n > 1:
+                self.E = obstacle.E[1:]
+                self.N = obstacle.N[1:]
+                self.w = obstacle.w[1:]
+                self.l = obstacle.l[1:]
+                self.Chi = obstacle.Chi[1:]
+            else:
+                self.E = np.array([obstacle.E[1:]])
+                self.N = np.array([obstacle.N[1:]])
+                self.w = np.array([obstacle.w[1:]])
+                self.l = np.array([obstacle.l[1:]])
+                self.Chi = np.array([obstacle.Chi[1:]])
+            pass
+
+    return obstacleRemainingData
+
+def getCurrentObstacle(obstacle):
+
+    class obstacleCurrentData(object):
+        def __init__(self):
+
+            self.Present = obstacle.Present
+            self.E = np.array([obstacle.E[0]])
+            self.N = np.array([obstacle.N[0]])
+            self.w = np.array([obstacle.w[0]])
+            self.l = np.array([obstacle.l[0]])
+            self.Chi = np.array([obstacle.Chi[0]])
+
+            pass
+
+    return obstacleCurrentData

@@ -257,6 +257,7 @@ class nlpProb(object):
             dyRoadL = delta_yRoad
             dyRoadR = delta_yRoad
 
+
         # Running Constraint
         #cl_running = np.concatenate([-1*np.ones(N), 0*np.ones(N)])
         #cu_running = np.concatenate([ 0*np.ones(N), 1*np.ones(N)])

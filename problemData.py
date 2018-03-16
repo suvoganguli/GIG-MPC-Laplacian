@@ -25,6 +25,8 @@ grid = gridClass()
 startPoint = np.array([7, 1]) * scaleFactor  # E (ft), N (ft)
 endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
 
+# Correction for new path generation with popup obstacle
+dNewPathAdjust = 2.0
 
 # expt:
 # 'N' - number of MPC time steps
@@ -39,7 +41,7 @@ sf_T = 1
 N = 4
 T = 0.4*sf_T
 ns = 4
-no = 1
+no = 2
 V0 = 5*mph2fps
 
 if abs(V0 - 5*mph2fps) <= 10**(-3):
@@ -152,10 +154,10 @@ mpciterations = int(mpciterations)
 
 # Obstacle Present (for MPC re-routing)
 # (True or False)
-obstaclePresent = False
+# obstaclePresent = False
 
 # Detection Window
-detectionWindow = {'L': 50, 'W': 11}
+detectionWindow = {'L': 20, 'W': 11}
 
 # Positon Index w.r.t. Path Sections
 posIdx0 = {'number': 0}
@@ -282,6 +284,8 @@ elif ns == 6:
 # ------------------------------------------------------------
 
 # Obstacle Data
+
+obstaclePresent = False
 
 if no == 0:
     #runOnce = False

@@ -189,6 +189,7 @@ def rotate(vec1,Chi):
     ])
     vec1 = np.squeeze(vec1)
     vec1 = vec1[:, None]
+
     vec2 = np.matmul(dcm, vec1)
 
     return np.squeeze(vec2)
@@ -289,3 +290,4 @@ def makePathObj(pdata, path, obstacle):
             }
 
     return pathObj
+

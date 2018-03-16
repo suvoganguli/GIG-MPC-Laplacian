@@ -88,7 +88,7 @@ def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle):
     plt.plot(East[0:nEN], North[0:nEN], marker='x', markersize=4, color='b')
     plt.plot(East[0], North[0], marker='o', markersize=4, color='r')
     plt.xlim([0, 16])
-    plt.ylim([0, 128])
+    plt.ylim([0, 128*2])
 
     #plt.draw()
     plt.pause(0.01)
@@ -435,7 +435,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
     plt.plot(x[:,0], x[:,1], color='b')
     plt.plot(x[:,0], x[:,1], marker='o', markersize=4, color='b')
     plt.xlim([0, 16])
-    plt.ylim([0, 128])
+    plt.ylim([0, 128*2])
     plt.ylabel('N [ft]')
     plt.xlabel('E [ft]')
 

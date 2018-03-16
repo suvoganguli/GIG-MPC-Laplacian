@@ -19,7 +19,7 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slo
 
     nmax = np.int( np.log2( min(nxs, nys) ) )
 
-    n_vec_exponents = [nmax, nmax-1, nmax]
+    n_vec_exponents = [nmax, nmax-1, nmax, nmax-1, nmax]
     iter_max = 50
 
     n_vec = 2 ** np.array(n_vec_exponents)

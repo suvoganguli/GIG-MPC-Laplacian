@@ -12,8 +12,8 @@ mph2fps = 4.4/3
 
 # Grid selection
 
-scaleFactor = 1
-widthSpace = 16 * scaleFactor  # ft
+scaleFactor = 2
+widthSpace = 16 # ft
 lengthSpace = 128 * scaleFactor  # ft
 heightSpace = 8  # ft
 
@@ -109,7 +109,12 @@ if abs(V0 - 5*mph2fps) <= 10**(-3):
 
 elif abs(V0 - 10*mph2fps) <= 10**(-3):
 
-    if no == 2:
+    if no == 1:
+        if N == 4:
+            if ns == 4:
+                mpciterations = 36/sf_T  # 36
+
+    elif no == 2:
         if N == 4:
             if ns == 4:
                 mpciterations = 18/sf_T  # 18
@@ -135,6 +140,12 @@ elif abs(V0 - 15*mph2fps) <= 10**(-3):
             elif ns == 6:
                 mpciterations = 36/sf_T  # 20 = wider dy with V terminal constraint, stops
 
+elif abs(V0 - 30*mph2fps) <= 10**(-3):
+
+    if no == 1:
+        if N == 4:
+            if ns == 4:
+                mpciterations = 36/sf_T  # 36
 
 N = int(N)
 mpciterations = int(mpciterations)
@@ -157,7 +168,7 @@ mpciterations = int(mpciterations)
 # obstaclePresent = False
 
 # Detection Window
-detectionWindow = {'L': 20, 'W': 11}
+detectionWindow = {'L': 20*scaleFactor, 'W': 11}
 
 # Positon Index w.r.t. Path Sections
 posIdx0 = {'number': 0}
@@ -287,23 +298,23 @@ if no == 0:
     #runOnce = False
     obstacleE = np.array([]) * scaleFactor # ft, left-bottom
     obstacleN = np.array([]) * scaleFactor # ft, left-bottom
-    obstacleChi = np.array([]) * scaleFactor  # rad
+    obstacleChi = np.array([])  # rad
     obstacleLength = np.array([]) * scaleFactor # ft
     obstacleWidth = np.array([]) * scaleFactor # ft
 
 elif no == 1:
     #runOnce = True
-    obstacleE = np.array([4.0]) * scaleFactor # ft, left-bottom
+    obstacleE = np.array([4.0]) * 1 # ft, left-bottom
     obstacleN = np.array([63.0]) * scaleFactor # ft, left-bottom
-    obstacleChi = np.array([0.0]) * scaleFactor  # rad
+    obstacleChi = np.array([0.0])  # rad
     obstacleLength = np.array([4.0]) * scaleFactor # ft
     obstacleWidth = np.array([6.0]) * scaleFactor # ft
 
 elif no == 2:
     #runOnce = True
-    obstacleE = np.array([4.0, 7.0]) * scaleFactor # ft, left-bottom
+    obstacleE = np.array([4.0, 7.0]) * 1 # ft, left-bottom
     obstacleN = np.array([31.0, 63.0]) * scaleFactor # ft, left-bottom
-    obstacleChi = np.array([0.0, 0.0]) * scaleFactor  # rad
+    obstacleChi = np.array([0.0, 0.0])  # rad
     obstacleLength = np.array([4.0, 4.0]) * scaleFactor # ft
     obstacleWidth = np.array([6.0, 6.0]) * scaleFactor # ft
 

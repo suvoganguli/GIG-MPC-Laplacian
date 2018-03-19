@@ -12,7 +12,7 @@ mph2fps = 4.4/3
 
 # Grid selection
 
-scaleFactor = 2
+scaleFactor = 1
 widthSpace = 16 # ft
 lengthSpace = 128 * scaleFactor  # ft
 heightSpace = 8  # ft
@@ -168,7 +168,7 @@ mpciterations = int(mpciterations)
 # obstaclePresent = False
 
 # Detection Window
-detectionWindow = {'L': 20*scaleFactor, 'W': 11}
+detectionWindow = {'L': 30*scaleFactor, 'W': 11}
 
 # Positon Index w.r.t. Path Sections
 posIdx0 = {'number': 0}
@@ -243,7 +243,7 @@ elif ns == 4:
     V_cmd = V0  # fps
 
     # Terminal constraint
-    delta_yRoad = 0.1*10  # ft
+    delta_yRoad = 0.1*5  # ft
     delta_yRoadRelaxed = 5  # ft, in safe zone
     delta_V = 1 * mph2fps  # fps
 

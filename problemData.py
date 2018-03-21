@@ -12,8 +12,8 @@ mph2fps = 4.4/3
 
 # Grid selection
 
-scaleFactorE = 2
-scaleFactorN = 2
+scaleFactorE = 1
+scaleFactorN = 1
 scaleFactorh = 1
 
 widthSpace = 16 # ft
@@ -48,8 +48,8 @@ sf_T = 1
 N = 4
 T = 0.4*sf_T
 ns = 4
-no = 2
-V0 = 10*mph2fps
+no = 1
+V0 = 5*mph2fps
 
 if abs(V0 - 5*mph2fps) <= 10**(-3):
     if no == 0:

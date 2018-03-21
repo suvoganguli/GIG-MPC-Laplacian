@@ -95,13 +95,18 @@ def pathInitData(case, startPoint, endPoint, pathWidth, obstacle = None, grid = 
 
         path, not_converged = laplacian( startPoint_, endPoint_, nE, nN, nU, nU_low, obstacleData, slow_convergence_test )
 
+        path[0, :] = path[0, :] * sf_E # ft
+        path[1, :] = path[1, :] * sf_E # ft
+        path[2, :] = path[2, :] * sf_E # ft
+
+        startPoint[0] = startPoint[0] * sf_E
+        startPoint[1] = startPoint[1] * sf_E
+        endPoint[0] = endPoint[0] * sf_E
+        endPoint[1] = endPoint[1] * sf_E
+
         pathE = path[0, :] * gridSize  # ft
         pathN = path[1, :] * gridSize  # ft
         pathU = path[2, :] * gridSize  # ft
-
-        pathE = path[0, :] * sf_E  # ft
-        pathN = path[1, :] * sf_N  # ft
-        pathU = path[2, :] * sf_U  # ft
 
         npts = len(pathE)
         nPathSections = npts -1

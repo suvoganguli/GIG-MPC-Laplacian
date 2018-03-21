@@ -84,7 +84,9 @@ while mpciter < mpciterations:
         chi = np.pi/2 - path.pathData.Theta[0]
         dN = dNewPathAdjust*np.cos(chi)
         dE = dNewPathAdjust*np.sin(chi)
-        startPoint = np.array([x0[0]-dE, x0[1]-dN])
+        newE = max(0,x0[0]-dE)
+        newN = max(0,x0[1]-dN)
+        startPoint = np.array([newE, newN])
         #x0[3] = chi  # align vehicle heading with road heading
 
         currentObstacleClass = getCurrentObstacle(obstacle)

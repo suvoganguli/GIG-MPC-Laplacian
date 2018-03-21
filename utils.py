@@ -272,7 +272,7 @@ def makePathObj(pdata, path, obstacle):
     pathObj = { 'PathE': path.pathData.E,
                 'PathN': path.pathData.N,
                 'PathStartPoint': path.pathData.PathStartPoint,
-                'PathEndPoint': path.pathData.PathStartPoint,
+                'PathEndPoint': path.pathData.PathEndPoint,
                 'PathRightEndPointsE': path.pathData.PathRightEndPointsE,
                 'PathRightEndPointsN': path.pathData.PathRightEndPointsN,
                 'PathLeftEndPointsE': path.pathData.PathLeftEndPointsE,
@@ -291,3 +291,13 @@ def makePathObj(pdata, path, obstacle):
 
     return pathObj
 
+# def scalePath(path, sf_E, sf_N):
+#     path.pathData.E = path.pathData.E * sf_E
+#     path.pathData.N = path.pathData.N * sf_N
+#     path.pathData.PathCenterEndPointsE = path.pathData.PathCenterEndPointsE * sf_E
+#     path.pathData.PathCenterEndPointsN = path.pathData.PathCenterEndPointsN * sf_N
+#     path.pathData.PathLeftEndPointsE = path.pathData.PathLeftEndPointsE * sf_E
+#     path.pathData.PathLeftEndPointsN = path.pathData.PathLeftEndPointsN * sf_N
+#     path.pathData.PathRightEndPointsE = path.pathData.PathRightEndPointsE * sf_E
+#     path.pathData.PathRightEndPointsN = path.pathData.PathRightEndPointsN * sf_N
+#     path.pathData.PathStartPoint

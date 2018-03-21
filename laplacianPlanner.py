@@ -19,7 +19,7 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slo
 
     nmax = np.int( np.log2( min(nxs, nys) ) )
 
-    n_vec_exponents = [nmax, nmax-1, nmax, nmax-1, nmax]
+    n_vec_exponents = [nmax, nmax-1, nmax]
     iter_max = 50
 
     n_vec = 2 ** np.array(n_vec_exponents)
@@ -85,6 +85,10 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slo
 
                     if i1==i2 or j1==j2 or k1==k2:
                         print('error')
+                    x = (obstacleData[ i1:i2, j1:j2 , k1:k2 ])
+                    if x.size == 0:
+                        print(x)
+                        None
                     if sum(sum(sum(obstacleData[ i1:i2, j1:j2 , k1:k2 ]))) > 0:
                         obstacle[i][j][k] = 1
 

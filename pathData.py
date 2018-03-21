@@ -1,6 +1,7 @@
 import numpy as np
 from laplacianPlanner import *
 from obstacleData import *
+from utils import *
 
 def pathInitData(case, startPoint, endPoint, pathWidth, obstacle = None, grid = None):
 
@@ -52,6 +53,39 @@ def pathInitData(case, startPoint, endPoint, pathWidth, obstacle = None, grid = 
         gridSize = grid.gridSize  # ft
         height = grid.height  # ft
 
+        print(nE,nN,nU)
+
+        if nE > 16:
+            sf_E = float(nE)/16
+            nE = int(nE/sf_E)
+            obstacle.E = np.array([int(obstacle.E/sf_E)])
+            obstacle.w = np.array([int(obstacle.w/sf_E)])
+            startPoint[0] = startPoint[0]/sf_E
+            endPoint[0] = endPoint[0] / sf_E
+        else:
+            sf_E = 1.0
+
+        if nN > 128:
+            sf_N = float(nN)/128
+            nN = int(nN/sf_N)
+            obstacle.N = np.array([int(obstacle.N/sf_N)])
+            obstacle.l = np.array([int(obstacle.l/sf_N)])
+            startPoint[1] = startPoint[1]/sf_N
+            endPoint[1] = endPoint[1] / sf_N
+        else:
+            sf_N = 1.0
+
+        if nU > 8:
+            sf_U = float(nU)/8
+            nU = int(nU/sf_U)
+            nU_low = int(nU/sf_U)
+            startPoint[2] = startPoint[2]/sf_U
+            endPoint[2] = endPoint[2] / sf_U
+        else:
+            sf_U = 1.0
+
+        print(nE, nN, nU)
+
         slow_convergence_test = 1
 
         startPoint_ = np.append(startPoint, height)
@@ -64,6 +98,10 @@ def pathInitData(case, startPoint, endPoint, pathWidth, obstacle = None, grid = 
         pathE = path[0, :] * gridSize  # ft
         pathN = path[1, :] * gridSize  # ft
         pathU = path[2, :] * gridSize  # ft
+
+        pathE = path[0, :] * sf_E  # ft
+        pathN = path[1, :] * sf_N  # ft
+        pathU = path[2, :] * sf_U  # ft
 
         npts = len(pathE)
         nPathSections = npts -1

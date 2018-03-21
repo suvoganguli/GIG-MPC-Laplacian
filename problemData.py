@@ -12,21 +12,28 @@ mph2fps = 4.4/3
 
 # Grid selection
 
-scaleFactor = 1
+scaleFactorE = 2
+scaleFactorN = 2
+scaleFactorh = 1
+
 widthSpace = 16 # ft
-lengthSpace = 128 * scaleFactor  # ft
-heightSpace = 8  # ft
+lengthSpace = 128  # ft
+heightSpace = 8 # ft
+
+widthSpace = int(widthSpace * scaleFactorE) # ft
+lengthSpace = int(lengthSpace * scaleFactorN)  # ft
+heightSpace = int(heightSpace * scaleFactorh) # ft
 
 gridSize = 1 # ft/unit
 gridClass = createGrid(gridSize, lengthSpace, widthSpace, heightSpace)
 grid = gridClass()
 
 # Start and End Points
-startPoint = np.array([7, 1]) * scaleFactor  # E (ft), N (ft)
-endPoint = np.array([7, 115]) * scaleFactor  # E (ft), N (ft)
+startPoint = np.array([7 * scaleFactorE, 1 * scaleFactorN])  # E (ft), N (ft)
+endPoint = np.array([7 * scaleFactorE, 115 * scaleFactorN])  # E (ft), N (ft)
 
 # Correction for new path generation with popup obstacle
-dNewPathAdjust = 2.0
+dNewPathAdjust = 2.0 * np.sqrt(scaleFactorN**2 + scaleFactorN**2)
 
 # expt:
 # 'N' - number of MPC time steps
@@ -41,8 +48,8 @@ sf_T = 1
 N = 4
 T = 0.4*sf_T
 ns = 4
-no = 1
-V0 = 5*mph2fps
+no = 2
+V0 = 10*mph2fps
 
 if abs(V0 - 5*mph2fps) <= 10**(-3):
     if no == 0:
@@ -168,52 +175,15 @@ mpciterations = int(mpciterations)
 # obstaclePresent = False
 
 # Detection Window
-detectionWindow = {'L': 30*scaleFactor, 'W': 11}
+detectionWindow = {'L': 20 * scaleFactorN, 'W': 11 *scaleFactorE}
 
 # Positon Index w.r.t. Path Sections
 posIdx0 = {'number': 0}
 
 # ----------------------------------------------------------
 
-if ns == 2:
 
-    # Ipopt settings
-    nlpMaxIter = 100
-    #mpciterations = 5
-
-    # Kinematic Constraints
-    E0 = startPoint[0]  # ft (North, long)
-    N0 = startPoint[1]  # ft (East, lat)
-    Chi0 = 0 * np.pi / 180  # rad
-    x0 = [E0, N0]  # E, N, V, Chi, Vdot, Chidot
-
-    lb_VdotVal = -2  # fps3
-    ub_VdotVal = 2  # fps3
-    lb_ChidotVal = -20 * np.pi / 180  # rad/s2
-    ub_ChidotVal = 20 * np.pi / 180  # rad/s2
-    lataccel_maxVal = 0.25 * 32.2  # fps2
-    useLatAccelCons = 0
-    #lb_V = 0.8 * V0
-    #ub_V = 1.2 * V0
-
-    # Tracking Tuning and Data
-    W_P = 1.0
-    W_V = 1.0
-    W_Vdot = 10.0
-    W_Chidot = 1.0
-
-    V_cmd = V0  # fps
-
-    # Terminal constraint
-    delta_yRoad = 0.5  # ft
-    delta_yRoadRelaxed = 5  # ft, in safe zone
-    delta_V = 1 * mph2fps  # fps
-
-    # Path parameters
-    pathWidth = 5.0 # ft
-
-
-elif ns == 4:
+if ns == 4:
 
     # Ipopt settings
     nlpMaxIter = 100
@@ -296,53 +266,32 @@ obstaclePresent = False
 
 if no == 0:
     #runOnce = False
-    obstacleE = np.array([]) * scaleFactor # ft, left-bottom
-    obstacleN = np.array([]) * scaleFactor # ft, left-bottom
+    obstacleE = np.array([]) * scaleFactorE # ft, left-bottom
+    obstacleN = np.array([]) * scaleFactorN # ft, left-bottom
     obstacleChi = np.array([])  # rad
-    obstacleLength = np.array([]) * scaleFactor # ft
-    obstacleWidth = np.array([]) * scaleFactor # ft
+    obstacleLength = np.array([]) * scaleFactorN # ft
+    obstacleWidth = np.array([]) * scaleFactorE # ft
 
 elif no == 1:
     #runOnce = True
-    obstacleE = np.array([4.0]) * 1 # ft, left-bottom
-    obstacleN = np.array([63.0]) * scaleFactor # ft, left-bottom
+    obstacleE = np.array([4.0]) * scaleFactorE # ft, left-bottom
+    obstacleN = np.array([63.0]) * scaleFactorN # ft, left-bottom
     obstacleChi = np.array([0.0])  # rad
-    obstacleLength = np.array([4.0]) * scaleFactor # ft
-    obstacleWidth = np.array([6.0]) * scaleFactor # ft
+    obstacleLength = np.array([4.0]) * scaleFactorN # ft
+    obstacleWidth = np.array([6.0]) * scaleFactorE # ft
 
 elif no == 2:
     #runOnce = True
-    obstacleE = np.array([4.0, 7.0]) * 1 # ft, left-bottom
-    obstacleN = np.array([31.0, 63.0]) * scaleFactor # ft, left-bottom
+    obstacleE = np.array([4.0, 7.0]) * scaleFactorE # ft, left-bottom
+    obstacleN = np.array([31.0, 63.0]) * scaleFactorN # ft, left-bottom
     obstacleChi = np.array([0.0, 0.0])  # rad
-    obstacleLength = np.array([4.0, 4.0]) * scaleFactor # ft
-    obstacleWidth = np.array([6.0, 6.0]) * scaleFactor # ft
+    obstacleLength = np.array([4.0, 4.0]) * scaleFactorN # ft
+    obstacleWidth = np.array([6.0, 6.0]) * scaleFactorE # ft
 
 
 # ------------------------------------------------------------
 
-if ns == 2:
-    # problem size
-    nx = 2
-    nu = 2
-    ncons = 2 * N + 2  # running + lataccel + terminal constraint-y
-    t0 = 0
-    u0 = np.zeros([N, nu])
-    # mpciterations = int(18*N/(6))
-
-    # nlpData
-    nlpPrintLevel = 0
-
-    # State and Control indices
-    idx_E = 0
-    idx_N = 1
-
-    idx_V = 1
-    idx_Chi = 1
-
-    ncons_option = None
-
-elif ns == 4:
+if ns == 4:
     # problem size
     nx = 4
     nu = 2

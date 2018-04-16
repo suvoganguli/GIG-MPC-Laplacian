@@ -12,8 +12,8 @@ mph2fps = 4.4/3
 
 # Grid selection
 
-scaleFactorE = 1
-scaleFactorN = 1
+scaleFactorE = 2
+scaleFactorN = 2
 scaleFactorh = 1
 
 widthSpace = 16 # ft
@@ -45,11 +45,11 @@ dNewPathAdjust = 2.0 * np.sqrt(scaleFactorN**2 + scaleFactorN**2)
 sf_T = 1
 
 # default
-N = 4
+N = 6
 T = 0.4*sf_T
 ns = 4
 no = 1
-V0 = 5*mph2fps
+V0 = 10*mph2fps
 
 if abs(V0 - 5*mph2fps) <= 10**(-3):
     if no == 0:
@@ -121,6 +121,15 @@ elif abs(V0 - 10*mph2fps) <= 10**(-3):
             if ns == 4:
                 mpciterations = 36/sf_T  # 36
 
+        if N == 6:
+            if ns == 4:
+                mpciterations = 34/sf_T  # 36
+
+        if N == 8:
+            if ns == 4:
+                mpciterations = 32/sf_T  # 36
+
+
     elif no == 2:
         if N == 4:
             if ns == 4:
@@ -175,7 +184,7 @@ mpciterations = int(mpciterations)
 # obstaclePresent = False
 
 # Detection Window
-detectionWindow = {'L': 20 * scaleFactorN, 'W': 11 *scaleFactorE}
+detectionWindow = {'L': 50 * scaleFactorN, 'W': 11 *scaleFactorE}
 
 # Positon Index w.r.t. Path Sections
 posIdx0 = {'number': 0}
@@ -195,7 +204,7 @@ if ns == 4:
     Chi0 = 0 * np.pi / 180  # rad
     x0 = [E0, N0, V0, Chi0]  # E, N, V, Chi, Vdot, Chidot
 
-    lb_VdotVal = -2  # fps3
+    lb_VdotVal = -2  # fps30
     ub_VdotVal = 2  # fps3
     lb_ChidotVal = -20 * np.pi / 180  # rad/s2
     ub_ChidotVal = 20 * np.pi / 180  # rad/s2

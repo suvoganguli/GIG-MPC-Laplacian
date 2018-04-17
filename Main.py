@@ -2,6 +2,7 @@ from path import *
 from nmpc import *
 from obstacleData import *
 import problemData as pdata
+import probInfo
 import printPlots
 import time, datetime
 import shutil, distutils.dir_util
@@ -24,6 +25,7 @@ import os
 # Path data
 pathClass = pathInfo('default', startPoint, endPoint)
 path = pathClass()
+pathType = 'default'
 
 # Obstacle data (static)
 obstacleClass = obstacleInfo(obstaclePresent, obstacleE, obstacleN, obstacleChi, obstacleWidth, obstacleLength)
@@ -81,18 +83,40 @@ while mpciter < mpciterations:
     if detected == True:
 
         # Get position and orientation for correction
-        chi = np.pi/2 - path.pathData.Theta[0]
-        dN = dNewPathAdjust*np.cos(chi)
-        dE = dNewPathAdjust*np.sin(chi)
-        newE = max(0,x0[0]-dE)
-        newN = max(0,x0[1]-dN)
-        startPoint = np.array([newE, newN])
-        #x0[3] = chi  # align vehicle heading with road heading
+        # chi = np.pi/2 - path.pathData.Theta[0]  # this is incorrect
+        # dN = dNewPathAdjust*np.cos(chi)
+        # dE = dNewPathAdjust*np.sin(chi)
+        # newE = max(0,x0[0]-dE)
+        # newN = max(0,x0[1]-dN)
+        # startPoint = np.array([newE, newN])
 
         currentObstacleClass = getCurrentObstacle(obstacle)
         currentObstacle = currentObstacleClass()
-        pathClass = pathInfo('newpath', startPoint, endPoint, currentObstacle)
-        path = pathClass()
+
+        if mpciter == 1:
+            startPoint = np.array([x0[0], x0[1]])
+            pathClass = pathInfo('newpath', startPoint, endPoint, currentObstacle)
+            path = pathClass()
+        else:
+            chi = np.array([x0[3]])
+            dN = dNewPathAdjust * np.cos(chi)
+            dE = dNewPathAdjust * np.sin(chi)
+            startPoint = np.array([x0[0]-dE, x0[1]-dN])
+
+            u_newpath = u0.flatten(1)
+            x_newpath = probInfo.computeOpenloopSolution(u_newpath, pdata.N, pdata.T, pdata.t0, x0)
+            E_newpath = x_newpath[-1, 0]
+            N_newpath = x_newpath[-1, 1]
+            startPoint_newpath = np.array([E_newpath, N_newpath])
+
+            pathClass = pathInfo('newpath', startPoint_newpath, endPoint, currentObstacle, startPoint)
+            path = pathClass()
+            #path = addCurrentPointToPath(path, startPoint, chi)
+            pathType = 'newpath'
+
+            posIdx = getPosIdx(x0[0], x0[1], path, posIdx0)
+
+            None
 
         # Update array with new path
         pathObj = makePathObj(pdata, path, obstacle)
@@ -115,7 +139,7 @@ while mpciter < mpciterations:
     tElapsed[mpciter] = (time.time() - tStart)
 
     # mpc  future path plot
-    VTerminal[mpciter] = printPlots.nmpcPlotSol(u_new, path, drawLPPath, x0, obstacle)
+    VTerminal[mpciter] = printPlots.nmpcPlotSol(u_new, path, drawLPPath, x0, obstacle, pathType)
     drawLPPath = False
 
     # solution information

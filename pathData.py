@@ -3,7 +3,10 @@ from laplacianPlanner import *
 from obstacleData import *
 from utils import *
 
-def pathInitData(case, startPoint, endPoint, pathWidth, obstacle = None, grid = None):
+def pathInitData(case, startPoint, endPoint, pathWidth, obstacle = None, grid = None, startPoint0 = None):
+
+    nSel = 1
+    nSP = 10
 
     # ---------------------------------------------------------
     # Default Path
@@ -95,14 +98,50 @@ def pathInitData(case, startPoint, endPoint, pathWidth, obstacle = None, grid = 
 
         path, not_converged = laplacian( startPoint_, endPoint_, nE, nN, nU, nU_low, obstacleData, slow_convergence_test )
 
+        n = len(path[0,:])
+
+        #dPathE = path[0, 1:n] - path[0, 0:n-1]
+        #dPathN = path[1, 1:n] - path[1, 0:n-1]
+        #dPath = np.sqrt( np.square(dPathE) + np.square(dPathN) )
+
+        # nSel = 1
+        # dPathMin = 5 # ft
+        # dPathAvg = np.mean(dPath)
+        # if dPathAvg > 0.1:
+        #     nSel = int(np.round(dPathMin / dPathAvg))
+        #
+        # if nSel == 0:  # zero protection
+        #     nSel = 1
+        #
+        # n2 = n // nSel
+
+        pathFine = path
+
+        pathcoarseE = pathFine[0, np.arange(0,n,nSel)]
+        pathcoarseN = pathFine[1, np.arange(0,n,nSel)]
+        pathcoarseU = pathFine[2, np.arange(0,n,nSel)]
+
+        path = np.vstack([pathcoarseE, pathcoarseN, pathcoarseU])
+
+        startPoint0[0] = startPoint0[0] / sf_E
+        startPoint0[1] = startPoint0[1] / sf_N
+
+        startPointsE = startPoint0[0] + (path[0, 0] - startPoint0[0]) / nSP
+        startPointsN = startPoint0[1] + (path[1, 0] - startPoint0[1]) / nSP
+        startPointsU = startPoint0[2] + (path[2, 0] - startPoint0[2]) / nSP
+
+        startPoints = np.vstack([ startPointsE, np.vstack([ startPointsN, startPointsU ])])
+
+        path = np.hstack([ startPoints, path ])
+
         path[0, :] = path[0, :] * sf_E # ft
-        path[1, :] = path[1, :] * sf_E # ft
-        path[2, :] = path[2, :] * sf_E # ft
+        path[1, :] = path[1, :] * sf_N # ft
+        path[2, :] = path[2, :] * sf_U # ft
 
         startPoint[0] = startPoint[0] * sf_E
-        startPoint[1] = startPoint[1] * sf_E
+        startPoint[1] = startPoint[1] * sf_N
         endPoint[0] = endPoint[0] * sf_E
-        endPoint[1] = endPoint[1] * sf_E
+        endPoint[1] = endPoint[1] * sf_N
 
         pathE = path[0, :] * gridSize  # ft
         pathN = path[1, :] * gridSize  # ft

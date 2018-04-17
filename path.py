@@ -5,17 +5,23 @@ from pathCons import *
 from pathLines import *
 from utils import *
 
-def pathInfo(case, startPoint, endPoint, obstacle=None):
+def pathInfo(case, startPoint, endPoint, obstacle=None, startPoint0=None):
 
     # Path initial data
     if case == 'newpath':
-        pathInitialData = pathInitData(case, startPoint, endPoint, pathWidth, obstacle, grid)
+        pathInitialData = pathInitData(case, startPoint, endPoint, pathWidth, obstacle, grid, startPoint0)
+
+        # pathInitialData['pathStartPoint'] = startPoint0
+        # E = np.append(startPoint0[0], pathInitialData['pathLaplacian'][0])
+        # N = np.append(startPoint0[1], pathInitialData['pathLaplacian'][1])
+        # U = np.append(pathInitialData['pathLaplacian'][2,0], pathInitialData['pathLaplacian'][2])
+        # pathInitialData['pathLaplacian'] = np.vstack([E,np.vstack([N,U])])
 
     elif case == 'default':
         pathInitialData = pathInitData(case, startPoint, endPoint, pathWidth)
 
     else:
-        pathData = None
+        pathInitialData = None
 
     # Path detailed data
     pathClass = pathDetailedData(pathInitialData)

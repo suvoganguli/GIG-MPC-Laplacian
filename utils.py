@@ -4,7 +4,7 @@ import pickle
 
 def getPosIdx(E, N, path, posIdx0 = None):
 
-    posIdx = {'number': 0}
+    posIdx = {'number': -1}
 
     AR_Path = path.alongPathLines.AR
     BR_Path = path.alongPathLines.BR
@@ -35,6 +35,8 @@ def getPosIdx(E, N, path, posIdx0 = None):
         if inbox == True:
             posIdx['number'] = k
             return posIdx
+
+    return posIdx
 
 
 def insideBox(x,y,AR,BR,CR,AL,BL,CL,D1,E1,F1,D2,E2,F2):
@@ -290,6 +292,32 @@ def makePathObj(pdata, path, obstacle):
             }
 
     return pathObj
+
+def addCurrentPointToPath(path, startPoint, Chi):
+
+    Theta = np.pi/2 - Chi
+
+    path.pathData.E = np.append(startPoint[0], path.pathData.E)
+    path.pathData.N = np.append(startPoint[1], path.pathData.N)
+    path.pathData.PathStartPoint = startPoint
+
+    RightEndPointE = startPoint[0] + path.pathWidth / 2 * np.sin(Theta)
+    RightEndPointN = startPoint[1] - path.pathWidth / 2 * np.cos(Theta)
+    LeftEndPointE = startPoint[0] - path.pathWidth / 2 * np.sin(Theta)
+    LeftEndPointN = startPoint[1] + path.pathWidth / 2 * np.cos(Theta)
+
+    path.pathData.PathRightEndPointsE = np.append(RightEndPointE, path.pathData.PathRightEndPointsE)
+    path.pathData.PathRightEndPointsN = np.append(RightEndPointN, path.pathData.PathRightEndPointsN)
+    path.pathData.PathLeftEndPointsE = np.append(LeftEndPointE, path.pathData.PathLeftEndPointsE)
+    path.pathData.PathLeftEndPointsN = np.append(LeftEndPointN, path.pathData.PathLeftEndPointsN)
+
+    path.pathData.PathCenterEndPointsE = np.append(startPoint[0], path.pathData.PathCenterEndPointsE)
+    path.pathData.PathCenterEndPointsN = np.append(startPoint[1], path.pathData.PathCenterEndPointsN)
+
+    path.pathData.Theta_endpoints = np.append(Theta, path.pathData.Theta_endpoints)
+
+    return path
+
 
 # def scalePath(path, sf_E, sf_N):
 #     path.pathData.E = path.pathData.E * sf_E

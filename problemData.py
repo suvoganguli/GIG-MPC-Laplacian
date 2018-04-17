@@ -123,7 +123,7 @@ elif abs(V0 - 10*mph2fps) <= 10**(-3):
 
         if N == 6:
             if ns == 4:
-                mpciterations = 34/sf_T  # 36
+                mpciterations = 12  #34/sf_T  # 34
 
         if N == 8:
             if ns == 4:

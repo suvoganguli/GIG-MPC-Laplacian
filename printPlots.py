@@ -13,7 +13,7 @@ from utils import *
 # *X, *Y = E [ft], N [ft], theta [rad] (theta is w.r.t +E axis)
 
 
-def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle):
+def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle,pathType):
 
     u_mpciter = u_new.flatten(1)
     x_mpciter = probInfo.computeOpenloopSolution(u_mpciter, pdata.N, pdata.T, pdata.t0, x0)
@@ -38,21 +38,28 @@ def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle):
         plt.plot(path.pathData.PathEndPoint[0], path.pathData.PathEndPoint[1], marker='o', markersize=8, color='g')
 
         if True:
-            # plt.plot(path.pathData.PathRightEndPointsE, path.pathData.PathRightEndPointsN,'m+')
-            # plt.plot(path.pathData.PathLeftEndPointsE, path.pathData.PathLeftEndPointsN,'m+')
-            #
-            # x1 = path.pathData.PathRightEndPointsE
-            # x2 = path.pathData.PathLeftEndPointsE
-            # y1 = path.pathData.PathRightEndPointsN
-            # y2 = path.pathData.PathLeftEndPointsN
-            # plt.plot(x1, y1, 'm', x2, y2, 'm')
+            plt.plot(path.pathData.PathRightEndPointsE, path.pathData.PathRightEndPointsN,'m+')
+            plt.plot(path.pathData.PathLeftEndPointsE, path.pathData.PathLeftEndPointsN,'m+')
 
-            x1 = path.pathData.PathCenterEndPointsE - pdata.delta_yRoad*np.sin(path.pathData.Theta_endpoints)
-            x2 = path.pathData.PathCenterEndPointsE + pdata.delta_yRoad*np.sin(path.pathData.Theta_endpoints)
-            y1 = path.pathData.PathCenterEndPointsN + pdata.delta_yRoad*np.cos(path.pathData.Theta_endpoints)
-            y2 = path.pathData.PathCenterEndPointsN - pdata.delta_yRoad*np.cos(path.pathData.Theta_endpoints)
-            plt.plot(x1, y1, 'r', x2, y2, 'r')
+            x1 = path.pathData.PathRightEndPointsE
+            x2 = path.pathData.PathLeftEndPointsE
+            y1 = path.pathData.PathRightEndPointsN
+            y2 = path.pathData.PathLeftEndPointsN
 
+            if pathType == 'default':
+                plt.plot(x1, y1, 'm', x2, y2, 'm')
+            else:
+                plt.plot(x1, y1, 'g', x2, y2, 'g--')
+
+            x3 = path.pathData.PathCenterEndPointsE + pdata.delta_yRoad*np.sin(path.pathData.Theta_endpoints)
+            x4 = path.pathData.PathCenterEndPointsE - pdata.delta_yRoad*np.sin(path.pathData.Theta_endpoints)
+            y3 = path.pathData.PathCenterEndPointsN - pdata.delta_yRoad*np.cos(path.pathData.Theta_endpoints)
+            y4 = path.pathData.PathCenterEndPointsN + pdata.delta_yRoad*np.cos(path.pathData.Theta_endpoints)
+
+            if pathType == 'default':
+                plt.plot(x3, y3, 'r', x4, y4, 'r')
+            else:
+                plt.plot(x3, y3, 'k', x4, y4, 'k--')
 
         plt.grid(True)
 
@@ -414,7 +421,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
                     L = ObstacleL[k]
                     Theta = ObstacleChi[k]
                     fc = "red"
-                    polygon_obstacle = getPatch(Efc*100, Nfc, W, L, Theta, fc)
+                    polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
 
 
                     Efc = ObstacleE[k]
@@ -428,6 +435,8 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
                     ax = plt.gca()
                     ax.add_patch(polygon_safezone)
                     ax.add_patch(polygon_obstacle)
+
+                    None
 
 
 

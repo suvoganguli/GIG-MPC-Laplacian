@@ -45,7 +45,7 @@ dNewPathAdjust = 2.0 * np.sqrt(scaleFactorN**2 + scaleFactorN**2)
 sf_T = 1
 
 # default
-N = 6
+N = 4
 T = 0.4*sf_T
 ns = 4
 no = 1
@@ -123,7 +123,7 @@ elif abs(V0 - 10*mph2fps) <= 10**(-3):
 
         if N == 6:
             if ns == 4:
-                mpciterations = 12  #34/sf_T  # 34
+                mpciterations = 34  #34/sf_T  # 34
 
         if N == 8:
             if ns == 4:

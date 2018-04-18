@@ -49,7 +49,8 @@ def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle,pathType):
             if pathType == 'default':
                 plt.plot(x1, y1, 'm', x2, y2, 'm')
             else:
-                plt.plot(x1, y1, 'g', x2, y2, 'g--')
+                #plt.plot(x1, y1, 'g', x2, y2, 'g--')
+                plt.plot(x1, y1, 'm', x2, y2, 'm')
 
             x3 = path.pathData.PathCenterEndPointsE + pdata.delta_yRoad*np.sin(path.pathData.Theta_endpoints)
             x4 = path.pathData.PathCenterEndPointsE - pdata.delta_yRoad*np.sin(path.pathData.Theta_endpoints)
@@ -59,7 +60,8 @@ def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle,pathType):
             if pathType == 'default':
                 plt.plot(x3, y3, 'r', x4, y4, 'r')
             else:
-                plt.plot(x3, y3, 'k', x4, y4, 'k--')
+                #plt.plot(x3, y3, 'k', x4, y4, 'k--')
+                plt.plot(x3, y3, 'r', x4, y4, 'r')
 
         plt.grid(True)
 

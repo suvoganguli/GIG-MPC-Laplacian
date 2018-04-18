@@ -5,7 +5,7 @@ from utils import *
 
 def pathInitData(case, startPoint, endPoint, pathWidth, obstacle = None, grid = None, startPoint0 = None):
 
-    nSel = 1
+    nSel = 2
     nSP = 10
 
     # ---------------------------------------------------------
@@ -126,9 +126,14 @@ def pathInitData(case, startPoint, endPoint, pathWidth, obstacle = None, grid = 
         startPoint0[0] = startPoint0[0] / sf_E
         startPoint0[1] = startPoint0[1] / sf_N
 
-        startPointsE = startPoint0[0] + (path[0, 0] - startPoint0[0]) / nSP
-        startPointsN = startPoint0[1] + (path[1, 0] - startPoint0[1]) / nSP
-        startPointsU = startPoint0[2] + (path[2, 0] - startPoint0[2]) / nSP
+        startPointsE = np.zeros([nSP])
+        startPointsN = np.zeros([nSP])
+        startPointsU = np.zeros([nSP])
+
+        for k in range(nSP):
+            startPointsE[k] = startPoint0[0] + k*(path[0, 0] - startPoint0[0]) / nSP
+            startPointsN[k] = startPoint0[1] + k*(path[1, 0] - startPoint0[1]) / nSP
+            startPointsU[k] = path[2, 0]
 
         startPoints = np.vstack([ startPointsE, np.vstack([ startPointsN, startPointsU ])])
 

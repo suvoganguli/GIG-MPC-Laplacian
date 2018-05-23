@@ -287,7 +287,7 @@ elif no == 1:
     obstacleN = np.array([63.0]) * scaleFactorN # ft, left-bottom
     obstacleChi = np.array([0.0])  # rad
     obstacleLength = np.array([4.0]) * scaleFactorN # ft
-    obstacleWidth = np.array([6.0]) * scaleFactorE # ft  # 6.0
+    obstacleWidth = np.array([6.0]) * scaleFactorE # ft
 
 elif no == 2:
     #runOnce = True
@@ -297,7 +297,7 @@ elif no == 2:
     obstacleLength = np.array([4.0, 4.0]) * scaleFactorN # ft
     obstacleWidth = np.array([6.0, 6.0]) * scaleFactorE # ft
 
-#pathWidth = obstacleWidth
+
 # ------------------------------------------------------------
 
 if ns == 4:

@@ -73,8 +73,6 @@ pathObjArray = [pathObj]
 # Main loop
 while mpciter < mpciterations:
 
-    tStart = time.time()
-
     #  get new initial value
     t0, x0 = measureInitialValue(tmeasure, xmeasure)
 
@@ -136,6 +134,7 @@ while mpciter < mpciterations:
         detected = False
 
     # solve optimal control problem
+    tStart = time.time()
     u_new, info = solveOptimalControlProblem(N, t0, x0, u0, T, ncons, nu, path, obstacle, posIdx, ncons_option)
     tElapsed[mpciter] = (time.time() - tStart)
 

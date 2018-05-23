@@ -73,6 +73,9 @@ pathObjArray = [pathObj]
 # Main loop
 while mpciter < mpciterations:
 
+    # start time keeping
+    tStart = time.time()
+
     #  get new initial value
     t0, x0 = measureInitialValue(tmeasure, xmeasure)
 
@@ -82,6 +85,7 @@ while mpciter < mpciterations:
     # create new path (only once), if obstacle detected
     if detected == True:
 
+        print('Running LP at iteration = ' + str(mpciter))
         # Get position and orientation for correction
         # chi = np.pi/2 - path.pathData.Theta[0]  # this is incorrect
         # dN = dNewPathAdjust*np.cos(chi)
@@ -134,7 +138,6 @@ while mpciter < mpciterations:
         detected = False
 
     # solve optimal control problem
-    tStart = time.time()
     u_new, info = solveOptimalControlProblem(N, t0, x0, u0, T, ncons, nu, path, obstacle, posIdx, ncons_option)
     tElapsed[mpciter] = (time.time() - tStart)
 

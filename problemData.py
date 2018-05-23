@@ -45,7 +45,7 @@ dNewPathAdjust = 2.0 * np.sqrt(scaleFactorN**2 + scaleFactorN**2)
 sf_T = 1
 
 # default
-N = 4
+N = 6
 T = 0.4*sf_T
 ns = 4
 no = 1
@@ -195,7 +195,7 @@ posIdx0 = {'number': 0}
 if ns == 4:
 
     # Ipopt settings
-    nlpMaxIter = 100
+    nlpMaxIter = 50 # 60
 
 
     # Kinematic Constraints
@@ -274,7 +274,7 @@ elif ns == 6:
 obstaclePresent = False
 
 if no == 0:
-    #runOnce = False
+
     obstacleE = np.array([]) * scaleFactorE # ft, left-bottom
     obstacleN = np.array([]) * scaleFactorN # ft, left-bottom
     obstacleChi = np.array([])  # rad
@@ -282,15 +282,19 @@ if no == 0:
     obstacleWidth = np.array([]) * scaleFactorE # ft
 
 elif no == 1:
-    #runOnce = True
-    obstacleE = np.array([4.0]) * scaleFactorE # ft, left-bottom
+
+    #obstacleE = np.array([4.0]) * scaleFactorE # ft, left-bottom
     obstacleN = np.array([63.0]) * scaleFactorN # ft, left-bottom
     obstacleChi = np.array([0.0])  # rad
     obstacleLength = np.array([4.0]) * scaleFactorN # ft
-    obstacleWidth = np.array([6.0]) * scaleFactorE # ft
+    #obstacleWidth = np.array([6.0]) * scaleFactorE # ft
+
+    pathWidth = 14
+    obstacleE = np.array([0]) * scaleFactorE  # ft, left-bottom
+    obstacleWidth = np.array([14.1]) * scaleFactorE  # ft
 
 elif no == 2:
-    #runOnce = True
+
     obstacleE = np.array([4.0, 7.0]) * scaleFactorE # ft, left-bottom
     obstacleN = np.array([31.0, 63.0]) * scaleFactorN # ft, left-bottom
     obstacleChi = np.array([0.0, 0.0])  # rad

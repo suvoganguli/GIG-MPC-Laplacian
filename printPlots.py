@@ -37,7 +37,7 @@ def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle,pathType):
         plt.plot(path.pathData.PathStartPoint[0], path.pathData.PathStartPoint[1], marker='o', markersize=8, color='r')
         plt.plot(path.pathData.PathEndPoint[0], path.pathData.PathEndPoint[1], marker='o', markersize=8, color='g')
 
-        if True:
+        if False:
             plt.plot(path.pathData.PathRightEndPointsE, path.pathData.PathRightEndPointsN,'m+')
             plt.plot(path.pathData.PathLeftEndPointsE, path.pathData.PathLeftEndPointsN,'m+')
 
@@ -96,8 +96,9 @@ def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle,pathType):
     nEN = len(East)
     plt.plot(East[0:nEN], North[0:nEN], marker='x', markersize=4, color='b')
     plt.plot(East[0], North[0], marker='o', markersize=4, color='r')
-    #plt.xlim([0, 16])
-    #plt.ylim([0, 128])
+    #plt.ylim([0, 240])
+    #plt.xlim([-10, 40])
+    plt.axis('equal')
 
     #plt.draw()
     plt.pause(0.01)
@@ -328,7 +329,7 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
         plt.plot(t, dyError)
         plt.plot(t, delta_yRoad * np.ones(t.shape), linestyle='--', color='r')
         plt.plot(t, -delta_yRoad * np.ones(t.shape), linestyle='--', color='r')
-        plt.ylabel('dy Error [m]')
+        plt.ylabel('dy Error [ft]')
         plt.xlabel('t [sec]')
         plt.grid(True)
 
@@ -338,11 +339,14 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
     plt.figure(7)
     figno[6] = plt.gcf().number
 
-    plt.plot(iterations, tElapsed)
+    #plt.plot(iterations, tElapsed)
     plt.ylabel('CPU Time [sec]')
-    plt.xlabel('Iteration')
+    plt.plot(t, tElapsed)
+    #plt.xlabel('Iteration')
+    plt.xlabel('t sec]')
     plt.grid(True)
-
+    plt.xlim([0,12])
+    plt.ylim([0,10])
 
     # figure 8
     plt.figure(8)

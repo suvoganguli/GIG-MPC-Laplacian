@@ -1,1 +1,0 @@
-# GIG-MPC-Laplacian

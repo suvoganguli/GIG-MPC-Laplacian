@@ -45,7 +45,7 @@ dNewPathAdjust = 2.0 * np.sqrt(scaleFactorN**2 + scaleFactorN**2)
 sf_T = 1
 
 # default
-N = 6
+N = 4
 T = 0.4*sf_T
 ns = 4
 no = 1
@@ -119,7 +119,7 @@ elif abs(V0 - 10*mph2fps) <= 10**(-3):
     if no == 1:
         if N == 4:
             if ns == 4:
-                mpciterations = 24/sf_T  # 36
+                mpciterations = 36/sf_T  # 36
 
         if N == 6:
             if ns == 4:
@@ -184,8 +184,6 @@ mpciterations = int(mpciterations)
 # obstaclePresent = False
 
 # Detection Window
-dwL = N*T*V0*1.2
-print(dwL)
 detectionWindow = {'L': 50 * scaleFactorN, 'W': 11 *scaleFactorE}
 
 # Positon Index w.r.t. Path Sections
@@ -218,13 +216,13 @@ if ns == 4:
     # Tracking Tuning and Data
     W_P = 1.0
     W_V = 1.0
-    W_Vdot = 10.0/10
-    W_Chidot = 1.0/10
+    W_Vdot = 10.0
+    W_Chidot = 1.0
 
     V_cmd = V0  # fps
 
     # Terminal constraint
-    delta_yRoad = 0.1*5*2  # ft
+    delta_yRoad = 0.1*5  # ft
     delta_yRoadRelaxed = 5  # ft, in safe zone
     delta_V = 1 * mph2fps  # fps
 

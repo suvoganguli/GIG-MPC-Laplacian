@@ -37,7 +37,7 @@ def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle,pathType):
         plt.plot(path.pathData.PathStartPoint[0], path.pathData.PathStartPoint[1], marker='o', markersize=8, color='r')
         plt.plot(path.pathData.PathEndPoint[0], path.pathData.PathEndPoint[1], marker='o', markersize=8, color='g')
 
-        if True:
+        if False:
             plt.plot(path.pathData.PathRightEndPointsE, path.pathData.PathRightEndPointsN,'m+')
             plt.plot(path.pathData.PathLeftEndPointsE, path.pathData.PathLeftEndPointsN,'m+')
 
@@ -64,6 +64,8 @@ def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle,pathType):
                 plt.plot(x3, y3, 'r', x4, y4, 'r')
 
         plt.grid(True)
+        plt.xlim([-75,100])
+        plt.ylim([0,250])
 
         if True: # obstacle is present:
 

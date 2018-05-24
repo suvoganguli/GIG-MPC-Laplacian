@@ -11,29 +11,50 @@ def system(uk, xk, T):
         xkp1[0] = xk[0] + T * uk[0] * np.sin(uk[1]) # Edot
         xkp1[1] = xk[1] + T * uk[0] * np.cos(uk[1]) # Ndot
 
-        # xkp1 = [0, 0]
-        # xkp1[0] = xk[0] + T * V_cmd * np.sin(uk[1]) # Edot
-        # xkp1[1] = xk[1] + T * V_cmd * np.cos(uk[1]) # Ndot
-
 
     elif ns == 4:
         # x0 = E, x1 = N, x2 = V, x3 = Chi
         # u0 = Vdot, u1 = Chidot
 
-        xkp1 = [0, 0, 0, 0]
-        xkp1[0] = xk[0] + T * xk[2] * np.sin(xk[3]) # Edot
-        xkp1[1] = xk[1] + T * xk[2] * np.cos(xk[3]) # Ndot
-        xkp1[2] = xk[2] + T * uk[0]                 # Vdot
-        xkp1[3] = xk[3] + T * uk[1]                 # Chidot
+        sys = 'lin'
 
-        xkp1[0] = xk[0] + T * ()
+        if sys == 'nonlin':
 
+            xkp1 = [0, 0, 0, 0]
+            xkp1[0] = xk[0] + T * xk[2] * np.sin(xk[3]) # Edot
+            xkp1[1] = xk[1] + T * xk[2] * np.cos(xk[3]) # Ndot
+            xkp1[2] = xk[2] + T * uk[0]                 # Vdot
+            xkp1[3] = xk[3] + T * uk[1]                 # Chidot
 
-        # xkp1 = [0, 0, 0, 0]
-        # xkp1[0] = xk[0] + T * V_cmd * np.sin(xk[3]) # Edot
-        # xkp1[1] = xk[1] + T * V_cmd * np.cos(xk[3]) # Ndot
-        # xkp1[2] = xk[2] + T * uk[0]                 # Vdot
-        # xkp1[3] = xk[3] + T * uk[1]                 # Chidot
+        elif sys == 'lin':
+
+            x0_k = [0, 0, 14.7, 0]
+
+            del_u_k = uk
+            del_x_k = xk
+
+            E0_k = x0_k[0]
+            N0_k = x0_k[1]
+            V0_k = x0_k[2]
+            Chi0_k = x0_k[3]
+
+            del_E_k = del_x_k[0]
+            del_N_k = del_x_k[1]
+            del_V_k = del_x_k[2]
+            del_Chi_k = del_x_k[3]
+
+            del_u1_k = del_u_k[0]
+            del_u2_k = del_u_k[1]
+
+            del_E_kp1 = del_E_k + T * (np.sin(Chi0_k) * del_V_k + V0_k * np.cos(Chi0_k) * del_Chi_k)  # Edot
+            del_N_kp1 = del_N_k + T * (np.cos(Chi0_k) * del_V_k - V0_k * np.sin(Chi0_k) * del_Chi_k)  # Edot
+            del_V_kp1 = del_V_k + T * del_u1_k
+            del_Chi_kp1 = del_Chi_k + T * del_u2_k
+
+            x_del_kp1 = np.array([del_E_kp1, del_N_kp1, del_V_kp1, del_Chi_kp1])
+
+            xkp1 = x_del_kp1
+
 
     elif ns == 6:
         # x0 = E, x1 = N, x2 = V, x3 = Chi, x5 = Vdot, x6 = Chidot
@@ -46,14 +67,6 @@ def system(uk, xk, T):
         xkp1[3] = xk[3] + T * xk[5]                     # Chidot
         xkp1[4] = xk[4] + T * uk[0]                     # Vddot
         xkp1[5] = xk[5] + T * uk[1]                     # Chiddot
-
-        # xkp1 = [0 ,0, 0, 0, 0, 0]
-        # xkp1[0] = xk[0] + T * V_cmd * np.sin(xk[3])     # Edot
-        # xkp1[1] = xk[1] + T * V_cmd * np.cos(xk[3])     # Ndot
-        # xkp1[2] = xk[2] + T * xk[4]                     # Vdot
-        # xkp1[3] = xk[3] + T * xk[5]                     # Chidot
-        # xkp1[4] = xk[4] + T * uk[0]                     # Vddot
-        # xkp1[5] = xk[5] + T * uk[1]                     # Chiddot
 
 
     return xkp1

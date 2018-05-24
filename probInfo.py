@@ -26,6 +26,9 @@ def system(uk, xk, T):
         xkp1[2] = xk[2] + T * uk[0]                 # Vdot
         xkp1[3] = xk[3] + T * uk[1]                 # Chidot
 
+        xkp1[0] = xk[0] + T * ()
+
+
         # xkp1 = [0, 0, 0, 0]
         # xkp1[0] = xk[0] + T * V_cmd * np.sin(xk[3]) # Edot
         # xkp1[1] = xk[1] + T * V_cmd * np.cos(xk[3]) # Ndot

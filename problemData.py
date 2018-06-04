@@ -47,7 +47,7 @@ sf_T = 1
 # default
 N = 6
 T = 0.4*sf_T
-ns = 4
+ns = 5
 no = 1
 V0 = 10*mph2fps
 

@@ -37,7 +37,7 @@ def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle,pathType):
         plt.plot(path.pathData.PathStartPoint[0], path.pathData.PathStartPoint[1], marker='o', markersize=8, color='r')
         plt.plot(path.pathData.PathEndPoint[0], path.pathData.PathEndPoint[1], marker='o', markersize=8, color='g')
 
-        if False:
+        if True:
             plt.plot(path.pathData.PathRightEndPointsE, path.pathData.PathRightEndPointsN,'m+')
             plt.plot(path.pathData.PathLeftEndPointsE, path.pathData.PathLeftEndPointsN,'m+')
 
@@ -345,8 +345,8 @@ def nmpcPlot(t,x,u,path,obstacle,tElapsed,V_terminal,latAccel,dyError,settingsFi
     #plt.xlabel('Iteration')
     plt.xlabel('t sec]')
     plt.grid(True)
-    plt.xlim([0,12])
-    plt.ylim([0,10])
+    plt.xlim([0,15])
+    plt.ylim([0,6])
 
     # figure 8
     plt.figure(8)

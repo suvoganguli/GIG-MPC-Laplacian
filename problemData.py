@@ -16,7 +16,7 @@ scaleFactorE = 2
 scaleFactorN = 2
 scaleFactorh = 1
 
-widthSpace = 16 # ft
+widthSpace = 32 # ft
 lengthSpace = 128  # ft
 heightSpace = 8 # ft
 
@@ -29,8 +29,8 @@ gridClass = createGrid(gridSize, lengthSpace, widthSpace, heightSpace)
 grid = gridClass()
 
 # Start and End Points
-startPoint = np.array([7 * scaleFactorE, 1 * scaleFactorN])  # E (ft), N (ft)
-endPoint = np.array([7 * scaleFactorE, 115 * scaleFactorN])  # E (ft), N (ft)
+startPoint = np.array([16 * scaleFactorE, 1 * scaleFactorN])  # E (ft), N (ft)
+endPoint = np.array([16 * scaleFactorE, 115 * scaleFactorN])  # E (ft), N (ft)
 
 # Correction for new path generation with popup obstacle
 dNewPathAdjust = 2.0 * np.sqrt(scaleFactorN**2 + scaleFactorN**2)
@@ -46,8 +46,9 @@ sf_T = 1
 
 # default
 N = 6
-T = 0.4*sf_T
-ns = 5
+T = 0.5*sf_T
+print('changed T from 0.4 to 0.5 sec')
+ns = 4
 no = 1
 V0 = 10*mph2fps
 
@@ -116,6 +117,16 @@ if abs(V0 - 5*mph2fps) <= 10**(-3):
 
 elif abs(V0 - 10*mph2fps) <= 10**(-3):
 
+    if no == 0:
+        if N == 4:
+            mpciterations = 35/sf_T #36
+        elif N == 6:
+            mpciterations = 33/sf_T #34
+        elif N == 8:
+            mpciterations = 31/sf_T # 32
+        elif N == 10:
+            mpciterations = 29/sf_T  # 30
+
     if no == 1:
         if N == 4:
             if ns == 4:
@@ -123,7 +134,7 @@ elif abs(V0 - 10*mph2fps) <= 10**(-3):
 
         if N == 6:
             if ns == 4:
-                mpciterations = 34  #34/sf_T  # 34
+                mpciterations = 28  #34/sf_T  # 34
 
         if N == 8:
             if ns == 4:
@@ -292,6 +303,16 @@ elif no == 1:
     pathWidth = 14
     obstacleE = np.array([0]) * scaleFactorE  # ft, left-bottom
     obstacleWidth = np.array([14.1]) * scaleFactorE  # ft
+
+    if True:  # compare time between nmpc and laplacian
+        obstacleN = np.array([65.0]) * scaleFactorN  # ft, left-bottom
+        obstacleChi = np.array([0.0])  # rad
+        obstacleLength = np.array([8.0]) * scaleFactorN  # ft
+
+        pathWidth = 22
+        obstacleE = np.array([11.01]) * scaleFactorE  # ft, left-bottom
+        obstacleWidth = np.array([10]) * scaleFactorE
+
 
 elif no == 2:
 

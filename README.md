@@ -14,3 +14,7 @@ ____________________________________________________
 - run_2018-03-09 (average cpu times, tradeoff plots)
 - run_2018-03-14 (tradeoff charts for various T)
 - run_2018-03-15 (V = 10 mph as opposed to 5 mph)
+
+touch
+
+

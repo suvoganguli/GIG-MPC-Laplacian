@@ -134,7 +134,7 @@ elif abs(V0 - 10*mph2fps) <= 10**(-3):
 
         if N == 6:
             if ns == 4:
-                mpciterations = 28  #34/sf_T  # 34
+                mpciterations = 28 #28  #34/sf_T  # 34
 
         if N == 8:
             if ns == 4:
@@ -233,7 +233,7 @@ if ns == 4:
     V_cmd = V0  # fps
 
     # Terminal constraint
-    delta_yRoad = 0.1*5  # ft
+    delta_yRoad = 0.5  # ft 0.5
     delta_yRoadRelaxed = 5  # ft, in safe zone
     delta_V = 1 * mph2fps  # fps
 
@@ -271,7 +271,7 @@ elif ns == 6:
     V_cmd = V0  # fps
 
     # Terminal constraint
-    delta_yRoad = 0.1 # ft
+    delta_yRoad = 0.5 # ft
     delta_yRoadRelaxed = 5 # ft, in safe zone
     delta_V = 1*mph2fps # fps
 
@@ -304,7 +304,7 @@ elif no == 1:
     obstacleE = np.array([0]) * scaleFactorE  # ft, left-bottom
     obstacleWidth = np.array([14.1]) * scaleFactorE  # ft
 
-    if True:  # compare time between nmpc and laplacian
+    if False:  # compare time between nmpc and laplacian
         obstacleN = np.array([65.0]) * scaleFactorN  # ft, left-bottom
         obstacleChi = np.array([0.0])  # rad
         obstacleLength = np.array([8.0]) * scaleFactorN  # ft
@@ -313,6 +313,28 @@ elif no == 1:
         obstacleE = np.array([11.01]) * scaleFactorE  # ft, left-bottom
         obstacleWidth = np.array([10]) * scaleFactorE
 
+
+    # debug for robustness analysis
+    debug = True
+    if debug:
+        # obstacleN = np.array([55.0]) * scaleFactorN  # ft, left-bottom
+        # obstacleChi = np.array([0.0])  # rad
+        # obstacleLength = np.array([8.0]) * scaleFactorN  # ft
+        #
+        # obstacleE = np.array([11.01 - (15.0-10.0)/2.0]) * scaleFactorE  # ft, left-bottom
+        # obstacleWidth = np.array([15]) * scaleFactorE
+        # pathWidth = 30 # <= obstacleWidth * scaleFactorE -
+
+        obstacleN = np.array([63.0]) * scaleFactorN  # ft, left-bottom
+        obstacleChi = np.array([0.0])  # rad
+        obstacleLength = np.array([6.0]) * scaleFactorN  # ft
+        obstacleWidth = np.array([6]) * scaleFactorE
+
+        obstacleE = startPoint[0] - obstacleWidth / 2 # ft, left-bottom
+        safetyMargin = 2.0 * scaleFactorE
+        obstacleSafetyE = obstacleE - safetyMargin
+
+        pathWidth = safetyMargin
 
 elif no == 2:
 

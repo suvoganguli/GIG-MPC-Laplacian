@@ -1,7 +1,7 @@
 from utils import *
 import matplotlib.path as mplPath
 
-def obstacleInfo(obstaclePresent, obstacleE, obstacleN, obstacleChi, obstacleWidth, obstacleLength):
+def obstacleInfo(obstaclePresent, obstacleE, obstacleN, obstacleChi, obstacleWidth, obstacleLength, safetyMargin):
 
     class obstacle():
         def __init__(self):
@@ -11,6 +11,7 @@ def obstacleInfo(obstaclePresent, obstacleE, obstacleN, obstacleChi, obstacleWid
             self.Chi = obstacleChi
             self.w = obstacleWidth
             self.l = obstacleLength
+            self.SM = safetyMargin
             pass
 
     return obstacle
@@ -90,20 +91,20 @@ def detectObstacle(x0, detectionWindow, obstacle):
     return detected
 
 
-def getObstacleData(obstacle, obstacleIdx):
-
-    class obstacleIdxData(object):
-
-        def __init__(self):
-            self.Present = obstacle.Present
-            self.E = np.array([obstacle.E[obstacleIdx]])
-            self.N = np.array([obstacle.N[obstacleIdx]])
-            self.w = np.array([obstacle.w[obstacleIdx]])
-            self.l = np.array([obstacle.l[obstacleIdx]])
-            self.Chi = np.array([obstacle.Chi[obstacleIdx]])
-            pass
-
-    return obstacleIdxData
+# def getObstacleData(obstacle, obstacleIdx):
+#
+#     class obstacleIdxData(object):
+#
+#         def __init__(self):
+#             self.Present = obstacle.Present
+#             self.E = np.array([obstacle.E[obstacleIdx]])
+#             self.N = np.array([obstacle.N[obstacleIdx]])
+#             self.w = np.array([obstacle.w[obstacleIdx]])
+#             self.l = np.array([obstacle.l[obstacleIdx]])
+#             self.Chi = np.array([obstacle.Chi[obstacleIdx]])
+#             pass
+#
+#     return obstacleIdxData
 
 
 def remainingObstacle(obstacle):
@@ -120,12 +121,14 @@ def remainingObstacle(obstacle):
                 self.w = obstacle.w[1:]
                 self.l = obstacle.l[1:]
                 self.Chi = obstacle.Chi[1:]
+                self.SM = obstacle.SM
             else:
                 self.E = np.array([obstacle.E[1:]])
                 self.N = np.array([obstacle.N[1:]])
                 self.w = np.array([obstacle.w[1:]])
                 self.l = np.array([obstacle.l[1:]])
                 self.Chi = np.array([obstacle.Chi[1:]])
+                self.SM = obstacle.SM
             pass
 
     return obstacleRemainingData
@@ -141,7 +144,7 @@ def getCurrentObstacle(obstacle):
             self.w = np.array([obstacle.w[0]])
             self.l = np.array([obstacle.l[0]])
             self.Chi = np.array([obstacle.Chi[0]])
-
+            self.SM = np.array([obstacle.SM])
             pass
 
     return obstacleCurrentData

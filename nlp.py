@@ -105,6 +105,7 @@ class nlpProb(object):
 
                 # terminal constraint (dy, dV)
                 consT1, consT2 = prob.terminalCons(u, x[N - 1], t0, lanes, obstacle, posIdx)
+
                 consT = np.concatenate([consT1, consT2])
 
 
@@ -144,6 +145,10 @@ class nlpProb(object):
 
                 # terminal constraint
                 consT1, consT2 = prob.terminalCons(u, x[N-1], t0, lanes, obstacle, posIdx)  # ydist, VEnd
+
+                #consT1 = []
+                #consT2 = []
+
                 consT = np.concatenate([consT1, consT2])
 
 

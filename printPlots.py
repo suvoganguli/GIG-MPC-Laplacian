@@ -72,22 +72,23 @@ def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle,pathType):
             if nObs > 0:
                 for k in range(nObs):
 
-                    Efc = obstacle.E[k] + pdata.pathWidth/2
-                    Nfc = obstacle.N[k]
-                    W = obstacle.w[k] - pdata.pathWidth
-                    L = obstacle.l[k]
+                    Elb = obstacle.E[k] + obstacle.SM
+                    Nlb = obstacle.N[k] + obstacle.SM
+                    W = obstacle.w[k] - 2.0 * obstacle.SM
+                    L = obstacle.l[k] - 2.0 * obstacle.SM
+
                     Theta = obstacle.Chi[k]
                     fc = "red"
-                    polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
+                    polygon_obstacle = getPatch(Elb, Nlb, W, L, Theta, fc)
 
 
-                    Efc = obstacle.E[k]
-                    Nfc = obstacle.N[k]
+                    Elb = obstacle.E[k]
+                    Nlb = obstacle.N[k]
                     W = obstacle.w[k]
                     L = obstacle.l[k]
                     Theta = obstacle.Chi[k]
                     fc = "green"
-                    polygon_safezone = getPatch(Efc, Nfc, W, L, Theta, fc)
+                    polygon_safezone = getPatch(Elb, Nlb, W, L, Theta, fc)
 
                     ax = plt.gca()
                     ax.add_patch(polygon_safezone)

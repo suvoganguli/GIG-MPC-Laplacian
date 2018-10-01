@@ -130,7 +130,7 @@ def intersect2(a1,b1,c1,a2,b2,c2):
     return x, y
 
 
-def getPatch(Efc,Nfc,W,L,theta,fc):
+def getPatch(Elb,Nlb,W,L,theta,fc):
 
     # create object with heading = 0 deg
 
@@ -154,8 +154,8 @@ def getPatch(Efc,Nfc,W,L,theta,fc):
         p = np.array([E[k], N[k]])
         p = p[:,None]
         pRot = np.dot(C,p)
-        ERot[k] = pRot[0] + Efc
-        NRot[k] = pRot[1] + Nfc
+        ERot[k] = pRot[0] + Elb
+        NRot[k] = pRot[1] + Nlb
 
     vertices = np.array([ERot, NRot])
     polygon = Polygon(vertices.T, facecolor=fc, alpha=0.75)

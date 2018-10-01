@@ -72,14 +72,24 @@ def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle,pathType):
             if nObs > 0:
                 for k in range(nObs):
 
-                    Elb = obstacle.E[k] + obstacle.SM
-                    Nlb = obstacle.N[k] + obstacle.SM
-                    W = obstacle.w[k] - 2.0 * obstacle.SM
-                    L = obstacle.l[k] - 2.0 * obstacle.SM
+                    REPEAT_MIDTERM = True
+                    if REPEAT_MIDTERM:
+                        Efc = obstacle.E[k] + pdata.pathWidth/2
+                        Nfc = obstacle.N[k]
+                        W = obstacle.w[k] - pdata.pathWidth
+                        L = obstacle.l[k]
+                        Theta = obstacle.Chi[k]
+                        fc = "red"
+                        polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
 
-                    Theta = obstacle.Chi[k]
-                    fc = "red"
-                    polygon_obstacle = getPatch(Elb, Nlb, W, L, Theta, fc)
+
+                    # Elb = obstacle.E[k] + obstacle.SM
+                    # Nlb = obstacle.N[k] + obstacle.SM
+                    # W = obstacle.w[k] - 2.0 * obstacle.SM
+                    # L = obstacle.l[k] - 2.0 * obstacle.SM
+                    # Theta = obstacle.Chi[k]
+                    # fc = "red"
+                    # polygon_obstacle = getPatch(Elb, Nlb, W, L, Theta, fc)
 
 
                     Elb = obstacle.E[k]

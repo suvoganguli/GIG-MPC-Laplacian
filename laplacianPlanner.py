@@ -21,6 +21,8 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slo
 
     #n_vec_exponents = [nmax, nmax-1, nmax]
     n_vec_exponents = [nmax, nmax - 1, nmax, nmax-1, nmax]  # 2018-05-23
+    #n_vec_exponents = [nmax-1, nmax]  # 2018-10-11
+
     iter_max = 50
 
     n_vec = 2 ** np.array(n_vec_exponents)

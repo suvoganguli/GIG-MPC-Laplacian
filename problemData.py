@@ -10,8 +10,6 @@ mph2fps = 4.4/3
 # USER INPUTS
 # ----------------------------------------------------------
 
-REPEAT_MIDTERM = True
-
 # Grid selection
 
 scaleFactorE = 2
@@ -31,15 +29,14 @@ gridClass = createGrid(gridSize, lengthSpace, widthSpace, heightSpace)
 grid = gridClass()
 
 # Start and End Points
-startPoint = np.array([16 * scaleFactorE, 1 * scaleFactorN])  # E (ft), N (ft)
-endPoint = np.array([16 * scaleFactorE, 115 * scaleFactorN])  # E (ft), N (ft)
+# startPoint = np.array([16 * scaleFactorE, 1 * scaleFactorN])  # E (ft), N (ft)
+# endPoint = np.array([16 * scaleFactorE, 115 * scaleFactorN])  # E (ft), N (ft)
 
-if REPEAT_MIDTERM:
-    startPoint = np.array([7 * scaleFactorE, 1 * scaleFactorN])  # E (ft), N (ft)
-    endPoint = np.array([7 * scaleFactorE, 115 * scaleFactorN])  # E (ft), N (ft)
+startPoint = np.array([7.5 * scaleFactorE, 1 * scaleFactorN])  # E (ft), N (ft)
+endPoint = np.array([7.5 * scaleFactorE, 115 * scaleFactorN])  # E (ft), N (ft)
 
 # Correction for new path generation with popup obstacle
-dNewPathAdjust = 2.0 * np.sqrt(scaleFactorN**2 + scaleFactorN**2)
+dNewPathAdjust = 4.0 * np.sqrt(scaleFactorN**2 + scaleFactorN**2)
 
 # expt:
 # 'N' - number of MPC time steps
@@ -221,14 +218,14 @@ if ns == 4:
     Chi0 = 0 * np.pi / 180  # rad
     x0 = [E0, N0, V0, Chi0]  # E, N, V, Chi, Vdot, Chidot
 
-    lb_VdotVal = -2  # fps30
-    ub_VdotVal = 2  # fps3
-    lb_ChidotVal = -20 * np.pi / 180  # rad/s2
-    ub_ChidotVal = 20 * np.pi / 180  # rad/s2
-    lataccel_maxVal = 0.25 * 32.2  # fps2
+    lb_VdotVal = -2 * 2.1 # fps30
+    ub_VdotVal = 2 * 2.1  # fps3
+    lb_ChidotVal = -20 * np.pi / 180  * 2.1 # rad/s2
+    ub_ChidotVal = 20 * np.pi / 180  * 2.1 # rad/s2
+    lataccel_maxVal = 0.25 * 32.2 * 2.1 # fps2
     useLatAccelCons = 1
-    lb_V = 0.8 * V0
-    ub_V = 1.2 * V0
+    lb_V = 0.8 * V0 / 2.1
+    ub_V = 1.2 * V0 * 2.1
 
     # Tracking Tuning and Data
     W_P = 1.0
@@ -250,7 +247,7 @@ if ns == 4:
 elif ns == 6:
 
     # Ipopt settings
-    nlpMaxIter = 100
+    nlpMaxIter = 100 * 100
     #mpciterations = 5
 
     # Kinematic Constraints
@@ -300,6 +297,9 @@ if no == 0:
 
 elif no == 1:
 
+    # Repeat mid-term results
+    REPEAT_MIDTERM = False
+
     if REPEAT_MIDTERM:
         obstacleN = np.array([63.0]) * scaleFactorN  # ft, left-bottom
         obstacleChi = np.array([0.0])  # rad
@@ -310,28 +310,29 @@ elif no == 1:
 
         safetyMargin = []
 
-    # debug for robustness analysis
-    debug = False
-    if debug:
+    else:
+
         # obstacleN = np.array([55.0]) * scaleFactorN  # ft, left-bottom
         # obstacleChi = np.array([0.0])  # rad
-        # obstacleLength = np.array([8.0]) * scaleFactorN  # ft
+        # obstacleLength = np.array([10]) * scaleFactorN  # ft
+        # obstacleWidth = np.array([10.1]) * scaleFactorE
         #
-        # obstacleE = np.array([11.01 - (15.0-10.0)/2.0]) * scaleFactorE  # ft, left-bottom
-        # obstacleWidth = np.array([15]) * scaleFactorE
-        # pathWidth = 30 # <= obstacleWidth * scaleFactorE -
+        # obstacleE = startPoint[0] - obstacleWidth / 2 # ft, left-bottom
+        # safetyMargin = 3.0 * scaleFactorE
+        # obstacleSafetyE = obstacleE - safetyMargin
+        #
+        # pathWidth = 2.0 * safetyMargin
 
-        obstacleN = np.array([63.0]) * scaleFactorN  # ft, left-bottom
+        obstacleN = np.array([55.0]) * scaleFactorN  # ft, left-bottom
         obstacleChi = np.array([0.0])  # rad
-        obstacleLength = np.array([6.0]) * scaleFactorN  # ft
-        obstacleWidth = np.array([6]) * scaleFactorE
+        obstacleLength = np.array([20]) * scaleFactorN  # ft
+        obstacleWidth = np.array([25.1]) * scaleFactorE
 
         obstacleE = startPoint[0] - obstacleWidth / 2 # ft, left-bottom
-        safetyMargin = 2.0 * scaleFactorE
+        safetyMargin = 5.0 * scaleFactorE
         obstacleSafetyE = obstacleE - safetyMargin
 
-        pathWidth = safetyMargin
-
+        pathWidth = 2.0 * safetyMargin
 
 
 

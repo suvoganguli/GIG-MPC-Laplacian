@@ -72,7 +72,7 @@ def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle,pathType):
             if nObs > 0:
                 for k in range(nObs):
 
-                    REPEAT_MIDTERM = True
+                    REPEAT_MIDTERM = False
                     if REPEAT_MIDTERM:
                         Efc = obstacle.E[k] + pdata.pathWidth/2
                         Nfc = obstacle.N[k]
@@ -82,14 +82,14 @@ def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle,pathType):
                         fc = "red"
                         polygon_obstacle = getPatch(Efc, Nfc, W, L, Theta, fc)
 
-
-                    # Elb = obstacle.E[k] + obstacle.SM
-                    # Nlb = obstacle.N[k] + obstacle.SM
-                    # W = obstacle.w[k] - 2.0 * obstacle.SM
-                    # L = obstacle.l[k] - 2.0 * obstacle.SM
-                    # Theta = obstacle.Chi[k]
-                    # fc = "red"
-                    # polygon_obstacle = getPatch(Elb, Nlb, W, L, Theta, fc)
+                    else:
+                        Elb = obstacle.E[k] + obstacle.SM
+                        Nlb = obstacle.N[k] + obstacle.SM
+                        W = obstacle.w[k] - 2.0 * obstacle.SM
+                        L = obstacle.l[k] - 2.0 * obstacle.SM
+                        Theta = obstacle.Chi[k]
+                        fc = "red"
+                        polygon_obstacle = getPatch(Elb, Nlb, W, L, Theta, fc)
 
 
                     Elb = obstacle.E[k]
@@ -108,8 +108,8 @@ def nmpcPlotSol(u_new,path,drawLPPath,x0,obstacle,pathType):
     plt.plot(East[0:nEN], North[0:nEN], marker='x', markersize=4, color='b')
     plt.plot(East[0], North[0], marker='o', markersize=4, color='r')
     #plt.ylim([0, 240])
-    #plt.xlim([-10, 40])
-    plt.axis('equal')
+    plt.xlim([-25, 75])
+    #plt.axis('equal')
 
     #plt.draw()
     plt.pause(0.01)

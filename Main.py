@@ -121,14 +121,12 @@ while mpciter < mpciterations:
 
             posIdx = getPosIdx(x0[0], x0[1], path, posIdx0)
 
-            None
-
         # Update array with new path
         pathObj = makePathObj(pdata, path, obstacle)
         pathObjArray.append(pathObj)
 
         # Discard current object in view
-        print(obstacle.E.size)
+        # print(obstacle.E.size)
         if obstacle.E.size > 0:
             remainingObstacleClass = remainingObstacle(obstacle)
             obstacle = remainingObstacleClass()

@@ -98,7 +98,7 @@ while mpciter < mpciterations:
         currentObstacleClass = getCurrentObstacle(obstacle)
         currentObstacle = currentObstacleClass()
 
-        if mpciter == 1:
+        if mpciter == 0:
             startPoint = np.array([x0[0], x0[1]])
             pathClass = pathInfo('newpath', startPoint, endPoint, currentObstacle)
             path = pathClass()

@@ -55,6 +55,7 @@ else:
 
 # Initialize storage arrays
 tElapsed = np.zeros(mpciterations)
+tLP = np.zeros(mpciterations)
 VTerminal = np.zeros(mpciterations)
 latAccel = np.zeros(mpciterations)
 dyError = np.zeros(mpciterations)
@@ -100,7 +101,9 @@ while mpciter < mpciterations:
 
         if mpciter == 0:
             startPoint = np.array([x0[0], x0[1]])
-            pathClass = pathInfo('newpath', startPoint, endPoint, currentObstacle)
+            startPoint0 = startPoint
+            pathClass = pathInfo('newpath', startPoint, endPoint, currentObstacle, startPoint0)
+            print('need to debug ...')
             path = pathClass()
         else:
             chi = np.array([x0[3]])
@@ -120,6 +123,12 @@ while mpciter < mpciterations:
             pathType = 'newpath'
 
             posIdx = getPosIdx(x0[0], x0[1], path, posIdx0)
+
+        # laplacian path computation time
+        tLP[mpciter] = (time.time() - tStart)
+        print("Computation time for LP = " + str(tLP[mpciter]))
+
+        tStart = time.time()
 
         # Update array with new path
         pathObj = makePathObj(pdata, path, obstacle)

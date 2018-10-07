@@ -58,8 +58,9 @@ def pathInitData(case, startPoint, endPoint, pathWidth, obstacle = None, grid = 
 
         print(nE,nN,nU)
 
-        if nE > 16: #16 - corrected on 10/11/2018
-            sf_E = float(nE)/16
+        print("nE > 16 changed to nE > 32")
+        if nE > 32: #16 - corrected on 10/11/2018
+            sf_E = float(nE)/32
             nE = int(nE/sf_E)
             obstacle.E = np.array([int(obstacle.E/sf_E)])
             obstacle.w = np.array([int(obstacle.w/sf_E)])

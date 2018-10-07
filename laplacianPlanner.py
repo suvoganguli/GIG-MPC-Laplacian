@@ -20,10 +20,13 @@ def laplacian( start_point, end_point, nxs, nys, nzs, nzs_low, obstacleData, slo
     nmax = np.int( np.log2( min(nxs, nys) ) )
 
     #n_vec_exponents = [nmax, nmax-1, nmax]
-    n_vec_exponents = [nmax, nmax - 1, nmax, nmax-1, nmax]  # 2018-05-23
-    #n_vec_exponents = [nmax-1, nmax]  # 2018-10-11
 
-    iter_max = 50
+    #n_vec_exponents = [nmax, nmax - 1, nmax, nmax-1, nmax]  # 2018-05-23
+    #iter_max = 50
+
+    # laplacian planner test
+    n_vec_exponents = [nmax-2, nmax-1, nmax]  # 2018-10-11
+    iter_max = 100
 
     n_vec = 2 ** np.array(n_vec_exponents)
     ny_factor = float(nxs) / float(nys) # POWER OF 2     (y grid_size) = (x grid size)/ny_factor

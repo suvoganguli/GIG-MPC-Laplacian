@@ -198,7 +198,7 @@ mpciterations = int(mpciterations)
 # obstaclePresent = False
 
 # Detection Window
-detectionWindow = {'L': 50 * scaleFactorN, 'W': 11 *scaleFactorE}
+detectionWindow = {'L': 50 * scaleFactorN, 'W': 11 *scaleFactorE} # 50
 
 # Positon Index w.r.t. Path Sections
 posIdx0 = {'number': 0}

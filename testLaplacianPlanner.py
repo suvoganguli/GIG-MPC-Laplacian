@@ -72,7 +72,7 @@ endPoint_ = np.append(endPoint, height)
 obstaclePresent = True
 safetyMargin = 2
 
-obstacleType = 'large'
+obstacleType = 'small'
 
 if obstaclePresent == False:
     obstacleN = np.array([]) * scaleFactorN  # ft, left-bottom
@@ -247,6 +247,9 @@ plt.ylim([0, lengthSpace])
 # large = 29.4 sec (75)
 
 if False:
+
+    sf = 21.1
+
     print("32 x 128")
     print(21.1/21.1)
     print(20.6/21.1)

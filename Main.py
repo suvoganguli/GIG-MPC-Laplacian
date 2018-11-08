@@ -12,14 +12,8 @@ import os
 # Main.py lets the user run different test cases for Model
 # Predictive Control (MPC) based trajectory generation
 #
-# The user needs to select 3 items:
-# 1. Test Case Type: Road shape and orientation
-# 2. Experiment Number: Sets various design parameters for MPC
-# 3. Number of States: Sets the vehicles states and control states
+# Edit problemData.py to run different test cases
 #
-# Edit problemData.py to run different experiments
-#
-# 01/25/2018
 # -------------------------------------------------------------------
 
 # Path data
